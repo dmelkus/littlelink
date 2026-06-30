@@ -148,20 +148,41 @@
 	font-size: calc(var(--scale-5) + 5px);
 }
 
-/* Brand button palette - overrides per-service brands.css colors with the Degs theme */
-.button-stack .button {
+/* Brand button palette - overrides per-service brands.css colors with the Degs theme.
+   The `body` prefix bumps specificity above brands.css compound selectors like
+   `.button.button-default`, which otherwise tie (brands.css loads after this file). */
+body .button-stack .button {
 	--button-background: #2E0A45;
 	--button-text: #FCEFFA;
 	--button-border: 1px solid #D41886;
+	background-image: none;          /* neutralizes brand gradients, e.g. Steam */
 	font-family: 'Cinzel', sans-serif;
 	font-weight: 600;
 	letter-spacing: 0.03em;
 }
-.button-stack .button:hover {
+body .button-stack .button:hover {
 	--button-background: #D41886;
 	--button-text: #2E0A45;
 	--button-border: 1px solid #FE54FF;
 	box-shadow: 0 0 0.6rem rgba(254, 84, 255, 0.5);
+}
+
+/* Tinted icons - recolors each brand icon via mask rather than its native colors,
+   so the buttons read as one cohesive Degs palette instead of mismatched brand logos */
+.icon--tint {
+	display: inline-block;
+	-webkit-mask-image: var(--icon-src);
+	mask-image: var(--icon-src);
+	-webkit-mask-repeat: no-repeat;
+	mask-repeat: no-repeat;
+	-webkit-mask-position: center;
+	mask-position: center;
+	-webkit-mask-size: contain;
+	mask-size: contain;
+	background-color: var(--icon-tint, #FCEFFA);
+}
+.button-stack .button:hover .icon--tint {
+	background-color: #2E0A45;
 }
 
 /* Typography Scale */
