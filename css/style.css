@@ -185,6 +185,13 @@ body .button-stack .button:hover {
 	background-color: #2E0A45;
 }
 
+/* Emoji icons - rendered as-is (not masked, so their native color stays) */
+.icon--emoji {
+	display: inline-block;
+	font-size: 1.25rem;
+	line-height: 1;
+}
+
 /* Typography Scale */
 h1 {
 	margin:0 0 var(--spacing-m) 0;
