@@ -150,6 +150,8 @@
 
 /* Tagline - sits between the title and the button stack */
 .container p.tagline {
+	display: inline-block;
+	max-width: 18.75rem;     /* matches .button width, so the badge lines up with the stack below */
 	margin: 0 0 var(--spacing-xl) 0;
 	font-family: 'Cinzel', sans-serif;
 	font-size: var(--scale-0);
@@ -157,6 +159,9 @@
 	letter-spacing: 0.08em;
 	text-transform: uppercase;
 	color: #C77DFF;
+	border: 1px solid #C77DFF;
+	border-radius: 0.5rem;
+	padding: 0.4rem 1rem;
 }
 
 /* Brand button palette - overrides per-service brands.css colors with the Degs theme.
