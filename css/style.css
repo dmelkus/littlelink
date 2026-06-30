@@ -125,9 +125,9 @@
 
 /* Avatar frame - doubles the avatar size and zooms in ~25% on the source image, centered */
 .avatar-frame {
-	width: 16rem;            /* 256px, 2x the base avatar */
-	height: 16rem;
-	border-radius: 50%;
+	width: 18.75rem;         /* 300px, matches .button width */
+	height: 18.75rem;
+	border-radius: 1.5rem;
 	overflow: hidden;
 	margin: 0 auto var(--spacing-l) auto;
 }
