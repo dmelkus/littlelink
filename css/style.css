@@ -123,6 +123,30 @@
 	display: block;
   }
 
+/* Avatar frame - doubles the avatar size and zooms in ~25% on the source image, centered */
+.avatar-frame {
+	width: 16rem;            /* 256px, 2x the base avatar */
+	height: 16rem;
+	border-radius: 50%;
+	overflow: hidden;
+	margin: 0 auto var(--spacing-l) auto;
+}
+.avatar-frame .avatar {
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	transform: scale(1.25);
+	transform-origin: center;
+}
+
+/* Brand title */
+.brand-title {
+	font-family:'UnifrakturMaguntia', serif;
+	font-weight: 400;
+	color: #D41886;
+	text-shadow: 0 0 0.4rem rgba(253, 0, 253, 0.45);
+}
+
 /* Typography Scale */
 h1 {
 	margin:0 0 var(--spacing-m) 0;
@@ -379,4 +403,11 @@ ul li {
 	font-weight:800;
 	src:url('../fonts/open-sans-v34-vietnamese_latin-ext_latin_hebrew_greek-ext_greek_cyrillic-ext_cyrillic-800.eot');
 	src:url('../fonts/open-sans-v34-vietnamese_latin-ext_latin_hebrew_greek-ext_greek_cyrillic-ext_cyrillic-800.eot?#iefix') format('embedded-opentype'),url('../fonts/open-sans-v34-vietnamese_latin-ext_latin_hebrew_greek-ext_greek_cyrillic-ext_cyrillic-800.woff2') format('woff2'),url('../fonts/open-sans-v34-vietnamese_latin-ext_latin_hebrew_greek-ext_greek_cyrillic-ext_cyrillic-800.woff') format('woff'),url('../fonts/open-sans-v34-vietnamese_latin-ext_latin_hebrew_greek-ext_greek_cyrillic-ext_cyrillic-800.ttf') format('truetype'),url('../fonts/open-sans-v34-vietnamese_latin-ext_latin_hebrew_greek-ext_greek_cyrillic-ext_cyrillic-800.svg#OpenSans') format('svg');
+}
+@font-face {
+	font-display:swap;
+	font-family:'UnifrakturMaguntia';
+	font-style:normal;
+	font-weight:400;
+	src:url('../fonts/unifraktur-maguntia-v22-latin-regular.woff2') format('woff2');
 }
