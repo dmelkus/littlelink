@@ -148,6 +148,22 @@
 	font-size: calc(var(--scale-5) + 5px);
 }
 
+/* Brand button palette - overrides per-service brands.css colors with the Degs theme */
+.button-stack .button {
+	--button-background: #2E0A45;
+	--button-text: #FCEFFA;
+	--button-border: 1px solid #D41886;
+	font-family: 'Cinzel', sans-serif;
+	font-weight: 600;
+	letter-spacing: 0.03em;
+}
+.button-stack .button:hover {
+	--button-background: #D41886;
+	--button-text: #2E0A45;
+	--button-border: 1px solid #FE54FF;
+	box-shadow: 0 0 0.6rem rgba(254, 84, 255, 0.5);
+}
+
 /* Typography Scale */
 h1 {
 	margin:0 0 var(--spacing-m) 0;
@@ -414,4 +430,11 @@ ul li {
 	font-style:normal;
 	font-weight:400;
 	src:url('../fonts/unifraktur-maguntia-v22-latin-regular.woff2') format('woff2');
+}
+@font-face {
+	font-display:swap;
+	font-family:'Cinzel';
+	font-style:normal;
+	font-weight:600;
+	src:url('../fonts/cinzel-v26-latin-600.woff2') format('woff2');
 }
