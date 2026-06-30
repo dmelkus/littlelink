@@ -148,6 +148,17 @@
 	font-size: calc(var(--scale-5) + 5px);
 }
 
+/* Tagline - sits between the title and the button stack */
+.container p.tagline {
+	margin: 0 0 var(--spacing-xl) 0;
+	font-family: 'Cinzel', sans-serif;
+	font-size: var(--scale-0);
+	font-weight: 600;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: #C77DFF;
+}
+
 /* Brand button palette - overrides per-service brands.css colors with the Degs theme.
    The `body` prefix bumps specificity above brands.css compound selectors like
    `.button.button-default`, which otherwise tie (brands.css loads after this file). */
