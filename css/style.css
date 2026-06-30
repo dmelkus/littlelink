@@ -192,36 +192,36 @@ body .button-stack .button:hover {
 	line-height: 1;
 }
 
-/* "Coming soon" tooltip for not-yet-live buttons */
+/* "Coming soon" - swaps the button's own icon/label for the message on hover, in place */
 .button-stack .button[data-tooltip] {
 	cursor: default;
 	position: relative;
-	margin-top: 1.5rem;     /* extra clearance so the tooltip above doesn't overlap the previous button */
+}
+.button-stack .button[data-tooltip] .icon,
+.button-stack .button[data-tooltip] .label {
+	transition: opacity 0.15s ease;
 }
 .button-stack .button[data-tooltip]::after {
 	content: attr(data-tooltip);
 	position: absolute;
-	bottom: calc(100% + 0.5rem);
-	left: 50%;
-	transform: translateX(-50%) translateY(4px);
-	background-color: #D41886;
-	color: #2E0A45;
-	font-family: 'Cinzel', sans-serif;
-	font-size: 0.75rem;
-	font-weight: 600;
-	letter-spacing: 0.03em;
-	padding: 0.35rem 0.75rem;
-	border-radius: 0.4rem;
-	white-space: nowrap;
+	inset: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: inherit;
 	opacity: 0;
 	pointer-events: none;
-	transition: opacity 0.15s ease, transform 0.15s ease;
-	box-shadow: 0 0 0.5rem rgba(254, 84, 255, 0.5);
+	transition: opacity 0.15s ease;
+}
+.button-stack .button[data-tooltip]:hover .icon,
+.button-stack .button[data-tooltip]:hover .label,
+.button-stack .button[data-tooltip]:focus-visible .icon,
+.button-stack .button[data-tooltip]:focus-visible .label {
+	opacity: 0;
 }
 .button-stack .button[data-tooltip]:hover::after,
 .button-stack .button[data-tooltip]:focus-visible::after {
 	opacity: 1;
-	transform: translateX(-50%) translateY(0);
 }
 
 /* Typography Scale */
