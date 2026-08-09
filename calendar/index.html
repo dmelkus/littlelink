@@ -178,17 +178,23 @@
     gap:11px;
     margin-top:24px;
   }
-  .daylight-read{
+  .daylight-total,
+  .daylight-gap{
     font-family:var(--font-head);
     font-weight:600;
     font-size:11px;
     letter-spacing:0.1em;
     text-transform:uppercase;
-    color:var(--text-dim);
     max-width:330px;
     line-height:1.5;
   }
-  .daylight-read b{ color:var(--text); font-weight:600; }
+  .daylight-total{ color:var(--text-dim); }
+  .daylight-total b{ color:var(--text); font-weight:600; }
+  /* The gap line takes the colour of whichever side is ahead, so the sentence
+     and the fill above it agree. */
+  .daylight-gap{ color:var(--text); }
+  .daylight-gap.day{ color:var(--pink); }
+  .daylight-gap.night{ color:var(--violet); }
 
   /* Secondary countdown — the run past the birthday, to Halloween. */
   .hero-secondary{
@@ -531,11 +537,12 @@
   <div class="count-label" id="countLabel">days to the Virgo–Libra nexus</div>
   <div class="sub"><b>Sept 21</b> is the last full day of Virgo — one day short of the autumnal equinox, and the steepest point of the whole year's daylight curve. From that hinge the light keeps draining: moon phases, longitude marks, and the Missouri harvest, tracked the rest of the way down to <b>Oct 31</b>.</div>
   <div class="daylight">
+    <div class="daylight-total" id="dlTotal"></div>
     <span class="meter meter--hero" aria-hidden="true">
       <span class="meter-fill" id="dlFill"></span>
       <span class="meter-center"></span>
     </span>
-    <div class="daylight-read" id="dlRead"></div>
+    <div class="daylight-gap" id="dlGap"></div>
   </div>
   <div class="hero-secondary" id="halloweenCount"></div>
   <div class="hero-secondary next-game" id="nextGameNight"></div>
@@ -667,13 +674,16 @@ const dlFill = document.getElementById('dlFill');
 if (todayParts.cls) dlFill.classList.add(todayParts.cls);
 dlFill.setAttribute('style', todayParts.style);
 
+document.getElementById('dlTotal').innerHTML = `<b>${fmtHM(todayDL)}</b> of daylight today`;
+
 const gap = todayDL - 12;
-document.getElementById('dlRead').innerHTML =
-  `<b>${fmtHM(todayDL)}</b> of daylight today · ` + (
-    Math.abs(gap) <= METER_BALANCE_H
-      ? 'day and night in balance'
-      : `<b>${fmtHM(Math.abs(gap))}</b> more ${gap > 0 ? 'day than night' : 'night than day'}`
-  );
+const gapEl = document.getElementById('dlGap');
+if (Math.abs(gap) <= METER_BALANCE_H){
+  gapEl.textContent = 'day and night in balance';
+} else {
+  gapEl.classList.add(gap > 0 ? 'day' : 'night');
+  gapEl.textContent = `${fmtHM(Math.abs(gap))} more ${gap > 0 ? 'day than night' : 'night than day'}`;
+}
 
 // moon phase icon renderer: illum 0-1, waxing bool
 const MOON_DARK = '#5A2C7A';
