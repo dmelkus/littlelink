@@ -7,7 +7,7 @@
 <title>The Approach — 9/21 to Halloween | Degs</title>
 <link rel="icon" type="image/x-icon" href="/images/avatar.png">
 
-<meta name="description" content="A countdown to September 21 and on through Halloween — moon phases, solar longitude marks, meteor showers, daylight loss, and Missouri harvest windows.">
+<meta name="description" content="A countdown to September 21 and on through Halloween — moon phases, solar longitude marks, meteor showers, Missouri harvest windows, and the August game nights at Lindenwood Park Place.">
 <meta rel="canonical" href="https://degs.skin/calendar">
 <meta name="author" content="Degs">
 
@@ -193,6 +193,8 @@
     text-transform:uppercase;
     color:var(--magenta);
   }
+  .hero-secondary.next-game{ margin-top:8px; color:var(--violet); }
+  .hero-secondary.next-game a{ color:inherit; }
   .daylight-bar{
     width:min(66vw, 300px);
     height:6px;
@@ -259,6 +261,15 @@
     width:20px; height:20px; margin-top:0;
     box-shadow:0 0 14px var(--glow);
   }
+  /* Game nights are the human thread through a sky calendar — marked by shape
+     rather than a new hue, so the rail still reads as one palette. */
+  .node.gamenight{
+    border-color:var(--violet); background:var(--violet);
+    width:13px; height:13px; margin-top:5px;
+    border-radius:2px;
+    transform:rotate(45deg);
+    box-shadow:0 0 10px rgba(199,125,255,0.55);
+  }
   .node.halloween{
     border-color:var(--magenta); background:var(--magenta);
     width:18px; height:18px; margin-top:1px;
@@ -308,6 +319,7 @@
   .tag.harvest{ color:var(--magenta); }
   .tag.birthday{ color:var(--pink); background:rgba(254,84,255,0.14); }
   .tag.halloween{ color:var(--magenta); background:rgba(212,24,134,0.18); }
+  .tag.gamenight{ color:var(--violet); background:rgba(199,125,255,0.16); }
 
   .title{
     font-family:var(--font-head);
@@ -330,6 +342,7 @@
     border-color:var(--magenta);
     box-shadow:0 0 18px rgba(212,24,134,0.18);
   }
+  .event.gamenight .card{ border-color:rgba(199,125,255,0.42); }
   .event.halloween .title{
     font-family:var(--font-display);
     font-weight:400;
@@ -409,6 +422,15 @@
     text-decoration:none;
   }
   footer .wordmark:hover{ color:var(--pink); }
+  footer .ics{
+    display:inline-block;
+    margin-top:10px;
+    color:var(--violet);
+    text-decoration:none;
+    border-bottom:1px solid rgba(199,125,255,0.4);
+    padding-bottom:2px;
+  }
+  footer .ics:hover{ color:var(--pink); border-bottom-color:var(--pink); }
 </style>
 </head>
 <body>
@@ -426,6 +448,7 @@
     <span id="dlEquinox">12h00 / 12h00</span>
   </div>
   <div class="hero-secondary" id="halloweenCount"></div>
+  <div class="hero-secondary next-game" id="nextGameNight"></div>
 </div>
 
 <div class="timeline" id="timeline"></div>
@@ -434,6 +457,7 @@
   Moon phase times in UTC · Solar longitude measured from Aries point (0°)<br>
   Daylight hours approximated for 38.6°N · Harvest and frost windows are typical Missouri timing, not 2026 forecasts<br>
   <span id="runSpan"></span><br>
+  <a class="ics" href="/calendar/game-nights-august.ics" download>⤓ Add the August game nights to your calendar</a><br>
   <a class="wordmark" href="/">Degs</a>
 </footer>
 
@@ -530,11 +554,18 @@ const events = [
   {date:ld(2026,8,6), type:'lunar', tag:'Last Quarter', title:'Last Quarter Moon', desc:'Half-lit, shrinking, in Taurus.', illum:0.5, waxing:false},
   {date:ld(2026,8,7), type:'astro', tag:'Cross-Quarter', title:'Astronomical Midpoint (135°)', desc:'True geometric halfway point between the June solstice and the equinox — solar longitude 135°. The most rigorous non-endpoint marker of the run.'},
   {date:ld(2026,8,12), type:'lunar', tag:'New Moon', title:'New Moon + Total Solar Eclipse', desc:'Moon passes in front of the sun at 19° Leo. Totality sweeps Russia, Greenland, Iceland, Spain — first mainland European totality since 1999.', illum:0.0, waxing:true},
+  {date:ld(2026,8,12), type:'gamenight', tag:'Game Night', when:'4–8 PM', venue:'Lindenwood Park Place', title:'Game Night · Tavern', desc:'Tavern room, same day the moon crosses the sun. The sky does its thing, we roll dice. Drop in whenever — a new game starts when someone new sits down.'},
+  {date:ld(2026,8,15), type:'gamenight', tag:'Game Night', when:'4–8 PM', venue:'Lindenwood Park Place', title:'Game Night · Tavern', desc:'Tavern room. No RSVP that means anything and no game anyone has to play — if nobody wants what is on the table, we play something else.'},
+  {date:ld(2026,8,16), type:'gamenight', tag:'Game Night', when:'4–8 PM', venue:'Lindenwood Park Place', title:'Game Night · Library', desc:'Library room this time — quieter, better suited to the longer games. Same open door, same four-hour window.'},
   {date:ld(2026,8,20), type:'lunar', tag:'First Quarter', title:'First Quarter Moon', desc:'Half-lit, growing.', illum:0.5, waxing:true},
   {date:ld(2026,8,20), type:'harvest', tag:'Harvest', title:'🍇 Missouri Grape Harvest Begins', desc:"Earliest varietals get picked as the state's wineries open the season — Augusta, Hermann, and the Ozark AVAs kick off six weeks ahead of Norton."},
   {date:ld(2026,8,22), type:'astro', tag:'Astrological', title:'Sun Enters Virgo (150°)', desc:'A 30° zodiac-grid point, not a geometric midpoint — but the daylight-loss rate here is already measurably faster than three weeks earlier. The on-ramp, not the peak.'},
+  {date:ld(2026,8,22), type:'gamenight', tag:'Game Night', when:'4–8 PM', venue:'Lindenwood Park Place', title:'Game Night · Tavern', desc:'Tavern room, on the day the sun crosses into Virgo. The lowest-commitment invitation there is: say yes now and decide later.'},
+  {date:ld(2026,8,26), type:'gamenight', tag:'Game Night', when:'4–8 PM', venue:'Lindenwood Park Place', title:'Game Night · Tavern', desc:'Tavern room, midweek. Bailing is fine, arriving at seven is fine, sitting out a round is fine. It is free.'},
   {date:ld(2026,8,28), type:'lunar', tag:'Full Moon', title:'Full "Sturgeon" Moon + Partial Lunar Eclipse', desc:'Full illumination at 4° Pisces, opposite the sun. A Blood Moon eclipse rides along with it.', illum:1.0, waxing:false},
+  {date:ld(2026,8,29), type:'gamenight', tag:'Game Night', when:'4–8 PM', venue:'Lindenwood Park Place', title:'Game Night · Tavern', desc:'Tavern room, the night after the Sturgeon Moon and its eclipse. Come late, leave early, no notice needed.'},
   {date:ld(2026,8,30), type:'astro', tag:'¾ Longitude', title:'Three-Quarter Arc Mark (157.5°)', desc:"Halfway between the cross-quarter day and the equinox — same bisection logic as Aug 7, applied again. More rigorous than Virgo's debut, and closer to the finish line."},
+  {date:ld(2026,8,30), type:'gamenight', tag:'Game Night', when:'4–8 PM', venue:'Lindenwood Park Place', title:'Game Night · Library', desc:'Library room, closing the month out on the three-quarter arc mark. Quieter side of the building, better for the long games.'},
   {date:ld(2026,9,1), type:'meteor', tag:'Meteorological', title:'Meteorological Autumn Begins', desc:'Calendar convention — the season starts on the 1st regardless of solar position. Zero astronomical basis, but daylight loss is now visibly accelerating.'},
   {date:ld(2026,9,1), type:'harvest', tag:'Harvest', title:'🌽 Corn Harvest Begins (River Bottoms)', desc:'Missouri River bottomland fields are first to come off — combines roll here weeks before the rest of the state, targeting ~15% grain moisture.'},
   {date:ld(2026,9,1), type:'harvest', tag:'Harvest', title:'🍷 Missouri Wine Month Begins', desc:"The state's official month-long celebration of its 5 AVAs and 129 wineries — timed to the harvest itself."},
@@ -594,9 +625,10 @@ events.forEach(ev => {
   const dateStr = fmtDate(ev.date);
 
   const dl = daylightHours(ev.date);
-  const statHTML = ev.type !== 'birthday'
-    ? `<div class="stat">☀ ${fmtHM(dl)} daylight</div>`
-    : `<div class="stat">☀ ${fmtHM(dl)} daylight · losing ~2min 50s/day</div>`;
+  const statHTML =
+      ev.type === 'gamenight' ? `<div class="stat">◆ ${ev.when} · ${ev.venue}</div>`
+    : ev.type === 'birthday'  ? `<div class="stat">☀ ${fmtHM(dl)} daylight · losing ~2min 50s/day</div>`
+    :                           `<div class="stat">☀ ${fmtHM(dl)} daylight</div>`;
 
   row.innerHTML = `
     <div class="card">
@@ -617,6 +649,12 @@ events.forEach(ev => {
 if (!todayInserted){
   tl.appendChild(todayMarker());
 }
+
+// Next game night, read off the same array so it can't disagree with the cards.
+const nextGame = events.find(e => e.type === 'gamenight' && e.date >= TODAY);
+document.getElementById('nextGameNight').textContent = nextGame
+  ? `Next game night · ${nextGame.date.toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'})} · ${nextGame.when}`
+  : '';
 
 // Footer run span, read off the timeline itself so it can never drift from it.
 document.getElementById('runSpan').textContent =

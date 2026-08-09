@@ -1,0 +1,192 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Degs//Game Nights//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Degs Game Nights — August 2026
+BEGIN:VTIMEZONE
+TZID:America/Chicago
+BEGIN:DAYLIGHT
+TZOFFSETFROM:-0600
+TZOFFSETTO:-0500
+TZNAME:CDT
+DTSTART:19700308T020000
+RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=2SU
+END:DAYLIGHT
+BEGIN:STANDARD
+TZOFFSETFROM:-0500
+TZOFFSETTO:-0600
+TZNAME:CST
+DTSTART:19701101T020000
+RRULE:FREQ=YEARLY;BYMONTH=11;BYDAY=1SU
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+UID:gamenight-20260812@lindenwoodparkplace
+DTSTAMP:20260807T110000Z
+DTSTART;TZID=America/Chicago:20260812T160000
+DTEND;TZID=America/Chicago:20260812T200000
+SUMMARY:Game Night at Lindenwood Park Place (Tavern)
+LOCATION:Lindenwood Park Place\, 3460 Jamieson Ave\, St. Louis
+DESCRIPTION:Lowest-commitment invitation there is. Not sure if you can co
+ me? Say yes anyway — bailing is completely fine. Not sure when you can
+  get there? Doesn't matter\, we'll start a new game when you join us. No
+ t sure you want to play whatever is on the table? Then we won't play it.
+  It's free.
+URL:https://degs.skin/calendar
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Game night tomorrow
+TRIGGER:-P1D
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Game night in 2 hours
+TRIGGER:-PT2H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:gamenight-20260815@lindenwoodparkplace
+DTSTAMP:20260807T110000Z
+DTSTART;TZID=America/Chicago:20260815T160000
+DTEND;TZID=America/Chicago:20260815T200000
+SUMMARY:Game Night at Lindenwood Park Place (Tavern)
+LOCATION:Lindenwood Park Place\, 3460 Jamieson Ave\, St. Louis
+DESCRIPTION:Lowest-commitment invitation there is. Not sure if you can co
+ me? Say yes anyway — bailing is completely fine. Not sure when you can
+  get there? Doesn't matter\, we'll start a new game when you join us. No
+ t sure you want to play whatever is on the table? Then we won't play it.
+  It's free.
+URL:https://degs.skin/calendar
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Game night tomorrow
+TRIGGER:-P1D
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Game night in 2 hours
+TRIGGER:-PT2H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:gamenight-20260816@lindenwoodparkplace
+DTSTAMP:20260807T110000Z
+DTSTART;TZID=America/Chicago:20260816T160000
+DTEND;TZID=America/Chicago:20260816T200000
+SUMMARY:Game Night at Lindenwood Park Place (Library)
+LOCATION:Lindenwood Park Place\, 3460 Jamieson Ave\, St. Louis
+DESCRIPTION:Lowest-commitment invitation there is. Not sure if you can co
+ me? Say yes anyway — bailing is completely fine. Not sure when you can
+  get there? Doesn't matter\, we'll start a new game when you join us. No
+ t sure you want to play whatever is on the table? Then we won't play it.
+  It's free.
+URL:https://degs.skin/calendar
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Game night tomorrow
+TRIGGER:-P1D
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Game night in 2 hours
+TRIGGER:-PT2H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:gamenight-20260822@lindenwoodparkplace
+DTSTAMP:20260807T110000Z
+DTSTART;TZID=America/Chicago:20260822T160000
+DTEND;TZID=America/Chicago:20260822T200000
+SUMMARY:Game Night at Lindenwood Park Place (Tavern)
+LOCATION:Lindenwood Park Place\, 3460 Jamieson Ave\, St. Louis
+DESCRIPTION:Lowest-commitment invitation there is. Not sure if you can co
+ me? Say yes anyway — bailing is completely fine. Not sure when you can
+  get there? Doesn't matter\, we'll start a new game when you join us. No
+ t sure you want to play whatever is on the table? Then we won't play it.
+  It's free.
+URL:https://degs.skin/calendar
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Game night tomorrow
+TRIGGER:-P1D
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Game night in 2 hours
+TRIGGER:-PT2H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:gamenight-20260826@lindenwoodparkplace
+DTSTAMP:20260807T110000Z
+DTSTART;TZID=America/Chicago:20260826T160000
+DTEND;TZID=America/Chicago:20260826T200000
+SUMMARY:Game Night at Lindenwood Park Place (Tavern)
+LOCATION:Lindenwood Park Place\, 3460 Jamieson Ave\, St. Louis
+DESCRIPTION:Lowest-commitment invitation there is. Not sure if you can co
+ me? Say yes anyway — bailing is completely fine. Not sure when you can
+  get there? Doesn't matter\, we'll start a new game when you join us. No
+ t sure you want to play whatever is on the table? Then we won't play it.
+  It's free.
+URL:https://degs.skin/calendar
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Game night tomorrow
+TRIGGER:-P1D
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Game night in 2 hours
+TRIGGER:-PT2H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:gamenight-20260829@lindenwoodparkplace
+DTSTAMP:20260807T110000Z
+DTSTART;TZID=America/Chicago:20260829T160000
+DTEND;TZID=America/Chicago:20260829T200000
+SUMMARY:Game Night at Lindenwood Park Place (Tavern)
+LOCATION:Lindenwood Park Place\, 3460 Jamieson Ave\, St. Louis
+DESCRIPTION:Lowest-commitment invitation there is. Not sure if you can co
+ me? Say yes anyway — bailing is completely fine. Not sure when you can
+  get there? Doesn't matter\, we'll start a new game when you join us. No
+ t sure you want to play whatever is on the table? Then we won't play it.
+  It's free.
+URL:https://degs.skin/calendar
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Game night tomorrow
+TRIGGER:-P1D
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Game night in 2 hours
+TRIGGER:-PT2H
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:gamenight-20260830@lindenwoodparkplace
+DTSTAMP:20260807T110000Z
+DTSTART;TZID=America/Chicago:20260830T160000
+DTEND;TZID=America/Chicago:20260830T200000
+SUMMARY:Game Night at Lindenwood Park Place (Library)
+LOCATION:Lindenwood Park Place\, 3460 Jamieson Ave\, St. Louis
+DESCRIPTION:Lowest-commitment invitation there is. Not sure if you can co
+ me? Say yes anyway — bailing is completely fine. Not sure when you can
+  get there? Doesn't matter\, we'll start a new game when you join us. No
+ t sure you want to play whatever is on the table? Then we won't play it.
+  It's free.
+URL:https://degs.skin/calendar
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Game night tomorrow
+TRIGGER:-P1D
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Game night in 2 hours
+TRIGGER:-PT2H
+END:VALARM
+END:VEVENT
+END:VCALENDAR
