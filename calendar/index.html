@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>The Approach — Countdown to 9/21 | Degs</title>
+<title>The Approach — 9/21 to Halloween | Degs</title>
 <link rel="icon" type="image/x-icon" href="/images/avatar.png">
 
-<meta name="description" content="A countdown to September 21 — moon phases, solar longitude marks, daylight loss, and Missouri harvest windows on the run up to the autumnal equinox.">
+<meta name="description" content="A countdown to September 21 and on through Halloween — moon phases, solar longitude marks, meteor showers, daylight loss, and Missouri harvest windows.">
 <meta rel="canonical" href="https://degs.skin/calendar">
 <meta name="author" content="Degs">
 
@@ -230,6 +230,11 @@
     width:20px; height:20px; margin-top:0;
     box-shadow:0 0 14px var(--glow);
   }
+  .node.halloween{
+    border-color:var(--magenta); background:var(--magenta);
+    width:18px; height:18px; margin-top:1px;
+    box-shadow:0 0 12px rgba(212,24,134,0.75);
+  }
 
   .card{
     flex:1;
@@ -273,6 +278,7 @@
   .tag.solar{ color:var(--pink); }
   .tag.harvest{ color:var(--magenta); }
   .tag.birthday{ color:var(--pink); background:rgba(254,84,255,0.14); }
+  .tag.halloween{ color:var(--magenta); background:rgba(212,24,134,0.18); }
 
   .title{
     font-family:var(--font-head);
@@ -289,6 +295,19 @@
     line-height:1.2;
     color:var(--pink);
     text-shadow:0 0 0.4rem var(--glow);
+  }
+  /* Halloween gets the blackletter too, one step down from the birthday. */
+  .event.halloween .card{
+    border-color:var(--magenta);
+    box-shadow:0 0 18px rgba(212,24,134,0.18);
+  }
+  .event.halloween .title{
+    font-family:var(--font-display);
+    font-weight:400;
+    font-size:23px;
+    line-height:1.2;
+    color:var(--magenta);
+    text-shadow:0 0 0.4rem rgba(212,24,134,0.5);
   }
 
   .desc{
@@ -478,12 +497,12 @@ const events = [
   {date:ld(2026,8,20), type:'harvest', tag:'Harvest', title:'🍇 Missouri Grape Harvest Begins', desc:"Earliest varietals get picked as the state's wineries open the season — Augusta, Hermann, and the Ozark AVAs kick off six weeks ahead of Norton."},
   {date:ld(2026,8,22), type:'astro', tag:'Astrological', title:'Sun Enters Virgo (150°)', desc:'A 30° zodiac-grid point, not a geometric midpoint — but the daylight-loss rate here is already measurably faster than three weeks earlier. The on-ramp, not the peak.'},
   {date:ld(2026,8,28), type:'lunar', tag:'Full Moon', title:'Full "Sturgeon" Moon + Partial Lunar Eclipse', desc:'Full illumination at 4° Pisces, opposite the sun. A Blood Moon eclipse rides along with it.', illum:1.0, waxing:false},
+  {date:ld(2026,8,30), type:'astro', tag:'¾ Longitude', title:'Three-Quarter Arc Mark (157.5°)', desc:"Halfway between the cross-quarter day and the equinox — same bisection logic as Aug 7, applied again. More rigorous than Virgo's debut, and closer to the finish line."},
   {date:ld(2026,9,1), type:'meteor', tag:'Meteorological', title:'Meteorological Autumn Begins', desc:'Calendar convention — the season starts on the 1st regardless of solar position. Zero astronomical basis, but daylight loss is now visibly accelerating.'},
   {date:ld(2026,9,1), type:'harvest', tag:'Harvest', title:'🌽 Corn Harvest Begins (River Bottoms)', desc:'Missouri River bottomland fields are first to come off — combines roll here weeks before the rest of the state, targeting ~15% grain moisture.'},
   {date:ld(2026,9,1), type:'harvest', tag:'Harvest', title:'🍷 Missouri Wine Month Begins', desc:"The state's official month-long celebration of its 5 AVAs and 129 wineries — timed to the harvest itself."},
   {date:ld(2026,9,4), type:'lunar', tag:'Last Quarter', title:'Last Quarter Moon', desc:'Half-lit, shrinking.', illum:0.5, waxing:false},
   {date:ld(2026,9,7), type:'harvest', tag:'Harvest', title:'🍎 Apple Season Peaks', desc:'Jonathan, Honeycrisp, Gala, and heirloom varieties hit peak across Missouri orchards — the single biggest apple-picking month of the year.'},
-  {date:ld(2026,9,8), type:'astro', tag:'¾ Longitude', title:'Three-Quarter Arc Mark (157.5°)', desc:"Halfway between the cross-quarter day and the equinox — same bisection logic as Aug 7, applied again. More rigorous than Virgo's debut, and closer to the finish line."},
   {date:ld(2026,9,11), type:'lunar', tag:'New Moon', title:'New Moon', desc:'Dark moon — sky is emptiest of lunar light heading into your birthday.', illum:0.0, waxing:true},
   {date:ld(2026,9,15), type:'harvest', tag:'Harvest', title:'🌱 Soybean Harvest Begins', desc:'Combines start rolling once pods turn tan and moisture hits ~13% — runs from mid-September into November.'},
   {date:ld(2026,9,18), type:'lunar', tag:'First Quarter', title:'First Quarter Moon', desc:'Half-lit, growing — three days out from 9/21.', illum:0.5, waxing:true},
@@ -491,6 +510,18 @@ const events = [
   {date:ld(2026,9,22), type:'solar', tag:'Equinox', title:'Autumnal Equinox (180°)', desc:'The only date in this whole run with unambiguous physical significance — day and night in balance, and the peak rate of change in daylight, right on your doorstep.'},
   {date:ld(2026,9,23), type:'harvest', tag:'Harvest', title:'🍇 Norton Grape Harvest Underway', desc:"Missouri's official state grape — the last and latest of the season's wine varietals, picked from now into November."},
   {date:ld(2026,9,26), type:'lunar', tag:'Full Moon', title:'Full "Harvest" Moon', desc:'First full moon after the equinox — the traditional Harvest Moon, arriving five days into your new year.', illum:1.0, waxing:false},
+  {date:ld(2026,10,3), type:'lunar', tag:'Last Quarter', title:'Last Quarter Moon', desc:'Half-lit, shrinking. The light drains back out of the sky ahead of the darkest stretch of October.', illum:0.5, waxing:false},
+  {date:ld(2026,10,8), type:'astro', tag:'Meteor Shower', title:'Draconids Peak', desc:'Debris from comet 21P/Giacobini-Zinner. Two nights before new moon, so effectively no moonlight — and unusually, the Draconids run best in the early evening rather than before dawn, because the radiant is highest at nightfall.'},
+  {date:ld(2026,10,10), type:'lunar', tag:'New Moon', title:'New Moon', desc:'The darkest sky of the whole run. Nothing between you and the Milky Way but St. Louis light pollution.', illum:0.0, waxing:true},
+  {date:ld(2026,10,12), type:'harvest', tag:'Harvest', title:'🎃 Pumpkin Harvest Peaks', desc:'Missouri patches hit full swing — the state grows pumpkins commercially across the river bottoms, and the pick-your-own fields peak in the middle two weeks of October.'},
+  {date:ld(2026,10,15), type:'astro', tag:'Bisection', title:'Post-Equinox Bisection (202.5°)', desc:'Halfway from the equinox to the true autumn cross-quarter — the same halving that gave you Aug 7 and Aug 30, now running on the far side of the balance point.'},
+  {date:ld(2026,10,18), type:'lunar', tag:'First Quarter', title:'First Quarter Moon', desc:'Half-lit, growing — building toward the Hunter\'s Moon.', illum:0.5, waxing:true},
+  {date:ld(2026,10,20), type:'harvest', tag:'Harvest', title:'🍂 Fall Color Peaks', desc:'Typical peak for the St. Louis region and the eastern Ozark border — maples, oaks, and hickory turning over the last ten days of the month.'},
+  {date:ld(2026,10,21), type:'astro', tag:'Meteor Shower', title:'Orionids Peak', desc:'Dust shed by Halley\'s Comet, burning up at 41 miles per second — the fastest meteors of the season. A waxing gibbous sets around midnight, leaving the pre-dawn peak hours genuinely dark.'},
+  {date:ld(2026,10,23), type:'astro', tag:'Astrological', title:'Sun Enters Scorpio (210°)', desc:'Another 30° grid point, same as Virgo back in August — zodiac convention rather than geometry. By now you are losing daylight at close to a minute and a half a day.'},
+  {date:ld(2026,10,26), type:'lunar', tag:'Full Moon', title:'Full "Hunter\'s" Moon', desc:'The first full moon after the Harvest Moon, and the last one before Halloween. Named for the month game was fattened and taken before winter.', illum:1.0, waxing:false},
+  {date:ld(2026,10,28), type:'harvest', tag:'Harvest', title:'🍇 Norton Harvest Ends', desc:"The last fruit comes off the vine. Missouri's state grape hangs longer than anything else in the state, and its picking closes the wine season that opened back on Aug 20."},
+  {date:ld(2026,10,31), type:'halloween', tag:'★ Halloween', title:'Halloween — on a Saturday', desc:'The last Saturday Halloween until 2037. The date walks forward a weekday each year and jumps two across leap years, so after tonight it lands Sunday, Tuesday, Wednesday, Thursday, Friday, Sunday, Monday, Tuesday, Wednesday, Friday — and only then Saturday again, eleven years out. Even counting Fridays, the next one is 2031. Daylight saving ends at 2am the following morning, so the night itself runs 25 hours, and a 60%-lit waning gibbous stays down until late evening — full dark for the early hours. The true cross-quarter, solar longitude 225°, is still a week away on Nov 7; tonight is the convention, not the geometry.'},
 ];
 
 const tl = document.getElementById('timeline');
@@ -512,19 +543,16 @@ events.forEach(ev => {
   }
 
   const row = document.createElement('div');
-  row.className = 'event' + (isPast ? ' past' : '') + (ev.type==='birthday' ? ' birthday today' : '');
+  row.className = 'event ' + ev.type + (isPast ? ' past' : '') + (ev.type === 'birthday' ? ' today' : '');
 
+  // Every event type has a matching .node/.tag class, so the type is the class.
   const rail = document.createElement('div');
   rail.className = 'rail';
-  if (ev.type === 'lunar'){
-    rail.innerHTML = moonSVG(ev.illum, ev.waxing);
-  } else {
-    const cls = ev.type === 'solar' ? 'solar' : ev.type === 'meteor' ? 'meteor' : ev.type === 'birthday' ? 'birthday' : ev.type === 'harvest' ? 'harvest' : 'astro';
-    rail.innerHTML = `<div class="node ${cls}"></div>`;
-  }
+  rail.innerHTML = ev.type === 'lunar'
+    ? moonSVG(ev.illum, ev.waxing)
+    : `<div class="node ${ev.type}"></div>`;
 
   const dateStr = fmtDate(ev.date);
-  const tagCls = ev.type === 'solar' ? 'solar' : ev.type === 'meteor' ? 'meteor' : ev.type === 'birthday' ? 'birthday' : ev.type === 'lunar' ? 'lunar' : ev.type === 'harvest' ? 'harvest' : 'astro';
 
   const dl = daylightHours(ev.date);
   const statHTML = ev.type !== 'birthday'
@@ -535,7 +563,7 @@ events.forEach(ev => {
     <div class="card">
       <div class="row1">
         <span class="date">${dateStr}</span>
-        <span class="tag ${tagCls}">${ev.tag}</span>
+        <span class="tag ${ev.type}">${ev.tag}</span>
       </div>
       <div class="title">${ev.title}</div>
       <div class="desc">${ev.desc}</div>
