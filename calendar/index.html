@@ -168,20 +168,27 @@
 
   .hero .sub b{ color:var(--text); font-weight:700; }
 
-  /* ---------- DAYLIGHT RAIL ---------- */
-  .daylight-strip{
+  /* ---------- DAYLIGHT RAIL ----------
+     Same gauge as the timeline cards, scaled up, with the reading spelled out
+     underneath — the bar shows the gap, the sentence names it. */
+  .daylight{
     display:flex;
-    justify-content:center;
+    flex-direction:column;
     align-items:center;
-    gap:10px;
-    margin-top:22px;
+    gap:11px;
+    margin-top:24px;
+  }
+  .daylight-read{
     font-family:var(--font-head);
     font-weight:600;
     font-size:11px;
-    letter-spacing:0.06em;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
     color:var(--text-dim);
+    max-width:330px;
+    line-height:1.5;
   }
-  .daylight-strip span{ white-space:nowrap; }
+  .daylight-read b{ color:var(--text); font-weight:600; }
 
   /* Secondary countdown — the run past the birthday, to Halloween. */
   .hero-secondary{
@@ -195,13 +202,6 @@
   }
   .hero-secondary.next-game{ margin-top:8px; color:var(--violet); }
   .hero-secondary.next-game a{ color:inherit; }
-  .daylight-bar{
-    width:min(66vw, 300px);
-    height:6px;
-    border-radius:3px;
-    background:linear-gradient(90deg, var(--pink) 0%, var(--pink) var(--pct), var(--night) var(--pct), var(--night) 100%);
-    box-shadow: inset 0 0 0 1px rgba(252,239,250,0.12);
-  }
 
   /* ---------- SOUNDTRACK ---------- */
   .soundtrack{
@@ -445,6 +445,20 @@
     transform:translateX(-0.5px);
     background:rgba(252,239,250,0.6);
   }
+  /* Hero scale. Must follow the base .meter rules — same specificity, so the
+     later declaration is what makes the override stick. */
+  .meter--hero{
+    width:min(66vw, 300px);
+    height:8px;
+    border-radius:4px;
+  }
+  /* Wider and brighter, so the reference point stays readable where the fill
+     begins on top of it. */
+  .meter--hero .meter-center{
+    width:2px;
+    transform:translateX(-1px);
+    background:var(--text);
+  }
 
   .today-marker{
     display:flex;
@@ -516,10 +530,12 @@
   <div class="count" id="countNum">—</div>
   <div class="count-label" id="countLabel">days to the Virgo–Libra nexus</div>
   <div class="sub"><b>Sept 21</b> is the last full day of Virgo — one day short of the autumnal equinox, and the steepest point of the whole year's daylight curve. From that hinge the light keeps draining: moon phases, longitude marks, and the Missouri harvest, tracked the rest of the way down to <b>Oct 31</b>.</div>
-  <div class="daylight-strip">
-    <span id="dlToday">—</span>
-    <div class="daylight-bar" id="dlBar" style="--pct:56%"></div>
-    <span id="dlEquinox">12h00 / 12h00</span>
+  <div class="daylight">
+    <span class="meter meter--hero" aria-hidden="true">
+      <span class="meter-fill" id="dlFill"></span>
+      <span class="meter-center"></span>
+    </span>
+    <div class="daylight-read" id="dlRead"></div>
   </div>
   <div class="hero-secondary" id="halloweenCount"></div>
   <div class="hero-secondary next-game" id="nextGameNight"></div>
@@ -598,16 +614,23 @@ function fmtDate(d){
 // the reading beside it carries the value for screen readers.
 const METER_SPAN_HOURS = 3;   // hours either side of 12h before the gauge pins
 const METER_BALANCE_H  = 0.1; // within six minutes of 12h, call it balanced
-function daylightMeter(hrs){
+
+// Shared geometry, so the hero gauge and the card gauges stay on one scale.
+// Day grows rightward from the tick, night leftward — each anchored to the
+// centre so the minimum-width mark extends the correct way.
+function meterParts(hrs){
   const delta = Math.max(-METER_SPAN_HOURS, Math.min(METER_SPAN_HOURS, hrs - 12));
   const half = Math.abs(delta) / METER_SPAN_HOURS * 50;
-  // Day grows rightward from the tick, night leftward — anchoring each to the
-  // centre so the minimum-width mark extends the correct way.
-  const fill =
-      Math.abs(delta) <= METER_BALANCE_H ? `<span class="meter-fill balanced"></span>`
-    : delta > 0 ? `<span class="meter-fill" style="left:50%;width:${half}%"></span>`
-    :             `<span class="meter-fill night" style="right:50%;width:${half}%"></span>`;
-  return `<span class="meter" aria-hidden="true">${fill}<span class="meter-center"></span></span>`;
+  if (Math.abs(delta) <= METER_BALANCE_H) return { cls:'balanced', style:'', delta:0 };
+  return delta > 0
+    ? { cls:'', style:`left:50%;width:${half}%`, delta }
+    : { cls:'night', style:`right:50%;width:${half}%`, delta };
+}
+function daylightMeter(hrs){
+  const { cls, style } = meterParts(hrs);
+  return `<span class="meter" aria-hidden="true">`
+       + `<span class="meter-fill${cls ? ' ' + cls : ''}" style="${style}"></span>`
+       + `<span class="meter-center"></span></span>`;
 }
 
 // countdown
@@ -636,10 +659,21 @@ document.getElementById('halloweenCount').textContent =
   : toHalloween === 0 ? 'Halloween — tonight'
   : `${Math.abs(toHalloween)} ${Math.abs(toHalloween) === 1 ? 'day' : 'days'} past Halloween`;
 
+// Today's daylight, on the same gauge the cards use, with the gap named in
+// words underneath — the bar alone never said what it was measuring against.
 const todayDL = daylightHours(TODAY);
-document.getElementById('dlToday').textContent = fmtHM(todayDL)+' day';
-document.getElementById('dlEquinox').textContent = '12h00 / 12h00';
-document.getElementById('dlBar').style.setProperty('--pct', ((todayDL/24)*100).toFixed(1)+'%');
+const todayParts = meterParts(todayDL);
+const dlFill = document.getElementById('dlFill');
+if (todayParts.cls) dlFill.classList.add(todayParts.cls);
+dlFill.setAttribute('style', todayParts.style);
+
+const gap = todayDL - 12;
+document.getElementById('dlRead').innerHTML =
+  `<b>${fmtHM(todayDL)}</b> of daylight today · ` + (
+    Math.abs(gap) <= METER_BALANCE_H
+      ? 'day and night in balance'
+      : `<b>${fmtHM(Math.abs(gap))}</b> more ${gap > 0 ? 'day than night' : 'night than day'}`
+  );
 
 // moon phase icon renderer: illum 0-1, waxing bool
 const MOON_DARK = '#5A2C7A';
