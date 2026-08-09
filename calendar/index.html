@@ -396,7 +396,9 @@
   }
 
   .stat{
-    display:inline-block;
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
     font-family:var(--font-head);
     font-weight:600;
     font-size:10.5px;
@@ -406,6 +408,42 @@
     margin-top:9px;
     padding-top:9px;
     border-top:1px solid var(--line);
+  }
+
+  /* Daylight gauge. Diverges from the 12h balance point rather than filling
+     from zero, so the fill crosses the centre tick exactly at the equinox —
+     the thing the whole page is about. Same track and inset as the hero bar. */
+  .meter{
+    position:relative;
+    flex:0 0 auto;
+    width:92px;
+    height:6px;
+    border-radius:3px;
+    background:var(--night);
+    box-shadow:inset 0 0 0 1px rgba(252,239,250,0.10);
+    overflow:hidden;
+  }
+  .meter-fill{
+    position:absolute;
+    top:0; bottom:0;
+    background:var(--pink);
+    min-width:2px;          /* keeps a near-zero reading visible as a mark */
+  }
+  .meter-fill.night{ background:var(--meteor); }
+  /* Within six minutes of 12h, neither side is meaningfully ahead — show a
+     neutral mark sitting on the tick instead of a pixel of one colour. */
+  .meter-fill.balanced{
+    left:50%; width:3px;
+    transform:translateX(-1.5px);
+    background:var(--pale);
+  }
+  .meter-center{
+    position:absolute;
+    top:0; bottom:0;
+    left:50%;
+    width:1px;
+    transform:translateX(-0.5px);
+    background:rgba(252,239,250,0.6);
   }
 
   .today-marker{
@@ -553,6 +591,25 @@ function fmtDate(d){
   return d.toLocaleDateString('en-US', {month:'short', day:'numeric'});
 }
 
+// Daylight gauge, measured out from the 12h balance point rather than from
+// zero. Over this run the values only span 10h23–14h05, so a 0–24h bar would
+// leave every card looking identical; anchoring on 12h turns the same numbers
+// into a curve that visibly crosses the centre at the equinox. Decorative —
+// the reading beside it carries the value for screen readers.
+const METER_SPAN_HOURS = 3;   // hours either side of 12h before the gauge pins
+const METER_BALANCE_H  = 0.1; // within six minutes of 12h, call it balanced
+function daylightMeter(hrs){
+  const delta = Math.max(-METER_SPAN_HOURS, Math.min(METER_SPAN_HOURS, hrs - 12));
+  const half = Math.abs(delta) / METER_SPAN_HOURS * 50;
+  // Day grows rightward from the tick, night leftward — anchoring each to the
+  // centre so the minimum-width mark extends the correct way.
+  const fill =
+      Math.abs(delta) <= METER_BALANCE_H ? `<span class="meter-fill balanced"></span>`
+    : delta > 0 ? `<span class="meter-fill" style="left:50%;width:${half}%"></span>`
+    :             `<span class="meter-fill night" style="right:50%;width:${half}%"></span>`;
+  return `<span class="meter" aria-hidden="true">${fill}<span class="meter-center"></span></span>`;
+}
+
 // countdown
 const diffDays = Math.round((BIRTHDAY - TODAY)/86400000);
 const countEl = document.getElementById('countNum');
@@ -686,8 +743,8 @@ events.forEach(ev => {
   const dl = daylightHours(ev.date);
   const statHTML =
       ev.type === 'gamenight' ? `<div class="stat">◆ ${ev.when} · ${ev.venue}</div>`
-    : ev.type === 'birthday'  ? `<div class="stat">☀ ${fmtHM(dl)} daylight · losing ~2min 50s/day</div>`
-    :                           `<div class="stat">☀ ${fmtHM(dl)} daylight</div>`;
+    : ev.type === 'birthday'  ? `<div class="stat">${daylightMeter(dl)}<span>${fmtHM(dl)} daylight · losing ~2min 50s/day</span></div>`
+    :                           `<div class="stat">${daylightMeter(dl)}<span>${fmtHM(dl)} daylight</span></div>`;
 
   row.innerHTML = `
     <div class="card">
