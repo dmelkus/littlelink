@@ -400,8 +400,8 @@
 <div class="hero">
   <div class="eyebrow">St. Louis · 38.6°N</div>
   <div class="count" id="countNum">—</div>
-  <div class="count-label" id="countLabel">days to the equinox threshold</div>
-  <div class="sub">From <b id="fromDate">today</b> (150° short of nothing) to <b>Sept 21</b>, your birthday sits one day inside Virgo, one day before the actual equinox — the steepest point of the year's daylight curve. The run then carries on through <b>Oct 31</b>.</div>
+  <div class="count-label" id="countLabel">days to the Virgo–Libra nexus</div>
+  <div class="sub"><b>Sept 21</b> is the last full day of Virgo — one day short of the autumnal equinox, and the steepest point of the whole year's daylight curve. From that hinge the light keeps draining: moon phases, longitude marks, and the Missouri harvest, tracked the rest of the way down to <b>Oct 31</b>.</div>
   <div class="daylight-strip">
     <span id="dlToday">—</span>
     <div class="daylight-bar" id="dlBar" style="--pct:56%"></div>
@@ -458,19 +458,17 @@ const countEl = document.getElementById('countNum');
 const labelEl = document.getElementById('countLabel');
 if (diffDays > 0){
   countEl.textContent = diffDays;
-  labelEl.textContent = diffDays === 1 ? 'day to the equinox threshold' : 'days to the equinox threshold';
+  labelEl.textContent = diffDays === 1 ? 'day to the Virgo–Libra nexus' : 'days to the Virgo–Libra nexus';
 } else if (diffDays === 0){
   countEl.textContent = 'Today';
   countEl.classList.add('is-word');
-  labelEl.textContent = 'the equinox threshold';
+  labelEl.textContent = 'the Virgo–Libra nexus';
 } else {
   countEl.textContent = Math.abs(diffDays);
   labelEl.textContent = Math.abs(diffDays) === 1
-    ? 'day since the equinox threshold'
-    : 'days since the equinox threshold';
+    ? 'day since the Virgo–Libra nexus'
+    : 'days since the Virgo–Libra nexus';
 }
-
-document.getElementById('fromDate').textContent = fmtDate(TODAY);
 
 // secondary countdown to Halloween
 const HALLOWEEN = ld(2026, 10, 31);
