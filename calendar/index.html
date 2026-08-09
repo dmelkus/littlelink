@@ -164,6 +164,17 @@
     color:var(--text-dim);
   }
   .daylight-strip span{ white-space:nowrap; }
+
+  /* Secondary countdown — the run past the birthday, to Halloween. */
+  .hero-secondary{
+    margin-top:18px;
+    font-family:var(--font-head);
+    font-weight:600;
+    font-size:11px;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    color:var(--magenta);
+  }
   .daylight-bar{
     width:min(66vw, 300px);
     height:6px;
@@ -390,19 +401,21 @@
   <div class="eyebrow">St. Louis · 38.6°N</div>
   <div class="count" id="countNum">—</div>
   <div class="count-label" id="countLabel">days to the equinox threshold</div>
-  <div class="sub">From <b id="fromDate">today</b> (150° short of nothing) to <b>Sept 21</b>, your birthday sits one day inside Virgo, one day before the actual equinox — the steepest point of the year's daylight curve.</div>
+  <div class="sub">From <b id="fromDate">today</b> (150° short of nothing) to <b>Sept 21</b>, your birthday sits one day inside Virgo, one day before the actual equinox — the steepest point of the year's daylight curve. The run then carries on through <b>Oct 31</b>.</div>
   <div class="daylight-strip">
     <span id="dlToday">—</span>
     <div class="daylight-bar" id="dlBar" style="--pct:56%"></div>
     <span id="dlEquinox">12h00 / 12h00</span>
   </div>
+  <div class="hero-secondary" id="halloweenCount"></div>
 </div>
 
 <div class="timeline" id="timeline"></div>
 
 <footer>
   Moon phase times in UTC · Solar longitude measured from Aries point (0°)<br>
-  Daylight hours approximated for 38.6°N · Harvest windows are typical Missouri timing, not 2026 forecasts<br>
+  Daylight hours approximated for 38.6°N · Harvest and frost windows are typical Missouri timing, not 2026 forecasts<br>
+  <span id="runSpan"></span><br>
   <a class="wordmark" href="/">Degs</a>
 </footer>
 
@@ -459,6 +472,14 @@ if (diffDays > 0){
 
 document.getElementById('fromDate').textContent = fmtDate(TODAY);
 
+// secondary countdown to Halloween
+const HALLOWEEN = ld(2026, 10, 31);
+const toHalloween = Math.round((HALLOWEEN - TODAY)/86400000);
+document.getElementById('halloweenCount').textContent =
+  toHalloween > 0 ? `${toHalloween} ${toHalloween === 1 ? 'day' : 'days'} to Halloween`
+  : toHalloween === 0 ? 'Halloween — tonight'
+  : `${Math.abs(toHalloween)} ${Math.abs(toHalloween) === 1 ? 'day' : 'days'} past Halloween`;
+
 const todayDL = daylightHours(TODAY);
 document.getElementById('dlToday').textContent = fmtHM(todayDL)+' day';
 document.getElementById('dlEquinox').textContent = '12h00 / 12h00';
@@ -508,18 +529,20 @@ const events = [
   {date:ld(2026,9,18), type:'lunar', tag:'First Quarter', title:'First Quarter Moon', desc:'Half-lit, growing — three days out from 9/21.', illum:0.5, waxing:true},
   {date:ld(2026,9,21), type:'birthday', tag:'★ The Day', title:'Your Birthday', desc:"Virgo/Libra cusp. One day before the equinox, sitting at the single steepest point of the entire year's daylight-loss curve."},
   {date:ld(2026,9,22), type:'solar', tag:'Equinox', title:'Autumnal Equinox (180°)', desc:'The only date in this whole run with unambiguous physical significance — day and night in balance, and the peak rate of change in daylight, right on your doorstep.'},
+  {date:ld(2026,9,23), type:'astro', tag:'Astrological', title:'Sun Enters Libra (180°)', desc:'Libra begins at the exact same longitude as the equinox itself — the only zodiac sign whose start is pinned to a real astronomical event rather than a 30° grid line. For one sign a year, the convention and the geometry agree.'},
   {date:ld(2026,9,23), type:'harvest', tag:'Harvest', title:'🍇 Norton Grape Harvest Underway', desc:"Missouri's official state grape — the last and latest of the season's wine varietals, picked from now into November."},
   {date:ld(2026,9,26), type:'lunar', tag:'Full Moon', title:'Full "Harvest" Moon', desc:'First full moon after the equinox — the traditional Harvest Moon, arriving five days into your new year.', illum:1.0, waxing:false},
-  {date:ld(2026,10,3), type:'lunar', tag:'Last Quarter', title:'Last Quarter Moon', desc:'Half-lit, shrinking. The light drains back out of the sky ahead of the darkest stretch of October.', illum:0.5, waxing:false},
+  {date:ld(2026,10,3), type:'lunar', tag:'Last Quarter', title:'Last Quarter Moon', desc:'Half-lit and shrinking, in Cancer. The light drains back out of the sky ahead of the darkest stretch of October.', illum:0.5, waxing:false},
   {date:ld(2026,10,8), type:'astro', tag:'Meteor Shower', title:'Draconids Peak', desc:'Debris from comet 21P/Giacobini-Zinner. Two nights before new moon, so effectively no moonlight — and unusually, the Draconids run best in the early evening rather than before dawn, because the radiant is highest at nightfall.'},
-  {date:ld(2026,10,10), type:'lunar', tag:'New Moon', title:'New Moon', desc:'The darkest sky of the whole run. Nothing between you and the Milky Way but St. Louis light pollution.', illum:0.0, waxing:true},
-  {date:ld(2026,10,12), type:'harvest', tag:'Harvest', title:'🎃 Pumpkin Harvest Peaks', desc:'Missouri patches hit full swing — the state grows pumpkins commercially across the river bottoms, and the pick-your-own fields peak in the middle two weeks of October.'},
+  {date:ld(2026,10,10), type:'lunar', tag:'New Moon', title:'New Moon', desc:'Dark moon at 17° Libra — the emptiest sky of the whole run. Nothing between you and the Milky Way but St. Louis light pollution.', illum:0.0, waxing:true},
+  {date:ld(2026,10,12), type:'harvest', tag:'Harvest', title:'🎃 Pumpkin & Late-Apple Season Peaks', desc:'Missouri patches hit full swing across the river bottoms, and the last apples come off the tree — Winesap and Arkansas Black, dense and built for winter storage rather than eating fresh.'},
   {date:ld(2026,10,15), type:'astro', tag:'Bisection', title:'Post-Equinox Bisection (202.5°)', desc:'Halfway from the equinox to the true autumn cross-quarter — the same halving that gave you Aug 7 and Aug 30, now running on the far side of the balance point.'},
-  {date:ld(2026,10,18), type:'lunar', tag:'First Quarter', title:'First Quarter Moon', desc:'Half-lit, growing — building toward the Hunter\'s Moon.', illum:0.5, waxing:true},
+  {date:ld(2026,10,18), type:'lunar', tag:'First Quarter', title:'First Quarter Moon', desc:'Half-lit and growing, in Capricorn — building toward the Hunter\'s Moon.', illum:0.5, waxing:true},
   {date:ld(2026,10,20), type:'harvest', tag:'Harvest', title:'🍂 Fall Color Peaks', desc:'Typical peak for the St. Louis region and the eastern Ozark border — maples, oaks, and hickory turning over the last ten days of the month.'},
   {date:ld(2026,10,21), type:'astro', tag:'Meteor Shower', title:'Orionids Peak', desc:'Dust shed by Halley\'s Comet, burning up at 41 miles per second — the fastest meteors of the season. A waxing gibbous sets around midnight, leaving the pre-dawn peak hours genuinely dark.'},
   {date:ld(2026,10,23), type:'astro', tag:'Astrological', title:'Sun Enters Scorpio (210°)', desc:'Another 30° grid point, same as Virgo back in August — zodiac convention rather than geometry. By now you are losing daylight at close to a minute and a half a day.'},
-  {date:ld(2026,10,26), type:'lunar', tag:'Full Moon', title:'Full "Hunter\'s" Moon', desc:'The first full moon after the Harvest Moon, and the last one before Halloween. Named for the month game was fattened and taken before winter.', illum:1.0, waxing:false},
+  {date:ld(2026,10,23), type:'harvest', tag:'Harvest', title:'❄ Average First Frost (St. Louis)', desc:'The long-run average date of the first fall frost, when the thermometer first dips into the 32–36°F band and tender crops need to be off the vine. The first true freeze runs later — its average lands on Oct 31 itself.'},
+  {date:ld(2026,10,26), type:'lunar', tag:'Full Moon', title:'Full "Hunter\'s" Moon', desc:'Full illumination at 2° Taurus — the first full moon after the Harvest Moon, and the last one before Halloween. Named for the month game was fattened and taken before winter.', illum:1.0, waxing:false},
   {date:ld(2026,10,28), type:'harvest', tag:'Harvest', title:'🍇 Norton Harvest Ends', desc:"The last fruit comes off the vine. Missouri's state grape hangs longer than anything else in the state, and its picking closes the wine season that opened back on Aug 20."},
   {date:ld(2026,10,31), type:'halloween', tag:'★ Halloween', title:'Halloween — on a Saturday', desc:'The last Saturday Halloween until 2037. The date walks forward a weekday each year and jumps two across leap years, so after tonight it lands Sunday, Tuesday, Wednesday, Thursday, Friday, Sunday, Monday, Tuesday, Wednesday, Friday — and only then Saturday again, eleven years out. Even counting Fridays, the next one is 2031. Daylight saving ends at 2am the following morning, so the night itself runs 25 hours, and a 60%-lit waning gibbous stays down until late evening — full dark for the early hours. The true cross-quarter, solar longitude 225°, is still a week away on Nov 7; tonight is the convention, not the geometry.'},
 ];
@@ -578,6 +601,10 @@ events.forEach(ev => {
 if (!todayInserted){
   tl.appendChild(todayMarker());
 }
+
+// Footer run span, read off the timeline itself so it can never drift from it.
+document.getElementById('runSpan').textContent =
+  `Run extends ${fmtDate(events[0].date)} → ${fmtDate(events[events.length-1].date)}`;
 </script>
 
 </body>
