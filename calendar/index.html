@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>The Approach — 9/21 to Halloween | Degs</title>
+<link rel="icon" type="image/x-icon" href="/images/avatar.png">
+
+<meta name="description" content="A countdown to September 21 and on through Halloween — moon phases, solar longitude marks, meteor showers, daylight loss, and Missouri harvest windows.">
+<meta rel="canonical" href="https://degs.skin/calendar">
+<meta name="author" content="Degs">
+
+<style>
+  /* Self-hosted Degs families, same files css/style.css uses. Absolute paths so
+     they resolve from /calendar/ as well as from the root. */
+  @font-face{
+    font-display:swap;
+    font-family:'Open Sans';
+    font-style:normal;
+    font-weight:400;
+    src:url('/fonts/open-sans-v34-vietnamese_latin-ext_latin_hebrew_greek-ext_greek_cyrillic-ext_cyrillic-regular.woff2') format('woff2');
+  }
+  @font-face{
+    font-display:swap;
+    font-family:'Open Sans';
+    font-style:normal;
+    font-weight:600;
+    src:url('/fonts/open-sans-v34-vietnamese_latin-ext_latin_hebrew_greek-ext_greek_cyrillic-ext_cyrillic-600.woff2') format('woff2');
+  }
+  @font-face{
+    font-display:swap;
+    font-family:'Open Sans';
+    font-style:normal;
+    font-weight:700;
+    src:url('/fonts/open-sans-v34-vietnamese_latin-ext_latin_hebrew_greek-ext_greek_cyrillic-ext_cyrillic-700.woff2') format('woff2');
+  }
+  @font-face{
+    font-display:swap;
+    font-family:'Cinzel';
+    font-style:normal;
+    font-weight:600;
+    src:url('/fonts/cinzel-v26-latin-600.woff2') format('woff2');
+  }
+  @font-face{
+    font-display:swap;
+    font-family:'UnifrakturMaguntia';
+    font-style:normal;
+    font-weight:400;
+    src:url('/fonts/unifraktur-maguntia-v22-latin-regular.woff2') format('woff2');
+  }
+
+  :root{
+    /* Degs palette, carried over from css/style.css */
+    --bg:#120522;
+    --bg-card:#2E0A45;
+    --line:#4A1B6B;
+    --muted:#5A2C7A;
+    --night:#0B0316;
+    --text:#FCEFFA;
+    --text-dim:#B98FD4;
+    --magenta:#D41886;
+    --pink:#FE54FF;
+    --violet:#C77DFF;
+    --pale:#FCEFFA;
+    --meteor:#8B6FD8;
+    --glow:rgba(253,0,253,0.45);
+
+    /* Type roles: blackletter for the one hero number, Cinzel for every label
+       and title, Open Sans for running text — mirrors the homepage. */
+    --font-display:'UnifrakturMaguntia', serif;
+    --font-head:'Cinzel', serif;
+    --font-body:'Open Sans', system-ui, sans-serif;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--font-body);
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:80px;
+  }
+
+  /* ---------- BACK LINK ---------- */
+  .backlink{
+    display:block;
+    padding:18px 24px 0;
+    font-family:var(--font-head);
+    font-weight:600;
+    font-size:11px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--violet);
+    text-decoration:none;
+  }
+  .backlink:hover{ color:var(--pink); }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    padding:44px 24px 40px;
+    text-align:center;
+    overflow:hidden;
+    border-bottom:1px solid var(--line);
+    background:
+      radial-gradient(ellipse at 50% -10%, rgba(253,0,253,0.18), transparent 62%),
+      linear-gradient(180deg, #0B0316 0%, #120522 100%);
+  }
+
+  .hero .eyebrow{
+    font-family:var(--font-head);
+    font-weight:600;
+    font-size:11px;
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+    color:var(--violet);
+  }
+
+  .hero .count{
+    font-family:var(--font-display);
+    font-weight:400;
+    font-size:min(26vw, 132px);
+    line-height:1.05;
+    margin:10px 0 6px;
+    color:var(--pink);
+    text-shadow:0 0 0.4rem var(--glow);
+    font-variant-numeric: tabular-nums;
+  }
+  .hero .count.is-word{ font-size:min(15vw, 76px); }
+
+  .hero .count-label{
+    font-family:var(--font-head);
+    font-weight:600;
+    font-size:14px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--text);
+  }
+
+  .hero .sub{
+    margin-top:20px;
+    font-size:13px;
+    color:var(--text-dim);
+    max-width:340px;
+    margin-left:auto; margin-right:auto;
+    line-height:1.6;
+  }
+
+  .hero .sub b{ color:var(--text); font-weight:700; }
+
+  /* ---------- DAYLIGHT RAIL ---------- */
+  .daylight-strip{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:10px;
+    margin-top:22px;
+    font-family:var(--font-head);
+    font-weight:600;
+    font-size:11px;
+    letter-spacing:0.06em;
+    color:var(--text-dim);
+  }
+  .daylight-strip span{ white-space:nowrap; }
+
+  /* Secondary countdown — the run past the birthday, to Halloween. */
+  .hero-secondary{
+    margin-top:18px;
+    font-family:var(--font-head);
+    font-weight:600;
+    font-size:11px;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    color:var(--magenta);
+  }
+  .daylight-bar{
+    width:min(66vw, 300px);
+    height:6px;
+    border-radius:3px;
+    background:linear-gradient(90deg, var(--pink) 0%, var(--pink) var(--pct), var(--night) var(--pct), var(--night) 100%);
+    box-shadow: inset 0 0 0 1px rgba(252,239,250,0.12);
+  }
+
+  /* ---------- TIMELINE ---------- */
+  .timeline{
+    max-width:640px;
+    margin:0 auto;
+    padding:36px 20px 0;
+    position:relative;
+  }
+
+  .timeline::before{
+    content:'';
+    position:absolute;
+    left:39px;
+    top:36px;
+    bottom:20px;
+    width:1px;
+    background:linear-gradient(180deg, var(--muted) 0%, var(--line) 40%, var(--pink) 100%);
+  }
+
+  .event{
+    position:relative;
+    display:flex;
+    gap:18px;
+    padding-bottom:30px;
+  }
+
+  .event.past{ opacity:0.42; }
+  .event.today .card{
+    border-color:var(--pink);
+    box-shadow:0 0 0 1px var(--pink), 0 0 24px rgba(253,0,253,0.25);
+  }
+
+  .rail{
+    flex:0 0 auto;
+    width:40px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    position:relative;
+    z-index:2;
+  }
+
+  .node{
+    width:14px; height:14px;
+    border-radius:50%;
+    background:var(--bg);
+    border:2px solid var(--muted);
+    margin-top:4px;
+  }
+  .node.lunar{ border-color:var(--pale); }
+  .node.astro{ border-color:var(--violet); }
+  .node.meteor{ border-color:var(--meteor); }
+  .node.solar{ border-color:var(--pink); background:var(--pink); }
+  .node.harvest{ border-color:var(--magenta); }
+  .node.birthday{
+    border-color:var(--pink); background:var(--pink);
+    width:20px; height:20px; margin-top:0;
+    box-shadow:0 0 14px var(--glow);
+  }
+  .node.halloween{
+    border-color:var(--magenta); background:var(--magenta);
+    width:18px; height:18px; margin-top:1px;
+    box-shadow:0 0 12px rgba(212,24,134,0.75);
+  }
+
+  .card{
+    flex:1;
+    background:var(--bg-card);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:14px 16px;
+  }
+
+  .card .row1{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+
+  .date{
+    font-family:var(--font-head);
+    font-weight:600;
+    font-size:11px;
+    letter-spacing:0.1em;
+    color:var(--text-dim);
+    text-transform:uppercase;
+  }
+
+  .tag{
+    font-family:var(--font-head);
+    font-weight:600;
+    font-size:9.5px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    padding:2px 8px;
+    border-radius:20px;
+    border:1px solid currentColor;
+    white-space:nowrap;
+  }
+  .tag.lunar{ color:var(--pale); }
+  .tag.astro{ color:var(--violet); }
+  .tag.meteor{ color:var(--meteor); }
+  .tag.solar{ color:var(--pink); }
+  .tag.harvest{ color:var(--magenta); }
+  .tag.birthday{ color:var(--pink); background:rgba(254,84,255,0.14); }
+  .tag.halloween{ color:var(--magenta); background:rgba(212,24,134,0.18); }
+
+  .title{
+    font-family:var(--font-head);
+    font-weight:600;
+    font-size:16px;
+    line-height:1.35;
+    margin-top:7px;
+    color:var(--text);
+  }
+  .event.birthday .title{
+    font-family:var(--font-display);
+    font-weight:400;
+    font-size:26px;
+    line-height:1.2;
+    color:var(--pink);
+    text-shadow:0 0 0.4rem var(--glow);
+  }
+  /* Halloween gets the blackletter too, one step down from the birthday. */
+  .event.halloween .card{
+    border-color:var(--magenta);
+    box-shadow:0 0 18px rgba(212,24,134,0.18);
+  }
+  .event.halloween .title{
+    font-family:var(--font-display);
+    font-weight:400;
+    font-size:23px;
+    line-height:1.2;
+    color:var(--magenta);
+    text-shadow:0 0 0.4rem rgba(212,24,134,0.5);
+  }
+
+  .desc{
+    font-size:12.5px;
+    color:var(--text-dim);
+    margin-top:6px;
+    line-height:1.6;
+  }
+
+  .stat{
+    display:inline-block;
+    font-family:var(--font-head);
+    font-weight:600;
+    font-size:10.5px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--violet);
+    margin-top:9px;
+    padding-top:9px;
+    border-top:1px solid var(--line);
+  }
+
+  .today-marker{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin:-6px 0 22px 0;
+    padding-left:58px;
+  }
+  .today-marker span{
+    font-family:var(--font-head);
+    font-weight:600;
+    font-size:10px;
+    letter-spacing:0.18em;
+    color:var(--pink);
+    text-transform:uppercase;
+  }
+  .today-marker::before{
+    content:'';
+    flex:1;
+    max-width:26px;
+    height:1px;
+    background:var(--pink);
+  }
+  .today-line{
+    flex:1;
+    height:1px;
+    background:repeating-linear-gradient(90deg, var(--pink) 0 4px, transparent 4px 8px);
+  }
+
+  footer{
+    text-align:center;
+    padding:36px 20px 0;
+    font-family:var(--font-head);
+    font-weight:600;
+    font-size:10px;
+    letter-spacing:0.1em;
+    color:var(--muted);
+    line-height:1.9;
+  }
+  footer .wordmark{
+    display:inline-block;
+    margin-top:14px;
+    font-family:var(--font-display);
+    font-weight:400;
+    font-size:22px;
+    letter-spacing:0;
+    color:var(--magenta);
+    text-shadow:0 0 0.4rem var(--glow);
+    text-decoration:none;
+  }
+  footer .wordmark:hover{ color:var(--pink); }
+</style>
+</head>
+<body>
+
+<a class="backlink" href="/">← Degs.skin</a>
+
+<div class="hero">
+  <div class="eyebrow">St. Louis · 38.6°N</div>
+  <div class="count" id="countNum">—</div>
+  <div class="count-label" id="countLabel">days to the equinox threshold</div>
+  <div class="sub">From <b id="fromDate">today</b> (150° short of nothing) to <b>Sept 21</b>, your birthday sits one day inside Virgo, one day before the actual equinox — the steepest point of the year's daylight curve. The run then carries on through <b>Oct 31</b>.</div>
+  <div class="daylight-strip">
+    <span id="dlToday">—</span>
+    <div class="daylight-bar" id="dlBar" style="--pct:56%"></div>
+    <span id="dlEquinox">12h00 / 12h00</span>
+  </div>
+  <div class="hero-secondary" id="halloweenCount"></div>
+</div>
+
+<div class="timeline" id="timeline"></div>
+
+<footer>
+  Moon phase times in UTC · Solar longitude measured from Aries point (0°)<br>
+  Daylight hours approximated for 38.6°N · Harvest and frost windows are typical Missouri timing, not 2026 forecasts<br>
+  <span id="runSpan"></span><br>
+  <a class="wordmark" href="/">Degs</a>
+</footer>
+
+<script>
+// Local-midnight date builder — avoids the UTC-parsing shift that renders
+// "Aug 6" as "Aug 5" for anyone west of Greenwich.
+function ld(y, m, d){ return new Date(y, m - 1, d); }
+function startOfDay(d){ return new Date(d.getFullYear(), d.getMonth(), d.getDate()); }
+
+const TODAY = startOfDay(new Date());
+const BIRTHDAY = ld(2026, 9, 21);
+const LAT = 38.6; // St. Louis
+
+function dayOfYear(d){
+  const start = new Date(d.getFullYear(),0,0);
+  return Math.floor((d - start)/86400000);
+}
+function daylightHours(d){
+  const doy = dayOfYear(d);
+  const decl = 23.44 * Math.sin( (2*Math.PI/365) * (doy - 81) );
+  const latR = LAT * Math.PI/180;
+  const declR = decl * Math.PI/180;
+  let cosH = -Math.tan(latR)*Math.tan(declR);
+  cosH = Math.max(-1, Math.min(1, cosH));
+  const H = Math.acos(cosH) * 180/Math.PI; // half-day arc in degrees
+  return (H/180)*24; // total daylight hours
+}
+function fmtHM(hrs){
+  const h = Math.floor(hrs);
+  const m = Math.round((hrs-h)*60);
+  return h+'h'+String(m).padStart(2,'0');
+}
+function fmtDate(d){
+  return d.toLocaleDateString('en-US', {month:'short', day:'numeric'});
+}
+
+// countdown
+const diffDays = Math.round((BIRTHDAY - TODAY)/86400000);
+const countEl = document.getElementById('countNum');
+const labelEl = document.getElementById('countLabel');
+if (diffDays > 0){
+  countEl.textContent = diffDays;
+  labelEl.textContent = diffDays === 1 ? 'day to the equinox threshold' : 'days to the equinox threshold';
+} else if (diffDays === 0){
+  countEl.textContent = 'Today';
+  countEl.classList.add('is-word');
+  labelEl.textContent = 'the equinox threshold';
+} else {
+  countEl.textContent = Math.abs(diffDays);
+  labelEl.textContent = Math.abs(diffDays) === 1
+    ? 'day since the equinox threshold'
+    : 'days since the equinox threshold';
+}
+
+document.getElementById('fromDate').textContent = fmtDate(TODAY);
+
+// secondary countdown to Halloween
+const HALLOWEEN = ld(2026, 10, 31);
+const toHalloween = Math.round((HALLOWEEN - TODAY)/86400000);
+document.getElementById('halloweenCount').textContent =
+  toHalloween > 0 ? `${toHalloween} ${toHalloween === 1 ? 'day' : 'days'} to Halloween`
+  : toHalloween === 0 ? 'Halloween — tonight'
+  : `${Math.abs(toHalloween)} ${Math.abs(toHalloween) === 1 ? 'day' : 'days'} past Halloween`;
+
+const todayDL = daylightHours(TODAY);
+document.getElementById('dlToday').textContent = fmtHM(todayDL)+' day';
+document.getElementById('dlEquinox').textContent = '12h00 / 12h00';
+document.getElementById('dlBar').style.setProperty('--pct', ((todayDL/24)*100).toFixed(1)+'%');
+
+// moon phase icon renderer: illum 0-1, waxing bool
+const MOON_DARK = '#5A2C7A';
+const MOON_LIT  = '#FCEFFA';
+function moonSVG(illum, waxing){
+  const r = 13;
+  const cx = 13, cy = 13;
+  // offset of terminator ellipse
+  const k = (illum <= 0.5) ? (1 - illum*2) : (illum*2 - 1);
+  const rx = r * k;
+  const litOnRight = waxing; // waxing: lit right side growing
+  let path;
+  if (illum <= 0.5){
+    // crescent/gibbous via two arcs
+    const sweep1 = litOnRight ? 1 : 0;
+    path = `M ${cx} ${cy-r} A ${r} ${r} 0 0 ${sweep1} ${cx} ${cy+r} A ${rx} ${r} 0 0 ${sweep1===1?0:1} ${cx} ${cy-r} Z`;
+  } else {
+    const sweep1 = litOnRight ? 1 : 0;
+    path = `M ${cx} ${cy-r} A ${r} ${r} 0 0 ${sweep1} ${cx} ${cy+r} A ${rx} ${r} 0 0 ${sweep1} ${cx} ${cy-r} Z`;
+  }
+  return `<svg width="26" height="26" viewBox="0 0 26 26">
+    <circle cx="13" cy="13" r="13" fill="${MOON_DARK}"/>
+    <path d="${path}" fill="${MOON_LIT}"/>
+  </svg>`;
+}
+
+const events = [
+  {date:ld(2026,8,6), type:'lunar', tag:'Last Quarter', title:'Last Quarter Moon', desc:'Half-lit, shrinking, in Taurus.', illum:0.5, waxing:false},
+  {date:ld(2026,8,7), type:'astro', tag:'Cross-Quarter', title:'Astronomical Midpoint (135°)', desc:'True geometric halfway point between the June solstice and the equinox — solar longitude 135°. The most rigorous non-endpoint marker of the run.'},
+  {date:ld(2026,8,12), type:'lunar', tag:'New Moon', title:'New Moon + Total Solar Eclipse', desc:'Moon passes in front of the sun at 19° Leo. Totality sweeps Russia, Greenland, Iceland, Spain — first mainland European totality since 1999.', illum:0.0, waxing:true},
+  {date:ld(2026,8,20), type:'lunar', tag:'First Quarter', title:'First Quarter Moon', desc:'Half-lit, growing.', illum:0.5, waxing:true},
+  {date:ld(2026,8,20), type:'harvest', tag:'Harvest', title:'🍇 Missouri Grape Harvest Begins', desc:"Earliest varietals get picked as the state's wineries open the season — Augusta, Hermann, and the Ozark AVAs kick off six weeks ahead of Norton."},
+  {date:ld(2026,8,22), type:'astro', tag:'Astrological', title:'Sun Enters Virgo (150°)', desc:'A 30° zodiac-grid point, not a geometric midpoint — but the daylight-loss rate here is already measurably faster than three weeks earlier. The on-ramp, not the peak.'},
+  {date:ld(2026,8,28), type:'lunar', tag:'Full Moon', title:'Full "Sturgeon" Moon + Partial Lunar Eclipse', desc:'Full illumination at 4° Pisces, opposite the sun. A Blood Moon eclipse rides along with it.', illum:1.0, waxing:false},
+  {date:ld(2026,8,30), type:'astro', tag:'¾ Longitude', title:'Three-Quarter Arc Mark (157.5°)', desc:"Halfway between the cross-quarter day and the equinox — same bisection logic as Aug 7, applied again. More rigorous than Virgo's debut, and closer to the finish line."},
+  {date:ld(2026,9,1), type:'meteor', tag:'Meteorological', title:'Meteorological Autumn Begins', desc:'Calendar convention — the season starts on the 1st regardless of solar position. Zero astronomical basis, but daylight loss is now visibly accelerating.'},
+  {date:ld(2026,9,1), type:'harvest', tag:'Harvest', title:'🌽 Corn Harvest Begins (River Bottoms)', desc:'Missouri River bottomland fields are first to come off — combines roll here weeks before the rest of the state, targeting ~15% grain moisture.'},
+  {date:ld(2026,9,1), type:'harvest', tag:'Harvest', title:'🍷 Missouri Wine Month Begins', desc:"The state's official month-long celebration of its 5 AVAs and 129 wineries — timed to the harvest itself."},
+  {date:ld(2026,9,4), type:'lunar', tag:'Last Quarter', title:'Last Quarter Moon', desc:'Half-lit, shrinking.', illum:0.5, waxing:false},
+  {date:ld(2026,9,7), type:'harvest', tag:'Harvest', title:'🍎 Apple Season Peaks', desc:'Jonathan, Honeycrisp, Gala, and heirloom varieties hit peak across Missouri orchards — the single biggest apple-picking month of the year.'},
+  {date:ld(2026,9,11), type:'lunar', tag:'New Moon', title:'New Moon', desc:'Dark moon — sky is emptiest of lunar light heading into your birthday.', illum:0.0, waxing:true},
+  {date:ld(2026,9,15), type:'harvest', tag:'Harvest', title:'🌱 Soybean Harvest Begins', desc:'Combines start rolling once pods turn tan and moisture hits ~13% — runs from mid-September into November.'},
+  {date:ld(2026,9,18), type:'lunar', tag:'First Quarter', title:'First Quarter Moon', desc:'Half-lit, growing — three days out from 9/21.', illum:0.5, waxing:true},
+  {date:ld(2026,9,21), type:'birthday', tag:'★ The Day', title:'Your Birthday', desc:"Virgo/Libra cusp. One day before the equinox, sitting at the single steepest point of the entire year's daylight-loss curve."},
+  {date:ld(2026,9,22), type:'solar', tag:'Equinox', title:'Autumnal Equinox (180°)', desc:'The only date in this whole run with unambiguous physical significance — day and night in balance, and the peak rate of change in daylight, right on your doorstep.'},
+  {date:ld(2026,9,23), type:'astro', tag:'Astrological', title:'Sun Enters Libra (180°)', desc:'Libra begins at the exact same longitude as the equinox itself — the only zodiac sign whose start is pinned to a real astronomical event rather than a 30° grid line. For one sign a year, the convention and the geometry agree.'},
+  {date:ld(2026,9,23), type:'harvest', tag:'Harvest', title:'🍇 Norton Grape Harvest Underway', desc:"Missouri's official state grape — the last and latest of the season's wine varietals, picked from now into November."},
+  {date:ld(2026,9,26), type:'lunar', tag:'Full Moon', title:'Full "Harvest" Moon', desc:'First full moon after the equinox — the traditional Harvest Moon, arriving five days into your new year.', illum:1.0, waxing:false},
+  {date:ld(2026,10,3), type:'lunar', tag:'Last Quarter', title:'Last Quarter Moon', desc:'Half-lit and shrinking, in Cancer. The light drains back out of the sky ahead of the darkest stretch of October.', illum:0.5, waxing:false},
+  {date:ld(2026,10,8), type:'astro', tag:'Meteor Shower', title:'Draconids Peak', desc:'Debris from comet 21P/Giacobini-Zinner. Two nights before new moon, so effectively no moonlight — and unusually, the Draconids run best in the early evening rather than before dawn, because the radiant is highest at nightfall.'},
+  {date:ld(2026,10,10), type:'lunar', tag:'New Moon', title:'New Moon', desc:'Dark moon at 17° Libra — the emptiest sky of the whole run. Nothing between you and the Milky Way but St. Louis light pollution.', illum:0.0, waxing:true},
+  {date:ld(2026,10,12), type:'harvest', tag:'Harvest', title:'🎃 Pumpkin & Late-Apple Season Peaks', desc:'Missouri patches hit full swing across the river bottoms, and the last apples come off the tree — Winesap and Arkansas Black, dense and built for winter storage rather than eating fresh.'},
+  {date:ld(2026,10,15), type:'astro', tag:'Bisection', title:'Post-Equinox Bisection (202.5°)', desc:'Halfway from the equinox to the true autumn cross-quarter — the same halving that gave you Aug 7 and Aug 30, now running on the far side of the balance point.'},
+  {date:ld(2026,10,18), type:'lunar', tag:'First Quarter', title:'First Quarter Moon', desc:'Half-lit and growing, in Capricorn — building toward the Hunter\'s Moon.', illum:0.5, waxing:true},
+  {date:ld(2026,10,20), type:'harvest', tag:'Harvest', title:'🍂 Fall Color Peaks', desc:'Typical peak for the St. Louis region and the eastern Ozark border — maples, oaks, and hickory turning over the last ten days of the month.'},
+  {date:ld(2026,10,21), type:'astro', tag:'Meteor Shower', title:'Orionids Peak', desc:'Dust shed by Halley\'s Comet, burning up at 41 miles per second — the fastest meteors of the season. A waxing gibbous sets around midnight, leaving the pre-dawn peak hours genuinely dark.'},
+  {date:ld(2026,10,23), type:'astro', tag:'Astrological', title:'Sun Enters Scorpio (210°)', desc:'Another 30° grid point, same as Virgo back in August — zodiac convention rather than geometry. By now you are losing daylight at close to a minute and a half a day.'},
+  {date:ld(2026,10,23), type:'harvest', tag:'Harvest', title:'❄ Average First Frost (St. Louis)', desc:'The long-run average date of the first fall frost, when the thermometer first dips into the 32–36°F band and tender crops need to be off the vine. The first true freeze runs later — its average lands on Oct 31 itself.'},
+  {date:ld(2026,10,26), type:'lunar', tag:'Full Moon', title:'Full "Hunter\'s" Moon', desc:'Full illumination at 2° Taurus — the first full moon after the Harvest Moon, and the last one before Halloween. Named for the month game was fattened and taken before winter.', illum:1.0, waxing:false},
+  {date:ld(2026,10,28), type:'harvest', tag:'Harvest', title:'🍇 Norton Harvest Ends', desc:"The last fruit comes off the vine. Missouri's state grape hangs longer than anything else in the state, and its picking closes the wine season that opened back on Aug 20."},
+  {date:ld(2026,10,31), type:'halloween', tag:'★ Halloween', title:'Halloween — on a Saturday', desc:'The last Saturday Halloween until 2037. The date walks forward a weekday each year and jumps two across leap years, so after tonight it lands Sunday, Tuesday, Wednesday, Thursday, Friday, Sunday, Monday, Tuesday, Wednesday, Friday — and only then Saturday again, eleven years out. Even counting Fridays, the next one is 2031. Daylight saving ends at 2am the following morning, so the night itself runs 25 hours, and a 60%-lit waning gibbous stays down until late evening — full dark for the early hours. The true cross-quarter, solar longitude 225°, is still a week away on Nov 7; tonight is the convention, not the geometry.'},
+];
+
+const tl = document.getElementById('timeline');
+let todayInserted = false;
+
+function todayMarker(){
+  const marker = document.createElement('div');
+  marker.className = 'today-marker';
+  marker.innerHTML = `<span>Today · ${fmtDate(TODAY)}</span><div class="today-line"></div>`;
+  return marker;
+}
+
+events.forEach(ev => {
+  const isPast = ev.date < TODAY;
+
+  if (!isPast && !todayInserted){
+    tl.appendChild(todayMarker());
+    todayInserted = true;
+  }
+
+  const row = document.createElement('div');
+  row.className = 'event ' + ev.type + (isPast ? ' past' : '') + (ev.type === 'birthday' ? ' today' : '');
+
+  // Every event type has a matching .node/.tag class, so the type is the class.
+  const rail = document.createElement('div');
+  rail.className = 'rail';
+  rail.innerHTML = ev.type === 'lunar'
+    ? moonSVG(ev.illum, ev.waxing)
+    : `<div class="node ${ev.type}"></div>`;
+
+  const dateStr = fmtDate(ev.date);
+
+  const dl = daylightHours(ev.date);
+  const statHTML = ev.type !== 'birthday'
+    ? `<div class="stat">☀ ${fmtHM(dl)} daylight</div>`
+    : `<div class="stat">☀ ${fmtHM(dl)} daylight · losing ~2min 50s/day</div>`;
+
+  row.innerHTML = `
+    <div class="card">
+      <div class="row1">
+        <span class="date">${dateStr}</span>
+        <span class="tag ${ev.type}">${ev.tag}</span>
+      </div>
+      <div class="title">${ev.title}</div>
+      <div class="desc">${ev.desc}</div>
+      ${statHTML}
+    </div>
+  `;
+  row.prepend(rail);
+  tl.appendChild(row);
+});
+
+// Everything already behind us — pin the marker to the end so the rail still reads.
+if (!todayInserted){
+  tl.appendChild(todayMarker());
+}
+
+// Footer run span, read off the timeline itself so it can never drift from it.
+document.getElementById('runSpan').textContent =
+  `Run extends ${fmtDate(events[0].date)} → ${fmtDate(events[events.length-1].date)}`;
+</script>
+
+</body>
+</html>
