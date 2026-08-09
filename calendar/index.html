@@ -203,6 +203,42 @@
     box-shadow: inset 0 0 0 1px rgba(252,239,250,0.12);
   }
 
+  /* ---------- SOUNDTRACK ---------- */
+  .soundtrack{
+    max-width:640px;
+    margin:0 auto;
+    padding:30px 20px 4px;
+    text-align:center;
+  }
+  .soundtrack h2{
+    font-family:var(--font-head);
+    font-weight:600;
+    font-size:12px;
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+    color:var(--violet);
+  }
+  .soundtrack-note{
+    margin-top:7px;
+    font-size:12.5px;
+    color:var(--text-dim);
+  }
+  /* Bandcamp's small player is a fixed 42px bar — stacked full width so the
+     track titles have room rather than truncating in two columns. */
+  .players{
+    display:grid;
+    gap:10px;
+    margin-top:16px;
+  }
+  .players iframe{
+    width:100%;
+    height:42px;
+    border:1px solid var(--line);
+    border-radius:8px;
+    background:var(--bg-card);
+    display:block;
+  }
+
   /* ---------- TIMELINE ---------- */
   .timeline{
     max-width:640px;
@@ -450,6 +486,29 @@
   <div class="hero-secondary" id="halloweenCount"></div>
   <div class="hero-secondary next-game" id="nextGameNight"></div>
 </div>
+
+<!-- Unofficial soundtrack. Bandcamp's EmbeddedPlayer keys off a numeric track
+     id, not the URL slug — grab each from the track page's Share / Embed
+     dialog and swap it in below. -->
+<section class="soundtrack" aria-labelledby="soundtrack-heading">
+  <h2 id="soundtrack-heading">Unofficial Soundtrack</h2>
+  <p class="soundtrack-note">Makeup and Vanity Set — “Laurie,” Parts I &amp; II</p>
+
+  <div class="players">
+    <!-- Recolored from Bandcamp's default white/blue to the page palette. -->
+    <iframe
+      title="Bandcamp player: Laurie Part I by Makeup and Vanity Set"
+      loading="lazy"
+      src="https://bandcamp.com/EmbeddedPlayer/album=1699135642/track=1232433533/size=small/bgcol=2e0a45/linkcol=c77dff/transparent=true/"
+      seamless><a href="https://makeupandvanityset.bandcamp.com/track/laurie-part-i">Laurie Part I by Makeup and Vanity Set</a></iframe>
+
+    <iframe
+      title="Bandcamp player: Laurie Part II by Makeup and Vanity Set"
+      loading="lazy"
+      src="https://bandcamp.com/EmbeddedPlayer/album=1699135642/track=764428382/size=small/bgcol=2e0a45/linkcol=c77dff/transparent=true/"
+      seamless><a href="https://makeupandvanityset.bandcamp.com/track/laurie-part-ii">Laurie Part II by Makeup and Vanity Set</a></iframe>
+  </div>
+</section>
 
 <div class="timeline" id="timeline"></div>
 
