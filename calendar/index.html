@@ -82,6 +82,11 @@
     --violet:#C77DFF;
     --pale:#FCEFFA;
     --meteor:#8B6FD8;
+    /* House colours for the two cinemas. Halloween-adjacent on a page that
+       ends there, and the only hues outside the purple family, which is what
+       makes them read as identity rather than category. */
+    --arkadin:#EE7B30;
+    --hipointe:#5FBF6B;
     --glow:rgba(253,0,253,0.45);
 
     /* Type roles: blackletter for the one hero number, Cinzel for every label
@@ -294,6 +299,15 @@
     color:var(--text);
   }
   .legend-chip[data-state="exclude"]{ opacity:0.42; }
+  .legend-chip[data-group="arkadin"]  { --house:var(--arkadin); }
+  .legend-chip[data-group="hipointe"] { --house:var(--hipointe); }
+  .legend-chip[data-group="arkadin"] .node{ border-color:var(--house); }
+  .legend-chip[data-group="hipointe"] .node{ background:var(--house); border-color:var(--house); }
+  .legend-chip[data-group="arkadin"][data-state="include"],
+  .legend-chip[data-group="hipointe"][data-state="include"]{
+    border-color:var(--house);
+    background:color-mix(in srgb, var(--house) 14%, var(--bg-card));
+  }
   .legend-chip[data-state="exclude"] .legend-label{ text-decoration:line-through; }
   .legend-count{ opacity:0.55; }
   /* Fixed width and its own emoji stack: the three icons have different
@@ -462,6 +476,26 @@
     margin-top:6px;
   }
   .node.film.hipointe{ background:var(--text-dim); border-color:var(--text-dim); }
+
+  /* Venue identity: a gradient frame rather than a fill, so the card ground
+     stays the same purple as everything else and only the edge carries the
+     house. The padding-box / border-box pair is what lets a gradient live in
+     a border without flattening the corner radius, which border-image would.
+     Shape still distinguishes the two on its own, so the colour is a second
+     signal rather than the only one. */
+  .event.venue-arkadin  { --house:var(--arkadin); }
+  .event.venue-hipointe { --house:var(--hipointe); }
+  .event.venue-arkadin .card,
+  .event.venue-hipointe .card{
+    border-color:transparent;
+    background:
+      linear-gradient(var(--bg-card), var(--bg-card)) padding-box,
+      linear-gradient(145deg, var(--house), rgba(0,0,0,0) 68%) border-box;
+  }
+  .event.venue-arkadin  .node.film{ border-color:var(--house); }
+  .event.venue-hipointe .node.film{ background:var(--house); border-color:var(--house); }
+  .event.venue-arkadin  .tag.film,
+  .event.venue-hipointe .tag.film{ color:var(--house); }
   .node.halloween{
     border-color:var(--magenta); background:var(--magenta);
     width:18px; height:18px; margin-top:1px;
@@ -1138,6 +1172,7 @@ events.forEach(ev => {
   // treatment, but each house filters on its own.
   const group = ev.group || GROUP_OF[ev.type];
   if (group) row.dataset.group = group;
+  if (ev.type === 'film' && group) row.classList.add('venue-' + group);
 
   // Every event type has a matching .node/.tag class, so the type is the class.
   // The rail symbol is a button, so a card can drive the same filter the
