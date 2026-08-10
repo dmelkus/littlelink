@@ -40,17 +40,62 @@ back to the trim and is reported on stderr for review:
 Keying on slug rather than position means a hand-written title survives the
 event moving in the calendar.
 
+### Monthly refresh
+
+Venues export one month at a time, and consecutive months overlap at the
+boundary. `--merge` unions the new export with what is already in the page,
+keyed on event URL, so each month adds rather than replaces:
+
+```sh
+python3 tools/ics_to_films.py september.ics --venue Arkadin --merge --splice
+```
+
+Without `--merge` the block is replaced outright, which is what you want only
+when regenerating the whole run from a single export.
+
+## hipointe_to_films.py
+
+The Hi-Pointe runs WordPress and publishes showtimes as JSON at
+`/wp-json/nj/v1/showtime/listings`: two lists joined on `movie_id`, one
+carrying name, runtime and release year, the other the datetime and a
+per-screening ticket link. Every field a card needs is already there, so there
+is no iCalendar step and no title cleanup to guess at.
+
+```sh
+# from a file you already have, no network at all
+python3 tools/hipointe_to_films.py listings.json --until 2026-10-31 --splice
+
+# fetch once, then write it in
+python3 tools/hipointe_to_films.py --fetch --until 2026-10-31 --splice
+```
+
+It reads a local file by default and only touches the network when asked.
+These are small venues; hit them once per refresh, never in a loop.
+
+`--until` drops screenings past a date. The feed currently runs to December
+while the page ends at Halloween, so the run is capped rather than trailing
+cards past its own ending.
+
+Titles come through clean, so there is no overrides file. The release year is
+appended only when the film predates the screening, which dates the repertory
+without dating this year's releases, and format notes like `(35MM)` or
+`(4K Restoration)` are kept as the venue wrote them.
+
 ### Adding a venue
 
-Cards read `venue` from the object, so a second venue is a second `films`-style
-array with its own `venue` value, concatenated into `events` the same way. The
-`.map` that stamps `type`, `tag` and `venue` is where that happens.
+Cards read `venue` from the object and filter on `group`, so a third venue is
+another array with its own `venue`, `group` and `nodeClass`, concatenated into
+`events` the same way, plus an entry in `GROUPS` for its legend chip.
 
 ## Refreshing
 
 Arkadin publishes through Events Calendar Pro with `REFRESH-INTERVAL:PT1H`, so
-the feed is live and the page holds a snapshot. Re-export, re-run with
-`--splice`, and commit.
+the feed is live and the page holds a snapshot. Their iCalendar endpoint sits
+behind Mod_Security and refuses scripted requests, so the export has to come
+from a browser: use Export Events on their calendar page, then run with
+`--merge --splice`.
+
+Hi-Pointe's JSON endpoint answers scripted requests, so `--fetch` works there.
 
 ## Verification
 
