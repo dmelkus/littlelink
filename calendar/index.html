@@ -999,23 +999,26 @@ const films = [
 events.push(...films);
 events.sort((a, b) => a.date - b.date);   // stable, so same-day order is source order
 
-// Legend order, top of the rail downward in rough order of how physical the
-// marker is. Only types actually present get a chip.
-const TYPES = [
-  {type:'lunar',     label:'Moon'},
-  {type:'solar',     label:'Equinox'},
-  {type:'astro',     label:'Sky'},
-  {type:'meteor',    label:'Seasonal'},
-  {type:'harvest',   label:'Harvest'},
-  {type:'film',      label:'Film'},
-  {type:'gamenight', label:'Game Night'},
-  {type:'birthday',  label:'The Day'},
-  {type:'halloween', label:'Halloween'},
+/* Legend groups, in field order. Sky folds the moons, the equinox, the
+   longitude and zodiac marks and the meteorological convention into one, since
+   they are all readings of the same sky on the same day.
+
+   The birthday and Halloween are deliberately ungrouped. They get no chip and
+   no rail button, and they stay visible under every filter: they are the two
+   fixed points the rest of the run is measured against, so the timeline keeps
+   its bearings no matter what is switched off. */
+const GROUPS = [
+  {group:'gamenight', label:'Game Night', types:['gamenight'], glyph:'gamenight'},
+  {group:'film',      label:'Film',       types:['film'],      glyph:'film'},
+  {group:'harvest',   label:'Harvest',    types:['harvest'],   glyph:'harvest'},
+  {group:'sky',       label:'Sky',        types:['lunar','solar','astro','meteor'], glyph:'moon'},
 ];
-const TYPE_LABEL = Object.fromEntries(TYPES.map(t => [t.type, t.label]));
-// The lunar rail draws a real phase, so the key shows one at half light.
-function typeGlyph(type){
-  return type === 'lunar' ? moonSVG(0.5, true) : `<span class="node ${type}"></span>`;
+const GROUP_OF = {};
+GROUPS.forEach(g => g.types.forEach(t => { GROUP_OF[t] = g.group; }));
+const GROUP_LABEL = Object.fromEntries(GROUPS.map(g => [g.group, g.label]));
+// The lunar rail draws a real phase, so the Sky key shows one at half light.
+function groupGlyph(glyph){
+  return glyph === 'moon' ? moonSVG(0.5, true) : `<span class="node ${glyph}"></span>`;
 }
 
 const tl = document.getElementById('timeline');
@@ -1039,6 +1042,7 @@ events.forEach(ev => {
   const row = document.createElement('div');
   row.className = 'event ' + ev.type + (isPast ? ' past' : '') + (ev.type === 'birthday' ? ' today' : '');
   row.dataset.type = ev.type;
+  if (GROUP_OF[ev.type]) row.dataset.group = GROUP_OF[ev.type];
 
   // Every event type has a matching .node/.tag class, so the type is the class.
   // The rail symbol is a button, so a card can drive the same filter the
@@ -1048,7 +1052,10 @@ events.forEach(ev => {
   const glyph = ev.type === 'lunar'
     ? moonSVG(ev.illum, ev.waxing)
     : `<div class="node ${ev.type}"></div>`;
-  rail.innerHTML = `<button class="rail-btn" type="button" data-type="${ev.type}">${glyph}</button>`;
+  // Ungrouped events have nothing to filter, so their symbol stays inert.
+  rail.innerHTML = GROUP_OF[ev.type]
+    ? `<button class="rail-btn" type="button" data-group="${GROUP_OF[ev.type]}">${glyph}</button>`
+    : glyph;
 
   const dateStr = fmtDate(ev.date);
 
@@ -1114,11 +1121,12 @@ const STATE_ICON = { neutral:'🔍', include:'📌', exclude:'🚫' };
 
 const rows = [...tl.querySelectorAll('.event')];
 const marker = tl.querySelector('.today-marker');
-const presentTypes = TYPES.filter(t => rows.some(r => r.dataset.type === t.type));
+const pinned = rows.filter(r => !r.dataset.group).length;
+const presentGroups = GROUPS.filter(g => rows.some(r => r.dataset.group === g.group));
 const counts = Object.fromEntries(
-  presentTypes.map(t => [t.type, rows.filter(r => r.dataset.type === t.type).length]));
+  presentGroups.map(g => [g.group, rows.filter(r => r.dataset.group === g.group).length]));
 
-const filterState = new Map(presentTypes.map(t => [t.type, 'neutral']));
+const filterState = new Map(presentGroups.map(g => [g.group, 'neutral']));
 
 const legendItems  = document.getElementById('legendItems');
 const legendStatus = document.getElementById('legendStatus');
@@ -1130,12 +1138,12 @@ emptyNote.hidden = true;
 emptyNote.textContent = 'Nothing matches that combination.';
 tl.appendChild(emptyNote);
 
-legendItems.innerHTML = presentTypes.map(t => `
+legendItems.innerHTML = presentGroups.map(g => `
   <li>
-    <button class="legend-chip" type="button" data-type="${t.type}" data-state="neutral">
-      ${typeGlyph(t.type)}
-      <span class="legend-label">${t.label}</span>
-      <span class="legend-count">${counts[t.type]}</span>
+    <button class="legend-chip" type="button" data-group="${g.group}" data-state="neutral">
+      ${groupGlyph(g.glyph)}
+      <span class="legend-label">${g.label}</span>
+      <span class="legend-count">${counts[g.group]}</span>
       <span class="legend-state" aria-hidden="true">${STATE_ICON.neutral}</span>
     </button>
   </li>`).join('');
@@ -1146,23 +1154,26 @@ function applyFilter(){
 
   let shown = 0;
   rows.forEach(row => {
-    const t = row.dataset.type;
-    const show = includes.length ? includes.includes(t) : !excludes.includes(t);
+    const g = row.dataset.group;
+    // Ungrouped rows are the birthday and Halloween: always on.
+    const show = !g ? true
+      : includes.length ? includes.includes(g)
+      : !excludes.includes(g);
     row.hidden = !show;
     if (show) shown++;
   });
 
   document.querySelectorAll('.legend-chip').forEach(chip => {
-    const t = chip.dataset.type, state = filterState.get(t);
+    const g = chip.dataset.group, state = filterState.get(g);
     chip.dataset.state = state;
     chip.querySelector('.legend-state').textContent = STATE_ICON[state];
     chip.setAttribute('aria-label',
-      `${TYPE_LABEL[t]}, ${counts[t]} events, ${STATE_TEXT[state]}`);
+      `${GROUP_LABEL[g]}, ${counts[g]} events, ${STATE_TEXT[state]}`);
   });
   document.querySelectorAll('.rail-btn').forEach(btn => {
-    const t = btn.dataset.type;
+    const g = btn.dataset.group;
     btn.setAttribute('aria-label',
-      `${TYPE_LABEL[t]}, ${STATE_TEXT[filterState.get(t)]}. Activate to filter.`);
+      `${GROUP_LABEL[g]}, ${STATE_TEXT[filterState.get(g)]}. Activate to filter.`);
   });
 
   const filtering = includes.length || excludes.length;
@@ -1174,19 +1185,19 @@ function applyFilter(){
     : `${rows.length} events, Aug through Oct`;
 }
 
-function cycle(type){
-  if (!filterState.has(type)) return;
-  filterState.set(type, NEXT_STATE[filterState.get(type)]);
+function cycle(group){
+  if (!filterState.has(group)) return;
+  filterState.set(group, NEXT_STATE[filterState.get(group)]);
   applyFilter();
 }
 
 legendItems.addEventListener('click', e => {
   const chip = e.target.closest('.legend-chip');
-  if (chip) cycle(chip.dataset.type);
+  if (chip) cycle(chip.dataset.group);
 });
 tl.addEventListener('click', e => {
   const btn = e.target.closest('.rail-btn');
-  if (btn) cycle(btn.dataset.type);
+  if (btn) cycle(btn.dataset.group);
 });
 legendReset.addEventListener('click', () => {
   filterState.forEach((_, t) => filterState.set(t, 'neutral'));
