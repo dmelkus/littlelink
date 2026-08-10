@@ -170,14 +170,19 @@
 
   /* Unit letters inside a reading — 13h46, 2min 50s. Cinzel is an all-caps
      face and these labels are uppercased, so a full-size H sits between two
-     numbers as just another glyph. Dropped to lowercase, smaller and lighter
-     so the digits read first. Opacity rather than a fixed colour, since this
-     appears on dim, pink and violet text alike. */
+     numbers as just another glyph.
+
+     The separation comes from the letterform: Cinzel's lowercase is small
+     capitals, so the h lands around two-thirds the height of the lining
+     figures on shape alone. Size and opacity only nudge that — the card stat
+     is 10.5px, and cutting hard on both axes at once put the glyph at 8px and
+     3.2:1, which is under the 4.5:1 needed at this size. Letter-spacing does
+     the rest of the work instead. */
   .unit{
-    font-size:0.76em;
+    font-size:0.92em;
     text-transform:lowercase;
-    opacity:0.62;
-    padding:0 0.05em;
+    opacity:0.85;
+    padding:0 0.11em;
   }
 
   /* ---------- DAYLIGHT RAIL ----------
