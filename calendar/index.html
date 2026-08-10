@@ -226,6 +226,116 @@
   .hero-secondary.next-game{ margin-top:8px; color:var(--violet); }
   .hero-secondary.next-game a{ color:inherit; }
 
+  /* ---------- LEGEND / FILTER ----------
+     Doubles as a key to the rail symbols and as the filter control. Each chip
+     cycles neutral, include, exclude. */
+  .legend{
+    max-width:640px;
+    margin:0 auto;
+    padding:26px 20px 0;
+  }
+  .legend-head{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    gap:12px;
+  }
+  .legend h2{
+    font-family:var(--font-head);
+    font-weight:600;
+    font-size:13px;
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+    color:var(--violet);
+  }
+  .legend-reset{
+    font-family:var(--font-head);
+    font-weight:600;
+    font-size:11px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--pink);
+    background:none;
+    border:0;
+    border-bottom:1px solid rgba(254,84,255,0.5);
+    padding:0 0 2px;
+    cursor:pointer;
+  }
+  .legend-reset:hover{ color:var(--text); border-bottom-color:var(--text); }
+
+  .legend-items{
+    display:flex;
+    flex-wrap:wrap;
+    gap:7px;
+    margin-top:13px;
+    list-style:none;
+  }
+  .legend-chip{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    padding:5px 11px 5px 9px;
+    border:1px solid var(--line);
+    border-radius:20px;
+    background:var(--bg-card);
+    color:var(--text-dim);
+    font-family:var(--font-head);
+    font-weight:600;
+    font-size:11px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    cursor:pointer;
+    line-height:1;
+  }
+  .legend-chip:hover{ border-color:var(--violet); color:var(--text); }
+  .legend-chip[data-state="include"]{
+    border-color:var(--pink);
+    background:rgba(254,84,255,0.14);
+    color:var(--text);
+  }
+  .legend-chip[data-state="exclude"]{ opacity:0.42; }
+  .legend-chip[data-state="exclude"] .legend-label{ text-decoration:line-through; }
+  .legend-count{ opacity:0.55; }
+  /* The chip glyphs are the rail symbols at rest, so the key actually matches
+     what is drawn beside the cards. */
+  .legend-chip .node{ margin-top:0; flex:0 0 auto; }
+  .legend-chip svg{ display:block; width:15px; height:15px; }
+
+  .legend-status{
+    margin-top:11px;
+    font-family:var(--font-head);
+    font-weight:600;
+    font-size:11px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--text-dim);
+  }
+
+  /* Rail symbols are buttons too, so a card can drive the same filter. */
+  .rail-btn{
+    display:block;
+    padding:0;
+    margin:0;
+    border:0;
+    background:none;
+    line-height:0;
+    cursor:pointer;
+  }
+  .rail-btn:focus-visible,
+  .legend-chip:focus-visible,
+  .legend-reset:focus-visible{
+    outline:2px solid var(--pink);
+    outline-offset:3px;
+  }
+
+  /* .event is display:flex, which would beat the user-agent [hidden] rule. */
+  .event[hidden], .today-marker[hidden]{ display:none; }
+  .timeline-empty{
+    padding:10px 0 30px 58px;
+    font-size:13px;
+    color:var(--text-dim);
+  }
+
   /* ---------- SOUNDTRACK ---------- */
   .soundtrack{
     max-width:640px;
@@ -595,6 +705,15 @@
 <!-- Unofficial soundtrack. Bandcamp's EmbeddedPlayer keys off a numeric track
      id, not the URL slug. Grab each from the track page's Share / Embed
      dialog and swap it in below. -->
+<nav class="legend" id="legend" aria-labelledby="legend-heading">
+  <div class="legend-head">
+    <h2 id="legend-heading">Legend</h2>
+    <button class="legend-reset" id="legendReset" type="button" hidden>Clear filter</button>
+  </div>
+  <ul class="legend-items" id="legendItems"></ul>
+  <p class="legend-status" id="legendStatus" role="status"></p>
+</nav>
+
 <section class="soundtrack" aria-labelledby="soundtrack-heading">
   <h2 id="soundtrack-heading">Unofficial Soundtrack</h2>
   <p class="soundtrack-note">Makeup and Vanity Set · “Laurie,” Parts I &amp; II</p>
@@ -868,6 +987,25 @@ const films = [
 events.push(...films);
 events.sort((a, b) => a.date - b.date);   // stable, so same-day order is source order
 
+// Legend order, top of the rail downward in rough order of how physical the
+// marker is. Only types actually present get a chip.
+const TYPES = [
+  {type:'lunar',     label:'Moon'},
+  {type:'solar',     label:'Equinox'},
+  {type:'astro',     label:'Sky'},
+  {type:'meteor',    label:'Seasonal'},
+  {type:'harvest',   label:'Harvest'},
+  {type:'film',      label:'Film'},
+  {type:'gamenight', label:'Game Night'},
+  {type:'birthday',  label:'The Day'},
+  {type:'halloween', label:'Halloween'},
+];
+const TYPE_LABEL = Object.fromEntries(TYPES.map(t => [t.type, t.label]));
+// The lunar rail draws a real phase, so the key shows one at half light.
+function typeGlyph(type){
+  return type === 'lunar' ? moonSVG(0.5, true) : `<span class="node ${type}"></span>`;
+}
+
 const tl = document.getElementById('timeline');
 let todayInserted = false;
 
@@ -888,13 +1026,17 @@ events.forEach(ev => {
 
   const row = document.createElement('div');
   row.className = 'event ' + ev.type + (isPast ? ' past' : '') + (ev.type === 'birthday' ? ' today' : '');
+  row.dataset.type = ev.type;
 
   // Every event type has a matching .node/.tag class, so the type is the class.
+  // The rail symbol is a button, so a card can drive the same filter the
+  // legend does.
   const rail = document.createElement('div');
   rail.className = 'rail';
-  rail.innerHTML = ev.type === 'lunar'
+  const glyph = ev.type === 'lunar'
     ? moonSVG(ev.illum, ev.waxing)
     : `<div class="node ${ev.type}"></div>`;
+  rail.innerHTML = `<button class="rail-btn" type="button" data-type="${ev.type}">${glyph}</button>`;
 
   const dateStr = fmtDate(ev.date);
 
@@ -939,6 +1081,102 @@ const nextGame = events.find(e => e.type === 'gamenight' && e.date >= TODAY);
 document.getElementById('nextGameNight').textContent = nextGame
   ? `Next game night · ${nextGame.date.toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'})} · ${nextGame.when}`
   : '';
+
+/* ---------- LEGEND AND FILTER ----------
+   Each type cycles neutral -> include -> exclude -> neutral, driven from either
+   the legend chip or any card's rail symbol.
+
+   With several types off neutral, includes win: any include at all turns the
+   selection into a whitelist, and excludes only decide things when nothing is
+   whitelisted. That way "show me only the moons" and "hide the films" are both
+   one click, and they do not fight each other. */
+const NEXT_STATE = { neutral:'include', include:'exclude', exclude:'neutral' };
+const STATE_TEXT = {
+  neutral: 'not filtered',
+  include: 'showing only these',
+  exclude: 'hidden',
+};
+
+const rows = [...tl.querySelectorAll('.event')];
+const marker = tl.querySelector('.today-marker');
+const presentTypes = TYPES.filter(t => rows.some(r => r.dataset.type === t.type));
+const counts = Object.fromEntries(
+  presentTypes.map(t => [t.type, rows.filter(r => r.dataset.type === t.type).length]));
+
+const filterState = new Map(presentTypes.map(t => [t.type, 'neutral']));
+
+const legendItems  = document.getElementById('legendItems');
+const legendStatus = document.getElementById('legendStatus');
+const legendReset  = document.getElementById('legendReset');
+
+const emptyNote = document.createElement('p');
+emptyNote.className = 'timeline-empty';
+emptyNote.hidden = true;
+emptyNote.textContent = 'Nothing matches that combination.';
+tl.appendChild(emptyNote);
+
+legendItems.innerHTML = presentTypes.map(t => `
+  <li>
+    <button class="legend-chip" type="button" data-type="${t.type}" data-state="neutral">
+      ${typeGlyph(t.type)}
+      <span class="legend-label">${t.label}</span>
+      <span class="legend-count">${counts[t.type]}</span>
+    </button>
+  </li>`).join('');
+
+function applyFilter(){
+  const includes = [...filterState].filter(([, s]) => s === 'include').map(([t]) => t);
+  const excludes = [...filterState].filter(([, s]) => s === 'exclude').map(([t]) => t);
+
+  let shown = 0;
+  rows.forEach(row => {
+    const t = row.dataset.type;
+    const show = includes.length ? includes.includes(t) : !excludes.includes(t);
+    row.hidden = !show;
+    if (show) shown++;
+  });
+
+  document.querySelectorAll('.legend-chip').forEach(chip => {
+    const t = chip.dataset.type, state = filterState.get(t);
+    chip.dataset.state = state;
+    chip.setAttribute('aria-label',
+      `${TYPE_LABEL[t]}, ${counts[t]} events, ${STATE_TEXT[state]}`);
+  });
+  document.querySelectorAll('.rail-btn').forEach(btn => {
+    const t = btn.dataset.type;
+    btn.setAttribute('aria-label',
+      `${TYPE_LABEL[t]}, ${STATE_TEXT[filterState.get(t)]}. Activate to filter.`);
+  });
+
+  const filtering = includes.length || excludes.length;
+  legendReset.hidden = !filtering;
+  if (marker) marker.hidden = !!filtering;   // "today" reads as a lie in a filtered list
+  emptyNote.hidden = shown > 0;
+  legendStatus.textContent = filtering
+    ? `Showing ${shown} of ${rows.length}`
+    : `${rows.length} events, Aug through Oct`;
+}
+
+function cycle(type){
+  if (!filterState.has(type)) return;
+  filterState.set(type, NEXT_STATE[filterState.get(type)]);
+  applyFilter();
+}
+
+legendItems.addEventListener('click', e => {
+  const chip = e.target.closest('.legend-chip');
+  if (chip) cycle(chip.dataset.type);
+});
+tl.addEventListener('click', e => {
+  const btn = e.target.closest('.rail-btn');
+  if (btn) cycle(btn.dataset.type);
+});
+legendReset.addEventListener('click', () => {
+  filterState.forEach((_, t) => filterState.set(t, 'neutral'));
+  applyFilter();
+});
+
+applyFilter();
 
 // Footer run span, read off the timeline itself so it can never drift from it.
 document.getElementById('runSpan').textContent =
