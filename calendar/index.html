@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>The Approach — 9/21 to Halloween | Degs</title>
+<title>The Approach: 9/21 to Halloween | Degs</title>
 <link rel="icon" type="image/x-icon" href="/images/avatar.png">
 
-<meta name="description" content="A countdown to September 21 and on through Halloween — moon phases, solar longitude marks, meteor showers, Missouri harvest windows, and the August game nights at Lindenwood Park Place.">
+<meta name="description" content="A countdown to September 21 and on through Halloween. Moon phases, solar longitude marks, meteor showers, Missouri harvest windows, and the August game nights at Lindenwood Park Place.">
 <meta rel="canonical" href="https://degs.skin/calendar">
 <meta name="author" content="Degs">
 
@@ -17,15 +17,15 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="degs.skin">
 <meta property="og:url" content="https://degs.skin/calendar">
-<meta property="og:title" content="The Approach — Virgo–Libra Nexus to Halloween">
+<meta property="og:title" content="The Approach: Virgo–Libra Nexus to Halloween">
 <meta property="og:description" content="Sept 21 is the last full day of Virgo, one day short of the equinox and the steepest point of the year's daylight curve. Moon phases, longitude marks, and the Missouri harvest, tracked down to Oct 31.">
 <meta property="og:image" content="https://degs.skin/images/calendar-og.png">
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="The Approach — Virgo–Libra nexus, equinox, Halloween. degs.skin/calendar">
+<meta property="og:image:alt" content="The Approach: Virgo–Libra nexus, equinox, Halloween. degs.skin/calendar">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="The Approach — Virgo–Libra Nexus to Halloween">
+<meta name="twitter:title" content="The Approach: Virgo–Libra Nexus to Halloween">
 <meta name="twitter:description" content="Sept 21 is the last full day of Virgo, one day short of the equinox. Moon phases, longitude marks, and the Missouri harvest, tracked down to Oct 31.">
 <meta name="twitter:image" content="https://degs.skin/images/calendar-og.png">
 
@@ -85,7 +85,7 @@
     --glow:rgba(253,0,253,0.45);
 
     /* Type roles: blackletter for the one hero number, Cinzel for every label
-       and title, Open Sans for running text — mirrors the homepage. */
+       and title, Open Sans for running text, mirroring the homepage. */
     --font-display:'UnifrakturMaguntia', serif;
     --font-head:'Cinzel', serif;
     --font-body:'Open Sans', system-ui, sans-serif;
@@ -168,13 +168,13 @@
 
   .hero .sub b{ color:var(--text); font-weight:700; }
 
-  /* Unit letters inside a reading — 13h46, 2min 50s. Cinzel is an all-caps
+  /* Unit letters inside a reading: 13h46, 2min 50s. Cinzel is an all-caps
      face and these labels are uppercased, so a full-size H sits between two
      numbers as just another glyph.
 
      The separation comes from the letterform: Cinzel's lowercase is small
      capitals, so the h lands around two-thirds the height of the lining
-     figures on shape alone. Size and opacity only nudge that — the card stat
+     figures on shape alone. Size and opacity only nudge that. The card stat
      is 10.5px, and cutting hard on both axes at once put the glyph at 8px and
      3.2:1, which is under the 4.5:1 needed at this size. Letter-spacing does
      the rest of the work instead. */
@@ -187,7 +187,7 @@
 
   /* ---------- DAYLIGHT RAIL ----------
      Same gauge as the timeline cards, scaled up, with the reading spelled out
-     underneath — the bar shows the gap, the sentence names it. */
+     underneath: the bar shows the gap, the sentence names it. */
   .daylight{
     display:flex;
     flex-direction:column;
@@ -213,7 +213,7 @@
   .daylight-gap.day{ color:var(--pink); }
   .daylight-gap.night{ color:var(--violet); }
 
-  /* Secondary countdown — the run past the birthday, to Halloween. */
+  /* Secondary countdown: the run past the birthday, to Halloween. */
   .hero-secondary{
     margin-top:18px;
     font-family:var(--font-head);
@@ -246,7 +246,7 @@
     font-size:12.5px;
     color:var(--text-dim);
   }
-  /* Bandcamp's small player is a fixed 42px bar — stacked full width so the
+  /* Bandcamp's small player is a fixed 42px bar, stacked full width so the
      track titles have room rather than truncating in two columns. */
   .players{
     display:grid;
@@ -320,7 +320,7 @@
     width:20px; height:20px; margin-top:0;
     box-shadow:0 0 14px var(--glow);
   }
-  /* Game nights are the human thread through a sky calendar — marked by shape
+  /* Game nights are the human thread through a sky calendar, marked by shape
      rather than a new hue, so the rail still reads as one palette. */
   .node.gamenight{
     border-color:var(--violet); background:var(--violet);
@@ -440,7 +440,7 @@
   }
 
   /* Daylight gauge. Diverges from the 12h balance point rather than filling
-     from zero, so the fill crosses the centre tick exactly at the equinox —
+     from zero, so the fill crosses the centre tick exactly at the equinox,
      the thing the whole page is about. Same track and inset as the hero bar. */
   .meter{
     position:relative;
@@ -459,7 +459,7 @@
     min-width:2px;          /* keeps a near-zero reading visible as a mark */
   }
   .meter-fill.night{ background:var(--meteor); }
-  /* Within six minutes of 12h, neither side is meaningfully ahead — show a
+  /* Within six minutes of 12h, neither side is meaningfully ahead, so show a
      neutral mark sitting on the tick instead of a pixel of one colour. */
   .meter-fill.balanced{
     left:50%; width:3px;
@@ -474,7 +474,7 @@
     transform:translateX(-0.5px);
     background:rgba(252,239,250,0.6);
   }
-  /* Hero scale. Must follow the base .meter rules — same specificity, so the
+  /* Hero scale. Must follow the base .meter rules. Same specificity, so the
      later declaration is what makes the override stick. */
   .meter--hero{
     width:min(66vw, 300px);
@@ -556,9 +556,9 @@
 
 <div class="hero">
   <div class="eyebrow">St. Louis · 38.6°N</div>
-  <div class="count" id="countNum">—</div>
+  <div class="count" id="countNum"></div>
   <div class="count-label" id="countLabel">days to the Virgo–Libra nexus</div>
-  <div class="sub"><b>Sept 21</b> is the last full day of Virgo — one day short of the autumnal equinox, and the steepest point of the whole year's daylight curve. From that hinge the light keeps draining: moon phases, longitude marks, and the Missouri harvest, tracked the rest of the way down to <b>Oct 31</b>.</div>
+  <div class="sub"><b>Sept 21</b> is the last full day of Virgo, one day short of the autumnal equinox and the steepest point of the whole year's daylight curve. From that hinge the light keeps draining: moon phases, longitude marks, and the Missouri harvest, tracked the rest of the way down to <b>Oct 31</b>.</div>
   <div class="daylight">
     <div class="daylight-total" id="dlTotal"></div>
     <span class="meter meter--hero" aria-hidden="true">
@@ -572,11 +572,11 @@
 </div>
 
 <!-- Unofficial soundtrack. Bandcamp's EmbeddedPlayer keys off a numeric track
-     id, not the URL slug — grab each from the track page's Share / Embed
+     id, not the URL slug. Grab each from the track page's Share / Embed
      dialog and swap it in below. -->
 <section class="soundtrack" aria-labelledby="soundtrack-heading">
   <h2 id="soundtrack-heading">Unofficial Soundtrack</h2>
-  <p class="soundtrack-note">Makeup and Vanity Set — “Laurie,” Parts I &amp; II</p>
+  <p class="soundtrack-note">Makeup and Vanity Set · “Laurie,” Parts I &amp; II</p>
 
   <div class="players">
     <!-- Recolored from Bandcamp's default white/blue to the page palette. -->
@@ -605,7 +605,7 @@
 </footer>
 
 <script>
-// Local-midnight date builder — avoids the UTC-parsing shift that renders
+// Local-midnight date builder. Avoids the UTC-parsing shift that renders
 // "Aug 6" as "Aug 5" for anyone west of Greenwich.
 function ld(y, m, d){ return new Date(y, m - 1, d); }
 function startOfDay(d){ return new Date(d.getFullYear(), d.getMonth(), d.getDate()); }
@@ -652,13 +652,13 @@ function fmtDate(d){
 // Daylight gauge, measured out from the 12h balance point rather than from
 // zero. Over this run the values only span 10h23–14h05, so a 0–24h bar would
 // leave every card looking identical; anchoring on 12h turns the same numbers
-// into a curve that visibly crosses the centre at the equinox. Decorative —
+// into a curve that visibly crosses the centre at the equinox. Decorative:
 // the reading beside it carries the value for screen readers.
 const METER_SPAN_HOURS = 3;   // hours either side of 12h before the gauge pins
 const METER_BALANCE_H  = 0.1; // within six minutes of 12h, call it balanced
 
 // Shared geometry, so the hero gauge and the card gauges stay on one scale.
-// Day grows rightward from the tick, night leftward — each anchored to the
+// Day grows rightward from the tick, night leftward, each anchored to the
 // centre so the minimum-width mark extends the correct way.
 function meterParts(hrs){
   const delta = Math.max(-METER_SPAN_HOURS, Math.min(METER_SPAN_HOURS, hrs - 12));
@@ -698,11 +698,11 @@ const HALLOWEEN = ld(2026, 10, 31);
 const toHalloween = Math.round((HALLOWEEN - TODAY)/86400000);
 document.getElementById('halloweenCount').textContent =
   toHalloween > 0 ? `${toHalloween} ${toHalloween === 1 ? 'day' : 'days'} to Halloween`
-  : toHalloween === 0 ? 'Halloween — tonight'
+  : toHalloween === 0 ? 'Halloween is tonight'
   : `${Math.abs(toHalloween)} ${Math.abs(toHalloween) === 1 ? 'day' : 'days'} past Halloween`;
 
 // Today's daylight, on the same gauge the cards use, with the gap named in
-// words underneath — the bar alone never said what it was measuring against.
+// words underneath, since the bar alone never said what it was measuring against.
 const todayDL = daylightHours(TODAY);
 const todayParts = meterParts(todayDL);
 const dlFill = document.getElementById('dlFill');
@@ -747,52 +747,52 @@ function moonSVG(illum, waxing){
 
 const events = [
   {date:ld(2026,8,6), type:'lunar', tag:'Last Quarter', title:'Last Quarter Moon', desc:'Half-lit, shrinking, in Taurus.', illum:0.5, waxing:false},
-  {date:ld(2026,8,7), type:'astro', tag:'Cross-Quarter', title:'Astronomical Midpoint (135°)', desc:'True geometric halfway point between the June solstice and the equinox — solar longitude 135°. The most rigorous non-endpoint marker of the run.'},
-  {date:ld(2026,8,12), type:'lunar', tag:'New Moon', title:'New Moon + Total Solar Eclipse', desc:'Moon passes in front of the sun at 19° Leo. Totality sweeps Russia, Greenland, Iceland, Spain — first mainland European totality since 1999.', illum:0.0, waxing:true},
-  {date:ld(2026,8,12), type:'gamenight', tag:'Game Night', when:'4–8 PM', venue:'Lindenwood Park Place', title:'Game Night · Tavern', desc:'Tavern room, same day the moon crosses the sun. The sky does its thing, we roll dice. Drop in whenever — a new game starts when someone new sits down.'},
-  {date:ld(2026,8,15), type:'gamenight', tag:'Game Night', when:'4–8 PM', venue:'Lindenwood Park Place', title:'Game Night · Tavern', desc:'Tavern room. No RSVP that means anything and no game anyone has to play — if nobody wants what is on the table, we play something else.'},
-  {date:ld(2026,8,16), type:'gamenight', tag:'Game Night', when:'4–8 PM', venue:'Lindenwood Park Place', title:'Game Night · Library', desc:'Library room this time — quieter, better suited to the longer games. Same open door, same four-hour window.'},
+  {date:ld(2026,8,7), type:'astro', tag:'Cross-Quarter', title:'Astronomical Midpoint (135°)', desc:'True geometric halfway point between the June solstice and the equinox, at solar longitude 135°. The most rigorous non-endpoint marker of the run.'},
+  {date:ld(2026,8,12), type:'lunar', tag:'New Moon', title:'New Moon + Total Solar Eclipse', desc:'Moon passes in front of the sun at 19° Leo. Totality sweeps Russia, Greenland, Iceland and Spain, the first mainland European totality since 1999.', illum:0.0, waxing:true},
+  {date:ld(2026,8,12), type:'gamenight', tag:'Game Night', when:'4–8 PM', venue:'Lindenwood Park Place', title:'Game Night · Tavern', desc:'Tavern room, same day the moon crosses the sun. The sky does its thing, we roll dice. Drop in whenever; a new game starts when someone new sits down.'},
+  {date:ld(2026,8,15), type:'gamenight', tag:'Game Night', when:'4–8 PM', venue:'Lindenwood Park Place', title:'Game Night · Tavern', desc:'Tavern room. No RSVP that means anything and no game anyone has to play. If nobody wants what is on the table, we play something else.'},
+  {date:ld(2026,8,16), type:'gamenight', tag:'Game Night', when:'4–8 PM', venue:'Lindenwood Park Place', title:'Game Night · Library', desc:'Library room this time: quieter, better suited to the longer games. Same open door, same four-hour window.'},
   {date:ld(2026,8,20), type:'lunar', tag:'First Quarter', title:'First Quarter Moon', desc:'Half-lit, growing.', illum:0.5, waxing:true},
-  {date:ld(2026,8,20), type:'harvest', tag:'Harvest', title:'🍇 Missouri Grape Harvest Begins', desc:"Earliest varietals get picked as the state's wineries open the season — Augusta, Hermann, and the Ozark AVAs kick off six weeks ahead of Norton."},
-  {date:ld(2026,8,22), type:'astro', tag:'Astrological', title:'Sun Enters Virgo (150°)', desc:'A 30° zodiac-grid point, not a geometric midpoint — but the daylight-loss rate here is already measurably faster than three weeks earlier. The on-ramp, not the peak.'},
+  {date:ld(2026,8,20), type:'harvest', tag:'Harvest', title:'🍇 Missouri Grape Harvest Begins', desc:"Earliest varietals get picked as the state's wineries open the season. Augusta, Hermann and the Ozark AVAs kick off six weeks ahead of Norton."},
+  {date:ld(2026,8,22), type:'astro', tag:'Astrological', title:'Sun Enters Virgo (150°)', desc:'A 30° zodiac-grid point, not a geometric midpoint. But the daylight-loss rate here is already measurably faster than three weeks earlier: the on-ramp, not the peak.'},
   {date:ld(2026,8,22), type:'gamenight', tag:'Game Night', when:'4–8 PM', venue:'Lindenwood Park Place', title:'Game Night · Tavern', desc:'Tavern room, on the day the sun crosses into Virgo. The lowest-commitment invitation there is: say yes now and decide later.'},
   {date:ld(2026,8,25), type:'harvest', tag:'Harvest', title:'🥭 Pawpaw Season Opens', desc:"Missouri's native tropical fruit, custard-textured and tasting of banana and mango, growing wild in the river bottoms. Southern stands ripen first and the front works its way north. Ripe fruit drops rather than waiting to be picked."},
   {date:ld(2026,8,26), type:'gamenight', tag:'Game Night', when:'4–8 PM', venue:'Lindenwood Park Place', title:'Game Night · Tavern', desc:'Tavern room, midweek. Bailing is fine, arriving at seven is fine, sitting out a round is fine. It is free.'},
-  {date:ld(2026,8,28), type:'lunar', tag:'Full Moon', title:'Full "Sturgeon" Moon + Partial Lunar Eclipse', desc:'Full illumination at 4° Pisces, opposite the sun, with a Blood Moon eclipse riding along. The name is borrowed from lake sturgeon in the Great Lakes rather than from anything here — but Missouri keeps three sturgeon of its own, and the <a href="https://mdc.mo.gov/discover-nature/field-guide/pallid-sturgeon" target="_blank" rel="noopener">pallid sturgeon</a> is endemic to the Missouri and Mississippi basins, found nowhere else on earth and federally endangered.', illum:1.0, waxing:false},
+  {date:ld(2026,8,28), type:'lunar', tag:'Full Moon', title:'Full "Sturgeon" Moon + Partial Lunar Eclipse', desc:'Full illumination at 4° Pisces, opposite the sun, with a Blood Moon eclipse riding along. The name is borrowed from lake sturgeon in the Great Lakes rather than from anything here. Missouri keeps three sturgeon of its own, and the <a href="https://mdc.mo.gov/discover-nature/field-guide/pallid-sturgeon" target="_blank" rel="noopener">pallid sturgeon</a> is endemic to the Missouri and Mississippi basins, found nowhere else on earth and federally endangered.', illum:1.0, waxing:false},
   {date:ld(2026,8,29), type:'gamenight', tag:'Game Night', when:'4–8 PM', venue:'Lindenwood Park Place', title:'Game Night · Tavern', desc:'Tavern room, the night after the Sturgeon Moon and its eclipse. Come late, leave early, no notice needed.'},
-  {date:ld(2026,8,30), type:'astro', tag:'¾ Longitude', title:'Three-Quarter Arc Mark (157.5°)', desc:"Halfway between the cross-quarter day and the equinox — same bisection logic as Aug 7, applied again. More rigorous than Virgo's debut, and closer to the finish line."},
+  {date:ld(2026,8,30), type:'astro', tag:'¾ Longitude', title:'Three-Quarter Arc Mark (157.5°)', desc:"Halfway between the cross-quarter day and the equinox, the same bisection logic as Aug 7 applied again. More rigorous than Virgo's debut, and closer to the finish line."},
   {date:ld(2026,8,30), type:'gamenight', tag:'Game Night', when:'4–8 PM', venue:'Lindenwood Park Place', title:'Game Night · Library', desc:'Library room, closing the month out on the three-quarter arc mark. Quieter side of the building, better for the long games.'},
-  {date:ld(2026,9,1), type:'meteor', tag:'Meteorological', title:'Meteorological Autumn Begins', desc:'Calendar convention — the season starts on the 1st regardless of solar position. Zero astronomical basis, but daylight loss is now visibly accelerating.'},
-  {date:ld(2026,9,1), type:'harvest', tag:'Harvest', title:'🌽 Corn Harvest Begins (River Bottoms)', desc:'Missouri River bottomland fields are first to come off — combines roll here weeks before the rest of the state, targeting ~15% grain moisture.'},
-  {date:ld(2026,9,1), type:'harvest', tag:'Harvest', title:'🍷 Missouri Wine Month Begins', desc:"The state's official month-long celebration of its 5 AVAs and 129 wineries — timed to the harvest itself."},
+  {date:ld(2026,9,1), type:'meteor', tag:'Meteorological', title:'Meteorological Autumn Begins', desc:'Calendar convention: the season starts on the 1st regardless of solar position. Zero astronomical basis, but daylight loss is now visibly accelerating.'},
+  {date:ld(2026,9,1), type:'harvest', tag:'Harvest', title:'🌽 Corn Harvest Begins (River Bottoms)', desc:'Missouri River bottomland fields are first to come off. Combines roll here weeks before the rest of the state, targeting ~15% grain moisture.'},
+  {date:ld(2026,9,1), type:'harvest', tag:'Harvest', title:'🍷 Missouri Wine Month Begins', desc:"The state's official month-long celebration of its 5 AVAs and 129 wineries, timed to the harvest itself."},
   {date:ld(2026,9,4), type:'lunar', tag:'Last Quarter', title:'Last Quarter Moon', desc:'Half-lit, shrinking.', illum:0.5, waxing:false},
-  {date:ld(2026,9,7), type:'harvest', tag:'Harvest', title:'🍎 Apple Season Peaks', desc:'Jonathan, Honeycrisp, Gala, and heirloom varieties hit peak across Missouri orchards — the single biggest apple-picking month of the year.'},
-  {date:ld(2026,9,11), type:'lunar', tag:'New Moon', title:'New Moon', desc:'Dark moon — sky is emptiest of lunar light heading into the 21st.', illum:0.0, waxing:true},
-  {date:ld(2026,9,14), type:'harvest', tag:'Harvest', title:'🥭 Pawpaw Harvest Peaks', desc:'Peak drop across the state. Two to five days from ripe to gone at room temperature, which is why the best fruit in Missouri has never reached a grocery shelf — you eat them where you find them or not at all.'},
-  {date:ld(2026,9,15), type:'harvest', tag:'Harvest', title:'🌱 Soybean Harvest Begins', desc:'Combines start rolling once pods turn tan and moisture hits ~13% — runs from mid-September into November.'},
-  {date:ld(2026,9,18), type:'lunar', tag:'First Quarter', title:'First Quarter Moon', desc:'Half-lit, growing — three days out from 9/21.', illum:0.5, waxing:true},
+  {date:ld(2026,9,7), type:'harvest', tag:'Harvest', title:'🍎 Apple Season Peaks', desc:'Jonathan, Honeycrisp, Gala, and heirloom varieties hit peak across Missouri orchards, the single biggest apple-picking month of the year.'},
+  {date:ld(2026,9,11), type:'lunar', tag:'New Moon', title:'New Moon', desc:'Dark moon. The sky is emptiest of lunar light heading into the 21st.', illum:0.0, waxing:true},
+  {date:ld(2026,9,14), type:'harvest', tag:'Harvest', title:'🥭 Pawpaw Harvest Peaks', desc:'Peak drop across the state. Two to five days from ripe to gone at room temperature, which is why the best fruit in Missouri has never reached a grocery shelf. You eat them where you find them or not at all.'},
+  {date:ld(2026,9,15), type:'harvest', tag:'Harvest', title:'🌱 Soybean Harvest Begins', desc:'Combines start rolling once pods turn tan and moisture hits ~13%, and runs from mid-September into November.'},
+  {date:ld(2026,9,18), type:'lunar', tag:'First Quarter', title:'First Quarter Moon', desc:'Half-lit, growing, three days out from 9/21.', illum:0.5, waxing:true},
   {date:ld(2026,9,21), type:'birthday', tag:'★ The Day', title:'Degs\u2019s Birthday', desc:"Virgo/Libra cusp. One day before the equinox, sitting at the single steepest point of the entire year's daylight-loss curve."},
-  {date:ld(2026,9,22), type:'solar', tag:'Equinox', title:'Autumnal Equinox (180°)', desc:'The only date in this whole run with unambiguous physical significance — day and night in balance, and the peak rate of change in daylight, one day past the cusp.'},
-  {date:ld(2026,9,23), type:'astro', tag:'Astrological', title:'Sun Enters Libra (180°)', desc:'Libra begins at the exact same longitude as the equinox itself — the only zodiac sign whose start is pinned to a real astronomical event rather than a 30° grid line. For one sign a year, the convention and the geometry agree.'},
-  {date:ld(2026,9,23), type:'harvest', tag:'Harvest', title:'🍇 Norton Grape Harvest Underway', desc:"Missouri's official state grape — the last and latest of the season's wine varietals, picked from now into November."},
-  {date:ld(2026,9,26), type:'lunar', tag:'Full Moon', title:'Full "Harvest" Moon', desc:'First full moon after the equinox — the traditional Harvest Moon, arriving five days after the cusp.', illum:1.0, waxing:false},
+  {date:ld(2026,9,22), type:'solar', tag:'Equinox', title:'Autumnal Equinox (180°)', desc:'The only date in this whole run with unambiguous physical significance: day and night in balance, and the peak rate of change in daylight, one day past the cusp.'},
+  {date:ld(2026,9,23), type:'astro', tag:'Astrological', title:'Sun Enters Libra (180°)', desc:'Libra begins at the exact same longitude as the equinox itself, the only zodiac sign whose start is pinned to a real astronomical event rather than a 30° grid line. For one sign a year, the convention and the geometry agree.'},
+  {date:ld(2026,9,23), type:'harvest', tag:'Harvest', title:'🍇 Norton Grape Harvest Underway', desc:"Missouri's official state grape, the last and latest of the season's wine varietals, picked from now into November."},
+  {date:ld(2026,9,26), type:'lunar', tag:'Full Moon', title:'Full "Harvest" Moon', desc:'First full moon after the equinox, the traditional Harvest Moon, arriving five days after the cusp.', illum:1.0, waxing:false},
   {date:ld(2026,9,28), type:'harvest', tag:'Harvest', title:'🌰 Black Walnuts Start Dropping', desc:'Green hulls come down hard enough to dent a car roof, and the husks stain hands, driveways and everything else they touch a brown that does not wash out.'},
-  {date:ld(2026,10,1), type:'harvest', tag:'Harvest', title:'🌰 Hulling Stations Open', desc:'Hammons opens its buying network out of Stockton — around 160 sites across Missouri and neighbouring states, paying by the hundredweight for nuts gathered off the ground. Runs through October and into mid-November.'},
+  {date:ld(2026,10,1), type:'harvest', tag:'Harvest', title:'🌰 Hulling Stations Open', desc:'Hammons opens its buying network out of Stockton, around 160 sites across Missouri and neighbouring states, paying by the hundredweight for nuts gathered off the ground. Runs through October and into mid-November.'},
   {date:ld(2026,10,3), type:'lunar', tag:'Last Quarter', title:'Last Quarter Moon', desc:'Half-lit and shrinking, in Cancer. The light drains back out of the sky ahead of the darkest stretch of October.', illum:0.5, waxing:false},
-  {date:ld(2026,10,8), type:'astro', tag:'Meteor Shower', title:'Draconids Peak', desc:'Debris from comet 21P/Giacobini-Zinner. Two nights before new moon, so effectively no moonlight — and unusually, the Draconids run best in the early evening rather than before dawn, because the radiant is highest at nightfall.'},
-  {date:ld(2026,10,10), type:'lunar', tag:'New Moon', title:'New Moon', desc:'Dark moon at 17° Libra — the emptiest sky of the whole run. Nothing between you and the Milky Way but St. Louis light pollution.', illum:0.0, waxing:true},
-  {date:ld(2026,10,12), type:'harvest', tag:'Harvest', title:'🎃 Pumpkin & Late-Apple Season Peaks', desc:'Missouri patches hit full swing across the river bottoms, and the last apples come off the tree — Winesap and Arkansas Black, dense and built for winter storage rather than eating fresh.'},
-  {date:ld(2026,10,15), type:'harvest', tag:'Harvest', title:'🍊 Persimmons Ripen', desc:'The first-frost fruit. Tannins keep them mouth-puckering until they go completely soft, usually mid-to-late October and often after the leaves have already dropped — the fruit that punishes impatience.'},
-  {date:ld(2026,10,15), type:'astro', tag:'Bisection', title:'Post-Equinox Bisection (202.5°)', desc:'Halfway from the equinox to the true autumn cross-quarter — the same halving behind Aug 7 and Aug 30, now running on the far side of the balance point.'},
-  {date:ld(2026,10,18), type:'lunar', tag:'First Quarter', title:'First Quarter Moon', desc:'Half-lit and growing, in Capricorn — building toward the Hunter\'s Moon.', illum:0.5, waxing:true},
-  {date:ld(2026,10,20), type:'harvest', tag:'Harvest', title:'🍂 Fall Color Peaks', desc:'Typical peak for the St. Louis region and the eastern Ozark border — maples, oaks, and hickory turning over the last ten days of the month.'},
-  {date:ld(2026,10,21), type:'astro', tag:'Meteor Shower', title:'Orionids Peak', desc:'Dust shed by Halley\'s Comet, burning up at 41 miles per second — the fastest meteors of the season. A waxing gibbous sets around midnight, leaving the pre-dawn peak hours genuinely dark.'},
-  {date:ld(2026,10,23), type:'astro', tag:'Astrological', title:'Sun Enters Scorpio (210°)', desc:'Another 30° grid point, same as Virgo back in August — zodiac convention rather than geometry. By now the day is shedding light at close to a minute and a half every 24 hours.'},
-  {date:ld(2026,10,23), type:'harvest', tag:'Harvest', title:'❄ Average First Frost (St. Louis)', desc:'The long-run average date of the first fall frost, when the thermometer first dips into the 32–36°F band and tender crops need to be off the vine. The first true freeze runs later — its average lands on Oct 31 itself.'},
-  {date:ld(2026,10,25), type:'harvest', tag:'Harvest', title:'🥄 The Persimmon Seed Forecast', desc:'Ozark tradition: split a ripe seed and read the shape inside. A spoon means heavy snow to shovel, a fork a mild winter, a knife a wind that cuts. No physical basis whatsoever — the least rigorous marker on this page, and the only one that claims to see forward.'},
-  {date:ld(2026,10,26), type:'lunar', tag:'Full Moon', title:'Full "Hunter\'s" Moon', desc:'Full illumination at 2° Taurus — the first full moon after the Harvest Moon, and the last one before Halloween. Named for the month game was fattened and taken before winter.', illum:1.0, waxing:false},
+  {date:ld(2026,10,8), type:'astro', tag:'Meteor Shower', title:'Draconids Peak', desc:'Debris from comet 21P/Giacobini-Zinner. Two nights before new moon, so effectively no moonlight. Unusually, the Draconids run best in the early evening rather than before dawn, because the radiant is highest at nightfall.'},
+  {date:ld(2026,10,10), type:'lunar', tag:'New Moon', title:'New Moon', desc:'Dark moon at 17° Libra, the emptiest sky of the whole run. Nothing between you and the Milky Way but St. Louis light pollution.', illum:0.0, waxing:true},
+  {date:ld(2026,10,12), type:'harvest', tag:'Harvest', title:'🎃 Pumpkin & Late-Apple Season Peaks', desc:'Missouri patches hit full swing across the river bottoms, and the last apples come off the tree: Winesap and Arkansas Black, dense and built for winter storage rather than eating fresh.'},
+  {date:ld(2026,10,15), type:'harvest', tag:'Harvest', title:'🍊 Persimmons Ripen', desc:'The first-frost fruit. Tannins keep them mouth-puckering until they go completely soft, usually mid-to-late October and often after the leaves have already dropped. The fruit that punishes impatience.'},
+  {date:ld(2026,10,15), type:'astro', tag:'Bisection', title:'Post-Equinox Bisection (202.5°)', desc:'Halfway from the equinox to the true autumn cross-quarter, the same halving behind Aug 7 and Aug 30, now running on the far side of the balance point.'},
+  {date:ld(2026,10,18), type:'lunar', tag:'First Quarter', title:'First Quarter Moon', desc:'Half-lit and growing, in Capricorn, building toward the Hunter\'s Moon.', illum:0.5, waxing:true},
+  {date:ld(2026,10,20), type:'harvest', tag:'Harvest', title:'🍂 Fall Color Peaks', desc:'Typical peak for the St. Louis region and the eastern Ozark border, with maples, oaks and hickory turning over the last ten days of the month.'},
+  {date:ld(2026,10,21), type:'astro', tag:'Meteor Shower', title:'Orionids Peak', desc:'Dust shed by Halley\'s Comet, burning up at 41 miles per second, the fastest meteors of the season. A waxing gibbous sets around midnight, leaving the pre-dawn peak hours genuinely dark.'},
+  {date:ld(2026,10,23), type:'astro', tag:'Astrological', title:'Sun Enters Scorpio (210°)', desc:'Another 30° grid point, same as Virgo back in August: zodiac convention rather than geometry. By now the day is shedding light at close to a minute and a half every 24 hours.'},
+  {date:ld(2026,10,23), type:'harvest', tag:'Harvest', title:'❄ Average First Frost (St. Louis)', desc:'The long-run average date of the first fall frost, when the thermometer first dips into the 32–36°F band and tender crops need to be off the vine. The first true freeze runs later; its average lands on Oct 31 itself.'},
+  {date:ld(2026,10,25), type:'harvest', tag:'Harvest', title:'🥄 The Persimmon Seed Forecast', desc:'Ozark tradition: split a ripe seed and read the shape inside. A spoon means heavy snow to shovel, a fork a mild winter, a knife a wind that cuts. No physical basis whatsoever: the least rigorous marker on this page, and the only one that claims to see forward.'},
+  {date:ld(2026,10,26), type:'lunar', tag:'Full Moon', title:'Full "Hunter\'s" Moon', desc:'Full illumination at 2° Taurus, the first full moon after the Harvest Moon and the last one before Halloween. Named for the month game was fattened and taken before winter.', illum:1.0, waxing:false},
   {date:ld(2026,10,28), type:'harvest', tag:'Harvest', title:'🍇 Norton Harvest Ends', desc:"The last fruit comes off the vine. Missouri's state grape hangs longer than anything else in the state, and its picking closes the wine season that opened back on Aug 20."},
-  {date:ld(2026,10,31), type:'halloween', tag:'★ Halloween', title:'Halloween — on a Saturday', desc:'The last Saturday Halloween until 2037. The date walks forward a weekday each year and jumps two across leap years, so after tonight it lands Sunday, Tuesday, Wednesday, Thursday, Friday, Sunday, Monday, Tuesday, Wednesday, Friday — and only then Saturday again, eleven years out. Even counting Fridays, the next one is 2031. Daylight saving ends at 2am the following morning, so the night itself runs 25 hours, and a 60%-lit waning gibbous stays down until late evening — full dark for the early hours. The true cross-quarter, solar longitude 225°, is still a week away on Nov 7; tonight is the convention, not the geometry.'},
+  {date:ld(2026,10,31), type:'halloween', tag:'★ Halloween', title:'Halloween, on a Saturday', desc:'The last Saturday Halloween until 2037. The date walks forward a weekday each year and jumps two across leap years, so after tonight it lands Sunday, Tuesday, Wednesday, Thursday, Friday, Sunday, Monday, Tuesday, Wednesday, Friday, and only then Saturday again, eleven years out. Even counting Fridays, the next one is 2031. Daylight saving ends at 2am the following morning, so the night itself runs 25 hours, and a 60%-lit waning gibbous stays down until late evening, leaving full dark for the early hours. The true cross-quarter, solar longitude 225°, is still a week away on Nov 7; tonight is the convention, not the geometry.'},
 ];
 
 const tl = document.getElementById('timeline');
@@ -846,7 +846,7 @@ events.forEach(ev => {
   tl.appendChild(row);
 });
 
-// Everything already behind us — pin the marker to the end so the rail still reads.
+// Everything already behind us: pin the marker to the end so the rail still reads.
 if (!todayInserted){
   tl.appendChild(todayMarker());
 }
