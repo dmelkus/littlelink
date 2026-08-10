@@ -417,6 +417,12 @@
     margin-top:6px;
     line-height:1.6;
   }
+  .desc a{
+    color:var(--violet);
+    text-decoration:none;
+    border-bottom:1px solid rgba(199,125,255,0.45);
+  }
+  .desc a:hover{ color:var(--pink); border-bottom-color:var(--pink); }
 
   .stat{
     display:inline-flex;
@@ -752,7 +758,7 @@ const events = [
   {date:ld(2026,8,22), type:'gamenight', tag:'Game Night', when:'4–8 PM', venue:'Lindenwood Park Place', title:'Game Night · Tavern', desc:'Tavern room, on the day the sun crosses into Virgo. The lowest-commitment invitation there is: say yes now and decide later.'},
   {date:ld(2026,8,25), type:'harvest', tag:'Harvest', title:'🥭 Pawpaw Season Opens', desc:"Missouri's native tropical fruit, custard-textured and tasting of banana and mango, growing wild in the river bottoms. Southern stands ripen first and the front works its way north. Ripe fruit drops rather than waiting to be picked."},
   {date:ld(2026,8,26), type:'gamenight', tag:'Game Night', when:'4–8 PM', venue:'Lindenwood Park Place', title:'Game Night · Tavern', desc:'Tavern room, midweek. Bailing is fine, arriving at seven is fine, sitting out a round is fine. It is free.'},
-  {date:ld(2026,8,28), type:'lunar', tag:'Full Moon', title:'Full "Sturgeon" Moon + Partial Lunar Eclipse', desc:'Full illumination at 4° Pisces, opposite the sun. A Blood Moon eclipse rides along with it.', illum:1.0, waxing:false},
+  {date:ld(2026,8,28), type:'lunar', tag:'Full Moon', title:'Full "Sturgeon" Moon + Partial Lunar Eclipse', desc:'Full illumination at 4° Pisces, opposite the sun, with a Blood Moon eclipse riding along. The name is borrowed from lake sturgeon in the Great Lakes rather than from anything here — but Missouri keeps three sturgeon of its own, and the <a href="https://mdc.mo.gov/discover-nature/field-guide/pallid-sturgeon" target="_blank" rel="noopener">pallid sturgeon</a> is endemic to the Missouri and Mississippi basins, found nowhere else on earth and federally endangered.', illum:1.0, waxing:false},
   {date:ld(2026,8,29), type:'gamenight', tag:'Game Night', when:'4–8 PM', venue:'Lindenwood Park Place', title:'Game Night · Tavern', desc:'Tavern room, the night after the Sturgeon Moon and its eclipse. Come late, leave early, no notice needed.'},
   {date:ld(2026,8,30), type:'astro', tag:'¾ Longitude', title:'Three-Quarter Arc Mark (157.5°)', desc:"Halfway between the cross-quarter day and the equinox — same bisection logic as Aug 7, applied again. More rigorous than Virgo's debut, and closer to the finish line."},
   {date:ld(2026,8,30), type:'gamenight', tag:'Game Night', when:'4–8 PM', venue:'Lindenwood Park Place', title:'Game Night · Library', desc:'Library room, closing the month out on the three-quarter arc mark. Quieter side of the building, better for the long games.'},
