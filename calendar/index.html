@@ -301,8 +301,6 @@
   .legend-chip[data-state="exclude"]{ opacity:0.42; }
   .legend-chip[data-group="arkadin"]  { --house:var(--arkadin); }
   .legend-chip[data-group="hipointe"] { --house:var(--hipointe); }
-  .legend-chip[data-group="arkadin"] .node{ border-color:var(--house); }
-  .legend-chip[data-group="hipointe"] .node{ background:var(--house); border-color:var(--house); }
   .legend-chip[data-group="arkadin"][data-state="include"],
   .legend-chip[data-group="hipointe"][data-state="include"]{
     border-color:var(--house);
@@ -471,11 +469,14 @@
   .node.film{
     width:13px; height:9px;
     border-radius:2px;
-    border-color:var(--text-dim);
+    border-color:var(--house, var(--text-dim));
     background:var(--bg);
     margin-top:6px;
   }
-  .node.film.hipointe{ background:var(--text-dim); border-color:var(--text-dim); }
+  .node.film.hipointe{
+    background:var(--house, var(--text-dim));
+    border-color:var(--house, var(--text-dim));
+  }
 
   /* Venue identity: a gradient frame rather than a fill, so the card ground
      stays the same purple as everything else and only the edge carries the
@@ -492,10 +493,10 @@
       linear-gradient(var(--bg-card), var(--bg-card)) padding-box,
       linear-gradient(145deg, var(--house), rgba(0,0,0,0) 68%) border-box;
   }
-  .event.venue-arkadin  .node.film{ border-color:var(--house); }
-  .event.venue-hipointe .node.film{ background:var(--house); border-color:var(--house); }
   .event.venue-arkadin  .tag.film,
   .event.venue-hipointe .tag.film{ color:var(--house); }
+  /* The venue's name on the card carries its house too. */
+  .stat .venue{ color:var(--house, inherit); }
   .node.halloween{
     border-color:var(--magenta); background:var(--magenta);
     width:18px; height:18px; margin-top:1px;
@@ -1195,7 +1196,7 @@ events.forEach(ev => {
       // Text has to be wrapped in a single span or each inline element becomes
       // its own flex item and the 9px gap lands inside the reading: 1h45 renders
       // as "1 h 45".
-      ev.type === 'film'      ? `<div class="stat"><span>▸ ${ev.venue} · ${fmtTime(ev.date)} · ${fmtRuntime(ev.runtime)}</span></div>`
+      ev.type === 'film'      ? `<div class="stat"><span>▸ <span class="venue">${ev.venue}</span> · ${fmtTime(ev.date)} · ${fmtRuntime(ev.runtime)}</span></div>`
     : ev.type === 'gamenight' ? `<div class="stat"><span>◆ ${ev.when} · ${ev.venue}</span></div>`
     : ev.type === 'birthday'  ? `<div class="stat">${daylightMeter(dl)}<span>${fmtHMHtml(dl)} daylight · losing ~2${unit('min')} 50${unit('s')}/day</span></div>`
     :                           `<div class="stat">${daylightMeter(dl)}<span>${fmtHMHtml(dl)} daylight</span></div>`;
