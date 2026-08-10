@@ -168,6 +168,18 @@
 
   .hero .sub b{ color:var(--text); font-weight:700; }
 
+  /* Unit letters inside a reading — 13h46, 2min 50s. Cinzel is an all-caps
+     face and these labels are uppercased, so a full-size H sits between two
+     numbers as just another glyph. Dropped to lowercase, smaller and lighter
+     so the digits read first. Opacity rather than a fixed colour, since this
+     appears on dim, pink and violet text alike. */
+  .unit{
+    font-size:0.76em;
+    text-transform:lowercase;
+    opacity:0.62;
+    padding:0 0.05em;
+  }
+
   /* ---------- DAYLIGHT RAIL ----------
      Same gauge as the timeline cards, scaled up, with the reading spelled out
      underneath — the bar shows the gap, the sentence names it. */
@@ -605,10 +617,22 @@ function daylightHours(d){
   const H = Math.acos(cosH) * 180/Math.PI; // half-day arc in degrees
   return (H/180)*24; // total daylight hours
 }
+function hoursMinutes(hrs){
+  let h = Math.floor(hrs);
+  let m = Math.round((hrs - h) * 60);
+  if (m === 60){ h += 1; m = 0; }   // 13.9959h would otherwise render as 13h60
+  return { h, m: String(m).padStart(2, '0') };
+}
 function fmtHM(hrs){
-  const h = Math.floor(hrs);
-  const m = Math.round((hrs-h)*60);
-  return h+'h'+String(m).padStart(2,'0');
+  const { h, m } = hoursMinutes(hrs);
+  return h + 'h' + m;
+}
+// Same reading, with the unit letter set apart from the digits. At 11px in an
+// all-caps face a full-size H is just another glyph between two numbers.
+function unit(u){ return `<span class="unit">${u}</span>`; }
+function fmtHMHtml(hrs){
+  const { h, m } = hoursMinutes(hrs);
+  return h + unit('h') + m;
 }
 function fmtDate(d){
   return d.toLocaleDateString('en-US', {month:'short', day:'numeric'});
@@ -674,7 +698,7 @@ const dlFill = document.getElementById('dlFill');
 if (todayParts.cls) dlFill.classList.add(todayParts.cls);
 dlFill.setAttribute('style', todayParts.style);
 
-document.getElementById('dlTotal').innerHTML = `<b>${fmtHM(todayDL)}</b> of daylight today`;
+document.getElementById('dlTotal').innerHTML = `<b>${fmtHMHtml(todayDL)}</b> of daylight today`;
 
 const gap = todayDL - 12;
 const gapEl = document.getElementById('dlGap');
@@ -682,7 +706,7 @@ if (Math.abs(gap) <= METER_BALANCE_H){
   gapEl.textContent = 'day and night in balance';
 } else {
   gapEl.classList.add(gap > 0 ? 'day' : 'night');
-  gapEl.textContent = `${fmtHM(Math.abs(gap))} more ${gap > 0 ? 'day than night' : 'night than day'}`;
+  gapEl.innerHTML = `${fmtHMHtml(Math.abs(gap))} more ${gap > 0 ? 'day than night' : 'night than day'}`;
 }
 
 // moon phase icon renderer: illum 0-1, waxing bool
@@ -787,8 +811,8 @@ events.forEach(ev => {
   const dl = daylightHours(ev.date);
   const statHTML =
       ev.type === 'gamenight' ? `<div class="stat">◆ ${ev.when} · ${ev.venue}</div>`
-    : ev.type === 'birthday'  ? `<div class="stat">${daylightMeter(dl)}<span>${fmtHM(dl)} daylight · losing ~2min 50s/day</span></div>`
-    :                           `<div class="stat">${daylightMeter(dl)}<span>${fmtHM(dl)} daylight</span></div>`;
+    : ev.type === 'birthday'  ? `<div class="stat">${daylightMeter(dl)}<span>${fmtHMHtml(dl)} daylight · losing ~2${unit('min')} 50${unit('s')}/day</span></div>`
+    :                           `<div class="stat">${daylightMeter(dl)}<span>${fmtHMHtml(dl)} daylight</span></div>`;
 
   row.innerHTML = `
     <div class="card">
