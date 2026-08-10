@@ -101,6 +101,38 @@ def build(ics_path: pathlib.Path, venue: str, overrides: dict):
     return lines, unmatched
 
 
+def existing_entries() -> list[str]:
+    """The entries already spliced into the page, for --merge."""
+    page = PAGE.read_text()
+    begin, end = page.find(BEGIN), page.find(END)
+    if begin == -1 or end == -1:
+        return []
+    body = page[page.index("\n", begin) + 1:page.rindex("\n", 0, end)]
+    return [line for line in body.split("\n") if line.strip()]
+
+
+def entry_url(line: str) -> str:
+    match = re.search(r"url:'([^']+)'", line)
+    return match.group(1) if match else line
+
+
+def entry_sort_key(line: str):
+    match = re.search(r"ldt\((\d+),(\d+),(\d+),(\d+),(\d+)\)", line)
+    return tuple(int(n) for n in match.groups()) if match else (0, 0, 0, 0, 0)
+
+
+def merge(old: list[str], new: list[str]) -> list[str]:
+    """Union by event URL, newest wins, back into date order.
+
+    A venue exports one month at a time and consecutive months overlap at the
+    boundary, so merging rather than replacing is what lets each export simply
+    add to the run.
+    """
+    combined = {entry_url(line): line for line in old}
+    combined.update({entry_url(line): line for line in new})
+    return sorted(combined.values(), key=entry_sort_key)
+
+
 def splice(entries: list[str]) -> None:
     page = PAGE.read_text()
     begin, end = page.find(BEGIN), page.find(END)
@@ -120,6 +152,9 @@ def main() -> None:
     ap.add_argument("--venue", required=True, help="shown on the card, e.g. Arkadin")
     ap.add_argument("--splice", action="store_true",
                     help="rewrite calendar/index.html between the FILMS markers")
+    ap.add_argument("--merge", action="store_true",
+                    help="union with the entries already in the page instead of "
+                         "replacing them, so each month's export adds to the run")
     args = ap.parse_args()
 
     overrides = json.loads(TITLES.read_text()) if TITLES.exists() else {}
@@ -134,6 +169,12 @@ def main() -> None:
               f"add any that read badly:", file=sys.stderr)
         for slug, summary, title in unmatched:
             print(f"  {slug}\n    {summary}\n    -> {title}", file=sys.stderr)
+
+    if args.merge:
+        before = len(existing_entries())
+        entries = merge(existing_entries(), entries)
+        print(f"merged: {before} already in the page, {len(entries)} after union",
+              file=sys.stderr)
 
     if args.splice:
         splice(entries)
