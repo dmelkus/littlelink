@@ -598,6 +598,15 @@
     margin-top:7px;
     color:var(--text);
   }
+  /* Card titles take their house everywhere except the cinemas, where 107
+     coloured titles would shout over everything else and the title is already
+     marked as a link. Resolves --ink first, so blood red uses its lifted tone:
+     a 17px semibold title is under the 18.66px WCAG counts as large, so it
+     needs the full 4.5:1, not the 3:1 allowed for marks. */
+  .event[data-group="gamenight"] .title,
+  .event[data-group="harvest"] .title,
+  .event[data-group="sky"] .title{ color:var(--ink, var(--house)); }
+
   .event.birthday .title{
     font-family:var(--font-display);
     font-weight:400;
