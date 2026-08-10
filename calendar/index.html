@@ -329,6 +329,16 @@
     transform:rotate(45deg);
     box-shadow:0 0 10px rgba(199,125,255,0.55);
   }
+  /* Screenings: a small screen rather than a disc, in the muted body colour.
+     There are thirty of them in a three-week stretch, so they are pitched to
+     read as texture running under the sky events rather than competing. */
+  .node.film{
+    width:13px; height:9px;
+    border-radius:2px;
+    border-color:var(--text-dim);
+    background:var(--bg);
+    margin-top:6px;
+  }
   .node.halloween{
     border-color:var(--magenta); background:var(--magenta);
     width:18px; height:18px; margin-top:1px;
@@ -379,6 +389,7 @@
   .tag.birthday{ color:var(--pink); background:rgba(254,84,255,0.14); }
   .tag.halloween{ color:var(--magenta); background:rgba(212,24,134,0.18); }
   .tag.gamenight{ color:var(--violet); background:rgba(199,125,255,0.16); }
+  .tag.film{ color:var(--text-dim); }
 
   .title{
     font-family:var(--font-head);
@@ -402,6 +413,16 @@
     box-shadow:0 0 18px rgba(212,24,134,0.18);
   }
   .event.gamenight .card{ border-color:rgba(199,125,255,0.42); }
+  /* Compact screening card: title, venue, time, runtime, and a link out. */
+  .event.film .card{ padding:11px 14px; }
+  .event.film .title{ font-size:15px; margin-top:5px; }
+  .event.film .stat{ margin-top:8px; padding-top:8px; }
+  .title a{
+    color:inherit;
+    text-decoration:none;
+    border-bottom:1px solid rgba(199,125,255,0.4);
+  }
+  .title a:hover{ color:var(--pink); border-bottom-color:var(--pink); }
   .event.halloween .title{
     font-family:var(--font-display);
     font-weight:400;
@@ -608,6 +629,9 @@
 // Local-midnight date builder. Avoids the UTC-parsing shift that renders
 // "Aug 6" as "Aug 5" for anyone west of Greenwich.
 function ld(y, m, d){ return new Date(y, m - 1, d); }
+// Screenings carry a real clock time, so they sort correctly against each other
+// within a day and only count as past once they have actually started.
+function ldt(y, m, d, hh, mm){ return new Date(y, m - 1, d, hh, mm); }
 function startOfDay(d){ return new Date(d.getFullYear(), d.getMonth(), d.getDate()); }
 
 const TODAY = startOfDay(new Date());
@@ -647,6 +671,15 @@ function fmtHMHtml(hrs){
 }
 function fmtDate(d){
   return d.toLocaleDateString('en-US', {month:'short', day:'numeric'});
+}
+function fmtTime(d){
+  const h = d.getHours(), m = d.getMinutes();
+  const hr = h % 12 || 12, ampm = h >= 12 ? 'PM' : 'AM';
+  return m ? `${hr}:${String(m).padStart(2,'0')} ${ampm}` : `${hr} ${ampm}`;
+}
+function fmtRuntime(mins){
+  const h = Math.floor(mins / 60), m = mins % 60;
+  return h + unit('h') + (m ? String(m).padStart(2, '0') : '');
 }
 
 // Daylight gauge, measured out from the 12h balance point rather than from
@@ -795,6 +828,46 @@ const events = [
   {date:ld(2026,10,31), type:'halloween', tag:'★ Halloween', title:'Halloween, on a Saturday', desc:'The last Saturday Halloween until 2037. The date walks forward a weekday each year and jumps two across leap years, so after tonight it lands Sunday, Tuesday, Wednesday, Thursday, Friday, Sunday, Monday, Tuesday, Wednesday, Friday, and only then Saturday again, eleven years out. Even counting Fridays, the next one is 2031. Daylight saving ends at 2am the following morning, so the night itself runs 25 hours, and a 60%-lit waning gibbous stays down until late evening, leaving full dark for the early hours. The true cross-quarter, solar longitude 225°, is still a week away on Nov 7; tonight is the convention, not the geometry.'},
 ];
 
+// Screenings at Arkadin Cinema & Bar, from the venue's published .ics export.
+// A snapshot rather than a live feed: re-export and regenerate to refresh.
+// Titles are trimmed to the film itself; the venue's own listings carry the
+// pre-shows, Q&As and series framing, which is what the link is for.
+const films = [
+  {date:ldt(2026,8,10,19,0), runtime:120, title:'Miracle Baby (1982)', url:'https://arkadincinema.com/event/miracle-baby-1982-presented-by-st-louis-video-society-2/'},
+  {date:ldt(2026,8,11,19,0), runtime:120, title:'Dead Media (2025)', url:'https://arkadincinema.com/event/dead-media-2025-w-live-filmmaker-qa/'},
+  {date:ldt(2026,8,12,19,0), runtime:120, title:'Busterpalooza: Seven Chances (1925)', url:'https://arkadincinema.com/event/busterpalooza-featuring-seven-chances-1925-and-more-presented-by-silents-please-stl/'},
+  {date:ldt(2026,8,14,19,0), runtime:105, title:'Anaconda (1997)', url:'https://arkadincinema.com/event/anaconda-1997-w-scary-snakes-pre-show-6-pm/'},
+  {date:ldt(2026,8,14,21,0), runtime:90, title:'Ice Cream Man (1994)', url:'https://arkadincinema.com/event/ice-cream-man-1994-friday-night-wtf/'},
+  {date:ldt(2026,8,15,17,0), runtime:90, title:'Pecker (1998)', url:'https://arkadincinema.com/event/john-waters-most-personal-film-pecker-1998/'},
+  {date:ldt(2026,8,15,19,0), runtime:120, title:'End of History (2025)', url:'https://arkadincinema.com/event/end-of-history-2025-virtual-qa-with-director-jacob-gregor/'},
+  {date:ldt(2026,8,16,15,0), runtime:120, title:'The Alabama Solution', url:'https://arkadincinema.com/event/the-alabama-solution-presented-by-empower-missouri/'},
+  {date:ldt(2026,8,16,18,0), runtime:60, title:'Kuroneko (1968)', url:'https://arkadincinema.com/event/kuroneko-1968-folk-horror-from-japan/'},
+  {date:ldt(2026,8,17,19,0), runtime:105, title:'Cabin Boy (1994)', url:'https://arkadincinema.com/event/chris-elliotts-surreal-cult-comedy-cabin-boy-1994/'},
+  {date:ldt(2026,8,19,19,0), runtime:105, title:'Multiple Maniacs (1970)', url:'https://arkadincinema.com/event/john-waters-multiple-maniacs-1970/'},
+  {date:ldt(2026,8,20,19,0), runtime:180, title:'VHS Night', url:'https://arkadincinema.com/event/vhs-night-admission-price-one-vhs-tape-25/'},
+  {date:ldt(2026,8,21,19,0), runtime:135, title:'Miami Vice (2006)', url:'https://arkadincinema.com/event/miami-vice-2006-20th-anniversary-screening-w-moody-rock-pre-show/'},
+  {date:ldt(2026,8,21,21,30), runtime:90, title:'Titanic 666 (2022)', url:'https://arkadincinema.com/event/titanic-666-2022-friday-night-wtf-free/'},
+  {date:ldt(2026,8,22,16,30), runtime:120, title:'Jason and the Argonauts (1963)', url:'https://arkadincinema.com/event/legendary-fantasy-adventure-extravaganza-jason-and-the-argonauts-1963/'},
+  {date:ldt(2026,8,22,19,0), runtime:120, title:'The Life Aquatic with Steve Zissou (2004)', url:'https://arkadincinema.com/event/the-life-aquatic-with-steve-zissou-2004-w-jacques-cousteau-pre-show/'},
+  {date:ldt(2026,8,23,16,0), runtime:165, title:'Invention for Destruction (1958)', url:'https://arkadincinema.com/event/karel-zemans-eye-popping-invention-for-destruction-1958-w-georges-melies-the-impossible-voyage/'},
+  {date:ldt(2026,8,23,18,30), runtime:120, title:'Deliverance (1972)', url:'https://arkadincinema.com/event/deliverance-1972/'},
+  {date:ldt(2026,8,24,19,0), runtime:120, title:'Amsterdamned (1988)', url:'https://arkadincinema.com/event/amsterdamned-1988-fast-gory-immensely-entertaining/'},
+  {date:ldt(2026,8,26,18,30), runtime:120, title:'Drinkolas Cage', url:'https://arkadincinema.com/event/drinkolas-cage-a-monthly-nicolas-cage-movie-drinking-game-event-6/'},
+  {date:ldt(2026,8,26,21,0), runtime:120, title:'Drinkolas Cage (outdoor)', url:'https://arkadincinema.com/event/drinkolas-cage-a-monthly-nicolas-cage-movie-drinking-game-event-7/'},
+  {date:ldt(2026,8,27,20,0), runtime:120, title:'Talladega Nights (2006, outdoor)', url:'https://arkadincinema.com/event/talladega-nights-the-ballad-of-ricky-bobby-2006-outdoor-screening-sponsored-by-proper-cannabis/'},
+  {date:ldt(2026,8,28,19,0), runtime:90, title:'Pink Flamingos (1972)', url:'https://arkadincinema.com/event/pink-flamingos-1972-w-divine-pre-show-6-pm/'},
+  {date:ldt(2026,8,28,21,30), runtime:120, title:'Drinkolas Cage', url:'https://arkadincinema.com/event/drinkolas-cage-a-monthly-nicolas-cage-movie-drinking-game-event-8/'},
+  {date:ldt(2026,8,29,14,0), runtime:105, title:'Muppet Treasure Island (1996)', url:'https://arkadincinema.com/event/muppet-treasure-island-1996-30th-anniversary-screening-w-muppet-pre-show/'},
+  {date:ldt(2026,8,29,16,30), runtime:105, title:'Nostos: The Return (1989)', url:'https://arkadincinema.com/event/homers-odyssey-as-youve-never-seen-it-before-nostos-the-return-1989-presented-by-lost-in-the-arthouse/'},
+  {date:ldt(2026,8,30,15,0), runtime:120, title:'The Time That Remains (2009)', url:'https://arkadincinema.com/event/palestinian-comedy-classic-the-time-that-remains-2009-fundraiser-for-the-alhaddad-family-in-gaza/'},
+  {date:ldt(2026,8,30,17,30), runtime:150, title:'Earth\'s Greatest Enemy (2025)', url:'https://arkadincinema.com/event/earths-greatest-enemy-2025-virtual-qa-with-director-abby-martin/'},
+  {date:ldt(2026,8,31,19,0), runtime:120, title:'$3 Monday Mystery Movie', url:'https://arkadincinema.com/event/3-monday-mystery-movie-the-tense-fascinating-totally-unprecedented-made-for-tv-thriller-that-shocked-a-nation/'},
+  {date:ldt(2026,9,2,19,0), runtime:120, title:'Street Fighter II: The Animated Movie (1994)', url:'https://arkadincinema.com/event/street-fighter-ii-the-animated-movie-1994-w-street-fighter-video-game-contest-presented-by-strange-brew/'},
+].map(f => Object.assign({type:'film', tag:'Film', venue:'Arkadin'}, f));
+
+events.push(...films);
+events.sort((a, b) => a.date - b.date);   // stable, so same-day order is source order
+
 const tl = document.getElementById('timeline');
 let todayInserted = false;
 
@@ -827,9 +900,19 @@ events.forEach(ev => {
 
   const dl = daylightHours(ev.date);
   const statHTML =
-      ev.type === 'gamenight' ? `<div class="stat">◆ ${ev.when} · ${ev.venue}</div>`
+      // .stat is a flex row so the daylight gauge can sit beside its reading.
+      // Text has to be wrapped in a single span or each inline element becomes
+      // its own flex item and the 9px gap lands inside the reading: 1h45 renders
+      // as "1 h 45".
+      ev.type === 'film'      ? `<div class="stat"><span>▸ ${ev.venue} · ${fmtTime(ev.date)} · ${fmtRuntime(ev.runtime)}</span></div>`
+    : ev.type === 'gamenight' ? `<div class="stat"><span>◆ ${ev.when} · ${ev.venue}</span></div>`
     : ev.type === 'birthday'  ? `<div class="stat">${daylightMeter(dl)}<span>${fmtHMHtml(dl)} daylight · losing ~2${unit('min')} 50${unit('s')}/day</span></div>`
     :                           `<div class="stat">${daylightMeter(dl)}<span>${fmtHMHtml(dl)} daylight</span></div>`;
+
+  // Screenings link out to the venue's own listing and carry no description.
+  const titleHTML = ev.url
+    ? `<a href="${ev.url}" target="_blank" rel="noopener">${ev.title}</a>`
+    : ev.title;
 
   row.innerHTML = `
     <div class="card">
@@ -837,8 +920,8 @@ events.forEach(ev => {
         <span class="date">${dateStr}</span>
         <span class="tag ${ev.type}">${ev.tag}</span>
       </div>
-      <div class="title">${ev.title}</div>
-      <div class="desc">${ev.desc}</div>
+      <div class="title">${titleHTML}</div>
+      ${ev.desc ? `<div class="desc">${ev.desc}</div>` : ''}
       ${statHTML}
     </div>
   `;
