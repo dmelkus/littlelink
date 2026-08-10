@@ -296,6 +296,18 @@
   .legend-chip[data-state="exclude"]{ opacity:0.42; }
   .legend-chip[data-state="exclude"] .legend-label{ text-decoration:line-through; }
   .legend-count{ opacity:0.55; }
+  /* Fixed width and its own emoji stack: the three icons have different
+     advances, so without this the chip resizes on every click and the whole
+     row reflows under the cursor. */
+  .legend-state{
+    flex:0 0 auto;
+    width:1.25em;
+    text-align:center;
+    font-size:0.95em;
+    line-height:1;
+    letter-spacing:0;
+    font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif;
+  }
   /* The chip glyphs are the rail symbols at rest, so the key actually matches
      what is drawn beside the cards. */
   .legend-chip .node{ margin-top:0; flex:0 0 auto; }
@@ -1096,6 +1108,9 @@ const STATE_TEXT = {
   include: 'showing only these',
   exclude: 'hidden',
 };
+// Shown on the chip itself. Decorative: the chip's aria-label already carries
+// the state in words, so these are hidden from assistive tech.
+const STATE_ICON = { neutral:'🔍', include:'📌', exclude:'🚫' };
 
 const rows = [...tl.querySelectorAll('.event')];
 const marker = tl.querySelector('.today-marker');
@@ -1121,6 +1136,7 @@ legendItems.innerHTML = presentTypes.map(t => `
       ${typeGlyph(t.type)}
       <span class="legend-label">${t.label}</span>
       <span class="legend-count">${counts[t.type]}</span>
+      <span class="legend-state" aria-hidden="true">${STATE_ICON.neutral}</span>
     </button>
   </li>`).join('');
 
@@ -1139,6 +1155,7 @@ function applyFilter(){
   document.querySelectorAll('.legend-chip').forEach(chip => {
     const t = chip.dataset.type, state = filterState.get(t);
     chip.dataset.state = state;
+    chip.querySelector('.legend-state').textContent = STATE_ICON[state];
     chip.setAttribute('aria-label',
       `${TYPE_LABEL[t]}, ${counts[t]} events, ${STATE_TEXT[state]}`);
   });
