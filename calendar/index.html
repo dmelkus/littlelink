@@ -87,6 +87,13 @@
        makes them read as identity rather than category. */
     --arkadin:#EE7B30;
     --hipointe:#5FBF6B;
+    /* Harvest and Sky. Both are lifted from the colours they are named for,
+       because this ground will not carry them at full depth: true rust reads
+       3.0:1 here and literal midnight blue 1.1:1, against the 4.5:1 wanted at
+       label size. Rust also lands only 14 degrees off the pumpkin above it, so
+       shape stays the primary separator between those two. */
+    --harvest-house:#D96A55;
+    --sky-house:#6A8CE8;
     --glow:rgba(253,0,253,0.45);
 
     /* Type roles: blackletter for the one hero number, Cinzel for every label
@@ -301,8 +308,12 @@
   .legend-chip[data-state="exclude"]{ opacity:0.42; }
   .legend-chip[data-group="arkadin"]  { --house:var(--arkadin); }
   .legend-chip[data-group="hipointe"] { --house:var(--hipointe); }
+  .legend-chip[data-group="harvest"]  { --house:var(--harvest-house); }
+  .legend-chip[data-group="sky"]      { --house:var(--sky-house); }
   .legend-chip[data-group="arkadin"][data-state="include"],
-  .legend-chip[data-group="hipointe"][data-state="include"]{
+  .legend-chip[data-group="hipointe"][data-state="include"],
+  .legend-chip[data-group="harvest"][data-state="include"],
+  .legend-chip[data-group="sky"][data-state="include"]{
     border-color:var(--house);
     background:color-mix(in srgb, var(--house) 14%, var(--bg-card));
   }
@@ -445,10 +456,13 @@
     margin-top:4px;
   }
   .node.lunar{ border-color:var(--pale); }
-  .node.astro{ border-color:var(--violet); }
-  .node.meteor{ border-color:var(--meteor); }
-  .node.solar{ border-color:var(--pink); background:var(--pink); }
-  .node.harvest{ border-color:var(--magenta); }
+  .node.astro{ border-color:var(--house, var(--violet)); }
+  .node.meteor{ border-color:var(--house, var(--meteor)); }
+  .node.solar{
+    border-color:var(--house, var(--pink));
+    background:var(--house, var(--pink));
+  }
+  .node.harvest{ border-color:var(--house, var(--magenta)); }
   .node.birthday{
     border-color:var(--pink); background:var(--pink);
     width:20px; height:20px; margin-top:0;
@@ -484,17 +498,21 @@
      a border without flattening the corner radius, which border-image would.
      Shape still distinguishes the two on its own, so the colour is a second
      signal rather than the only one. */
-  .event.venue-arkadin  { --house:var(--arkadin); }
-  .event.venue-hipointe { --house:var(--hipointe); }
-  .event.venue-arkadin .card,
-  .event.venue-hipointe .card{
+  .event[data-group="arkadin"]  { --house:var(--arkadin); }
+  .event[data-group="hipointe"] { --house:var(--hipointe); }
+  .event[data-group="harvest"]  { --house:var(--harvest-house); }
+  .event[data-group="sky"]      { --house:var(--sky-house); }
+  .event[data-group="arkadin"] .card,
+  .event[data-group="hipointe"] .card,
+  .event[data-group="harvest"] .card,
+  .event[data-group="sky"] .card{
     border-color:transparent;
     background:
       linear-gradient(var(--bg-card), var(--bg-card)) padding-box,
       linear-gradient(145deg, var(--house), rgba(0,0,0,0) 68%) border-box;
   }
-  .event.venue-arkadin  .tag.film,
-  .event.venue-hipointe .tag.film{ color:var(--house); }
+  .event[data-group="arkadin"] .tag.film,
+  .event[data-group="hipointe"] .tag.film{ color:var(--house); }
   /* The venue's name on the card carries its house too. */
   .stat .venue{ color:var(--house, inherit); }
   .node.halloween{
@@ -539,11 +557,11 @@
     border:1px solid currentColor;
     white-space:nowrap;
   }
-  .tag.lunar{ color:var(--pale); }
-  .tag.astro{ color:var(--violet); }
-  .tag.meteor{ color:var(--meteor); }
-  .tag.solar{ color:var(--pink); }
-  .tag.harvest{ color:var(--magenta); }
+  .tag.lunar{ color:var(--house, var(--pale)); }
+  .tag.astro{ color:var(--house, var(--violet)); }
+  .tag.meteor{ color:var(--house, var(--meteor)); }
+  .tag.solar{ color:var(--house, var(--pink)); }
+  .tag.harvest{ color:var(--house, var(--magenta)); }
   .tag.birthday{ color:var(--pink); background:rgba(254,84,255,0.14); }
   .tag.halloween{ color:var(--magenta); background:rgba(212,24,134,0.18); }
   .tag.gamenight{ color:var(--violet); background:rgba(199,125,255,0.16); }
@@ -921,7 +939,7 @@ if (Math.abs(gap) <= METER_BALANCE_H){
 }
 
 // moon phase icon renderer: illum 0-1, waxing bool
-const MOON_DARK = '#5A2C7A';
+const MOON_DARK = 'var(--sky-house)';
 const MOON_LIT  = '#FCEFFA';
 function moonSVG(illum, waxing){
   const r = 13;
