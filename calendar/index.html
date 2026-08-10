@@ -91,15 +91,20 @@
 
        Blood red is dark by nature and this ground is dark, so it is split in
        two: the deep tone carries the frame and the rail node, where 3:1 is the
-       bar for non-text marks, and a lifted tone carries the tag, where 4.5:1
-       is the bar for 10px uppercase. That keeps a real blood red on the large
-       visible element instead of washing the whole house out to coral to
-       satisfy the smallest one. It also sits 24 degrees off the pumpkin above,
-       better separated than the rust it replaces.
+       bar for non-text marks, and a lifted tone carries the tag and title,
+       where 4.5:1 is the bar. That keeps a real blood red on the large visible
+       element instead of washing the whole house out to satisfy the smallest.
+
+       Both sit on the crimson side of red, hue 350 to 355 rather than 5. A
+       warm red on a purple ground gets dragged toward orange by simultaneous
+       contrast, so a red that measures correct at hue 5 still reads as rust
+       here. Crossing below 360 pulls against that instead of with it, and
+       takes the separation from Arkadin's pumpkin from 18 degrees to about 32.
+       Saturation does the rest: the deep tone runs at 98 percent.
 
        Gold needs no such split: it reads 10:1 here on its own. */
-    --harvest-house:#C0392B;   /* 3.10:1, frame and node */
-    --harvest-ink:#EA6E63;     /* 5.55:1, tag text */
+    --harvest-house:#D90429;   /* 3.21:1, frame and node */
+    --harvest-ink:#FF3B4D;     /* 4.81:1, tag and title */
     --sky-house:#E8C547;       /* 10.04:1 */
     --sky-glow:rgba(232,197,71,0.55);
     --gamenight-house:var(--pink);   /* 6.36:1, the hero countdown's pink */
