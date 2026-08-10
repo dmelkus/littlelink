@@ -102,6 +102,7 @@
     --harvest-ink:#EA6E63;     /* 5.55:1, tag text */
     --sky-house:#E8C547;       /* 10.04:1 */
     --sky-glow:rgba(232,197,71,0.55);
+    --gamenight-house:var(--pink);   /* 6.36:1, the hero countdown's pink */
     --glow:rgba(253,0,253,0.45);
 
     /* Type roles: blackletter for the one hero number, Cinzel for every label
@@ -318,10 +319,12 @@
   .legend-chip[data-group="hipointe"] { --house:var(--hipointe); }
   .legend-chip[data-group="harvest"]  { --house:var(--harvest-house); --ink:var(--harvest-ink); }
   .legend-chip[data-group="sky"]      { --house:var(--sky-house); }
+  .legend-chip[data-group="gamenight"]{ --house:var(--gamenight-house); }
   .legend-chip[data-group="arkadin"][data-state="include"],
   .legend-chip[data-group="hipointe"][data-state="include"],
   .legend-chip[data-group="harvest"][data-state="include"],
-  .legend-chip[data-group="sky"][data-state="include"]{
+  .legend-chip[data-group="sky"][data-state="include"],
+  .legend-chip[data-group="gamenight"][data-state="include"]{
     border-color:var(--house);
     background:color-mix(in srgb, var(--house) 14%, var(--bg-card));
   }
@@ -479,11 +482,12 @@
   /* Game nights are the human thread through a sky calendar, marked by shape
      rather than a new hue, so the rail still reads as one palette. */
   .node.gamenight{
-    border-color:var(--violet); background:var(--violet);
+    border-color:var(--house, var(--violet));
+    background:var(--house, var(--violet));
     width:13px; height:13px; margin-top:5px;
     border-radius:2px;
     transform:rotate(45deg);
-    box-shadow:0 0 10px rgba(199,125,255,0.55);
+    box-shadow:0 0 10px var(--glow);
   }
   /* Screenings: a small screen rather than a disc, in the muted body colour.
      There are thirty of them in a three-week stretch, so they are pitched to
@@ -510,10 +514,12 @@
   .event[data-group="hipointe"] { --house:var(--hipointe); }
   .event[data-group="harvest"]  { --house:var(--harvest-house); --ink:var(--harvest-ink); }
   .event[data-group="sky"]      { --house:var(--sky-house); }
+  .event[data-group="gamenight"]{ --house:var(--gamenight-house); }
   .event[data-group="arkadin"] .card,
   .event[data-group="hipointe"] .card,
   .event[data-group="harvest"] .card,
-  .event[data-group="sky"] .card{
+  .event[data-group="sky"] .card,
+  .event[data-group="gamenight"] .card{
     border-color:transparent;
     background:
       linear-gradient(var(--bg-card), var(--bg-card)) padding-box,
@@ -578,7 +584,10 @@
   .tag.harvest{ color:var(--ink, var(--house, var(--magenta))); }
   .tag.birthday{ color:var(--pink); background:rgba(254,84,255,0.14); }
   .tag.halloween{ color:var(--magenta); background:rgba(212,24,134,0.18); }
-  .tag.gamenight{ color:var(--violet); background:rgba(199,125,255,0.16); }
+  .tag.gamenight{
+    color:var(--ink, var(--house, var(--violet)));
+    background:color-mix(in srgb, var(--house, var(--violet)) 16%, transparent);
+  }
   .tag.film{ color:var(--text-dim); }
 
   .title{
@@ -602,7 +611,6 @@
     border-color:var(--magenta);
     box-shadow:0 0 18px rgba(212,24,134,0.18);
   }
-  .event.gamenight .card{ border-color:rgba(199,125,255,0.42); }
   /* Compact screening card: title, venue, time, runtime, and a link out. */
   .event.film .card{ padding:11px 14px; }
   .event.film .title{ font-size:15px; margin-top:5px; }
