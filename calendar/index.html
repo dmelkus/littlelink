@@ -435,10 +435,10 @@
   .timeline::before{
     content:'';
     position:absolute;
-    /* 41, not 39: the day block's left border and the row's own offset push
-       the rail nodes 2px right of where they sat before, and the spine has to
-       thread their centres or the whole rail reads crooked. */
-    left:41px;
+    /* Threads the centre of the rail nodes: the rail is 40px wide and starts
+       at the timeline's content edge, so its centre line is 40px in. Measured
+       against a node's own box, not eyeballed. */
+    left:40px;
     top:36px;
     bottom:20px;
     width:1px;
@@ -446,28 +446,35 @@
   }
 
   /* ---------- DAY BLOCK ----------
-     One bounded block per date, holding every entry that falls on it.
+     One block per date, holding every entry that falls on it. The date rides
+     a gradient band rather than a border drawn around the whole day: a box
+     had to enclose the rail to enclose the cards, which forced padding on
+     all four sides and made every day taller than its contents.
 
-     Border only, no background. The spine runs behind these blocks and .node
-     fills itself with var(--bg) to punch a hole through that line, so any
-     other ground here would leave every node ringed in the wrong colour. */
+     The band is offset to start where the cards start and runs to where they
+     end, so it never crosses the rail column. That column belongs to the
+     spine and its nodes alone. The block itself carries no padding, which
+     puts the cards back at full timeline width. */
   .day-block{
     position:relative;
-    border:1px solid var(--line);
-    border-radius:14px;
-    padding:14px 16px 0 0;
-    margin-bottom:20px;
+    margin-bottom:12px;
   }
   .day-block[hidden]{ display:none; }
   .day-block-head{
+    margin-left:58px;       /* the 40px rail plus the 18px row gap */
+    margin-bottom:12px;
+    padding:7px 14px;
+    border-radius:8px;
+    /* Fades out rightward so it reads as a label on the day rather than as
+       another card stacked above the real ones. */
+    background:linear-gradient(90deg,
+      var(--muted) 0%, var(--line) 42%, rgba(74,27,107,0) 100%);
     font-family:var(--font-head);
     font-weight:600;
     font-size:13px;
     letter-spacing:0.16em;
     text-transform:uppercase;
-    color:var(--text-dim);
-    padding-left:58px;      /* clears the 40px rail and the 18px row gap */
-    margin-bottom:14px;
+    color:var(--text);
   }
 
   .event{
@@ -476,9 +483,9 @@
     gap:18px;
     padding-bottom:30px;
   }
-  /* The block's own edge closes the day, so the last card inside drops most
-     of the gap the rows carry between one another. */
-  .day-block .event:last-child{ padding-bottom:16px; }
+  /* The next day's band is its own divider, so the last card in a block does
+     not need the full between-cards gap under it. */
+  .day-block .event:last-child{ padding-bottom:18px; }
 
   /* No .past rule: spent entries never reach the DOM. See the live filter. */
   .event.today .card{
@@ -1275,6 +1282,11 @@ live.forEach(ev => {
   else days.push({key, date:startOfDay(ev.date), events:[ev]});
 });
 
+/* Both filter controls carry the same hint: the rail symbol on a card and the
+   legend chip drive the identical three-state cycle, and neither states its
+   cycle anywhere else. One string so the two can never drift apart. */
+const FILTER_HINT = 'click to filter - repeat to hide - repeat to reset';
+
 function buildRow(ev){
   const row = document.createElement('div');
   row.className = 'event ' + ev.type + (ev.type === 'birthday' ? ' today' : '');
@@ -1295,7 +1307,8 @@ function buildRow(ev){
     : `<div class="node ${ev.nodeClass || ev.type}"></div>`;
   // Ungrouped events have nothing to filter, so their symbol stays inert.
   rail.innerHTML = group
-    ? `<button class="rail-btn" type="button" data-group="${group}">${glyph}</button>`
+    ? `<button class="rail-btn" type="button" data-group="${group}"
+               title="${FILTER_HINT}">${glyph}</button>`
     : glyph;
 
   const dl = daylightHours(ev.date);
@@ -1412,7 +1425,7 @@ tl.appendChild(emptyNote);
 legendItems.innerHTML = presentGroups.map(g => `
   <li>
     <button class="legend-chip" type="button" data-group="${g.group}" data-state="neutral"
-            title="click to filter - repeat to hide - repeat to reset">
+            title="${FILTER_HINT}">
       ${groupGlyph(g.glyph)}
       <span class="legend-label">${g.label}</span>
       <span class="legend-count">${counts[g.group]}</span>
