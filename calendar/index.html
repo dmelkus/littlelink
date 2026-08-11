@@ -750,9 +750,22 @@
     position:relative;
     flex:0 0 auto;
     width:92px;
-    height:6px;
-    border-radius:3px;
-    background:var(--night);
+    /* Matches the line box of the reading beside it, so the gauge reads as
+       part of that line rather than as a rule floating next to it. Costs no
+       height: the row is 20px tall either way, set by the category tag. */
+    height:15px;
+    border-radius:7.5px;
+    /* The track names its own poles: --meteor at the night end, --pink at the
+       day end, both fading to nothing across the middle so the balance point
+       sits on clean ground. Without this the fill colour carried the whole
+       answer and had no key to be read against. */
+    background:
+      linear-gradient(90deg,
+        rgba(139,111,216,0.40) 0%,
+        rgba(139,111,216,0.02) 44%,
+        rgba(254,84,255,0.02) 56%,
+        rgba(254,84,255,0.36) 100%),
+      var(--night);
     box-shadow:inset 0 0 0 1px rgba(252,239,250,0.10);
     overflow:hidden;
   }
