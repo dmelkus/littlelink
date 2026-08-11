@@ -435,11 +435,39 @@
   .timeline::before{
     content:'';
     position:absolute;
-    left:39px;
+    /* 41, not 39: the day block's left border and the row's own offset push
+       the rail nodes 2px right of where they sat before, and the spine has to
+       thread their centres or the whole rail reads crooked. */
+    left:41px;
     top:36px;
     bottom:20px;
     width:1px;
     background:linear-gradient(180deg, var(--muted) 0%, var(--line) 40%, var(--pink) 100%);
+  }
+
+  /* ---------- DAY BLOCK ----------
+     One bounded block per date, holding every entry that falls on it.
+
+     Border only, no background. The spine runs behind these blocks and .node
+     fills itself with var(--bg) to punch a hole through that line, so any
+     other ground here would leave every node ringed in the wrong colour. */
+  .day-block{
+    position:relative;
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:14px 16px 0 0;
+    margin-bottom:20px;
+  }
+  .day-block[hidden]{ display:none; }
+  .day-block-head{
+    font-family:var(--font-head);
+    font-weight:600;
+    font-size:13px;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    color:var(--text-dim);
+    padding-left:58px;      /* clears the 40px rail and the 18px row gap */
+    margin-bottom:14px;
   }
 
   .event{
@@ -448,6 +476,9 @@
     gap:18px;
     padding-bottom:30px;
   }
+  /* The block's own edge closes the day, so the last card inside drops most
+     of the gap the rows carry between one another. */
+  .day-block .event:last-child{ padding-bottom:16px; }
 
   /* No .past rule: spent entries never reach the DOM. See the live filter. */
   .event.today .card{
@@ -555,10 +586,12 @@
     padding:14px 16px;
   }
 
+  /* The date moved out to the day head, so the tag is all that is left in
+     here. It keeps its right edge rather than sliding left into the gap. */
   .card .row1{
     display:flex;
     align-items:baseline;
-    justify-content:space-between;
+    justify-content:flex-end;
     gap:10px;
     flex-wrap:wrap;
   }
@@ -1230,7 +1263,19 @@ function todayMarker(){
 // which a static file whose contents depend on load time needs to do.
 tl.appendChild(todayMarker());
 
+/* Group the run into days. Everything sharing a date also shares that date's
+   daylight and its place in the run, so the date belongs to the block rather
+   than to each card inside it. The array is already sorted, so a day is just
+   a run of adjacent entries carrying the same date. */
+const days = [];
 live.forEach(ev => {
+  const key = startOfDay(ev.date).getTime();
+  const open = days[days.length - 1];
+  if (open && open.key === key) open.events.push(ev);
+  else days.push({key, date:startOfDay(ev.date), events:[ev]});
+});
+
+function buildRow(ev){
   const row = document.createElement('div');
   row.className = 'event ' + ev.type + (ev.type === 'birthday' ? ' today' : '');
   row.dataset.type = ev.type;
@@ -1253,8 +1298,6 @@ live.forEach(ev => {
     ? `<button class="rail-btn" type="button" data-group="${group}">${glyph}</button>`
     : glyph;
 
-  const dateStr = fmtDate(ev.date);
-
   const dl = daylightHours(ev.date);
   const statHTML =
       // .stat is a flex row so the daylight gauge can sit beside its reading.
@@ -1274,7 +1317,6 @@ live.forEach(ev => {
   row.innerHTML = `
     <div class="card">
       <div class="row1">
-        <span class="date">${dateStr}</span>
         <span class="tag ${ev.type}">${ev.tag}</span>
       </div>
       <div class="title">${titleHTML}</div>
@@ -1283,7 +1325,23 @@ live.forEach(ev => {
     </div>
   `;
   row.prepend(rail);
-  tl.appendChild(row);
+  return row;
+}
+
+// The weekday earns its place here: it has nowhere else to live on the page,
+// and "which Saturday" is the question a run of dates actually gets asked.
+days.forEach(day => {
+  const block = document.createElement('section');
+  block.className = 'day-block';
+
+  const head = document.createElement('h3');
+  head.className = 'day-block-head';
+  head.textContent =
+    `${day.date.toLocaleDateString('en-US', {weekday:'short'})} · ${fmtDate(day.date)}`;
+  block.appendChild(head);
+
+  day.events.forEach(ev => block.appendChild(buildRow(ev)));
+  tl.appendChild(block);
 });
 
 // Past Oct 31 the prune empties the list outright, which is a real state and
@@ -1321,6 +1379,7 @@ const STATE_TEXT = {
 const STATE_ICON = { neutral:'🔍', include:'📌', exclude:'🚫' };
 
 const rows = [...tl.querySelectorAll('.event')];
+const dayBlocks = [...tl.querySelectorAll('.day-block')];
 const presentGroups = GROUPS.filter(g => rows.some(r => r.dataset.group === g.group));
 const counts = Object.fromEntries(
   presentGroups.map(g => [g.group, rows.filter(r => r.dataset.group === g.group).length]));
@@ -1352,7 +1411,8 @@ tl.appendChild(emptyNote);
 
 legendItems.innerHTML = presentGroups.map(g => `
   <li>
-    <button class="legend-chip" type="button" data-group="${g.group}" data-state="neutral">
+    <button class="legend-chip" type="button" data-group="${g.group}" data-state="neutral"
+            title="click to filter - repeat to hide - repeat to reset">
       ${groupGlyph(g.glyph)}
       <span class="legend-label">${g.label}</span>
       <span class="legend-count">${counts[g.group]}</span>
@@ -1373,6 +1433,12 @@ function applyFilter(){
       : !excludes.includes(g);
     row.hidden = !show;
     if (show) shown++;
+  });
+
+  // A day whose every entry just went out is an empty box with a date on it,
+  // so the block goes with them.
+  dayBlocks.forEach(block => {
+    block.hidden = !block.querySelector('.event:not([hidden])');
   });
 
   document.querySelectorAll('.legend-chip').forEach(chip => {
