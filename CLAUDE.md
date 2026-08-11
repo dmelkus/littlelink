@@ -42,9 +42,21 @@ Two things that will mislead you:
 ## Deploys
 
 Pushing to `main` triggers a Cloudflare Workers build; it takes a minute or
-two. Confirm it actually shipped by fetching the live page and grepping for
-the change, rather than trusting the build status:
+two. A green build is not proof the bytes you expect are being served, so
+confirm it by fetching the live page.
 
-    curl -s https://degs.skin/calendar/ | grep -c "<a marker from your change>"
+**Diff the whole file, do not grep for a marker, and fetch more than once.**
+Cloudflare propagates to its edge nodes unevenly: one request can hit a node
+that already has the update while the next hits a stale one. A single
+successful `grep` has already reported a deploy as live while the page most
+requests were getting was still the old version.
 
-A green build is not proof the bytes you expect are being served.
+    for i in $(seq 1 6); do
+      curl -s https://degs.skin/calendar/ -o /tmp/live.html
+      diff -q /tmp/live.html calendar/index.html >/dev/null \
+        && echo "$i: identical" || echo "$i: STALE $(wc -c < /tmp/live.html)"
+      sleep 3
+    done
+
+Byte-identical on every fetch is the check that holds. Anything less can be a
+stale edge answering.

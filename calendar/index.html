@@ -623,15 +623,10 @@
     padding:14px 16px;
   }
 
-  /* The date moved out to the day head, so the tag is all that is left in
-     here. It keeps its right edge rather than sliding left into the gap. */
-  .card .row1{
-    display:flex;
-    align-items:baseline;
-    justify-content:flex-end;
-    gap:10px;
-    flex-wrap:wrap;
-  }
+  /* The tag shares the stat row and takes its right end. margin-left:auto
+     rather than justify-content, so the reading keeps its own left alignment
+     next to the gauge no matter how short it is. */
+  .stat .tag{ margin-left:auto; }
 
   .date{
     font-family:var(--font-head);
@@ -674,6 +669,8 @@
     margin-top:7px;
     color:var(--text);
   }
+  /* Nothing sits above the title any more, so it opens the card flush. */
+  .card > .title:first-child{ margin-top:0; }
   /* Card titles take their house everywhere except the cinemas, where 107
      coloured titles would shout over everything else and the title is already
      marked as a link. Resolves --ink first, so blood red uses its lifted tone:
@@ -728,9 +725,12 @@
   }
   .desc a:hover{ color:var(--pink); border-bottom-color:var(--pink); }
 
+  /* Full-width flex, not inline-flex: the category tag rides the right end of
+     this row now, and needs the whole card width to be pushed out to. */
   .stat{
-    display:inline-flex;
+    display:flex;
     align-items:center;
+    flex-wrap:wrap;
     gap:9px;
     font-family:var(--font-head);
     font-weight:600;
@@ -1342,15 +1342,18 @@ function buildRow(ev){
     : glyph;
 
   const dl = daylightHours(ev.date);
-  const statHTML =
-      // .stat is a flex row so the daylight gauge can sit beside its reading.
-      // Text has to be wrapped in a single span or each inline element becomes
-      // its own flex item and the 9px gap lands inside the reading: 1h45 renders
-      // as "1 h 45".
-      ev.type === 'film'      ? `<div class="stat"><span>▸ <span class="venue">${ev.venue}</span> · ${fmtTime(ev.date)} · ${fmtRuntime(ev.runtime)}</span></div>`
-    : ev.type === 'gamenight' ? `<div class="stat"><span>◆ ${ev.when} · ${ev.venue}</span></div>`
-    : ev.type === 'birthday'  ? `<div class="stat">${daylightMeter(dl)}<span>${fmtHMHtml(dl)} daylight · losing ~2${unit('min')} 50${unit('s')}/day</span></div>`
-    :                           `<div class="stat">${daylightMeter(dl)}<span>${fmtHMHtml(dl)} daylight</span></div>`;
+  // .stat is a flex row so the daylight gauge can sit beside its reading.
+  // Text has to be wrapped in a single span or each inline element becomes
+  // its own flex item and the 9px gap lands inside the reading: 1h45 renders
+  // as "1 h 45".
+  const reading =
+      ev.type === 'film'      ? `<span>▸ <span class="venue">${ev.venue}</span> · ${fmtTime(ev.date)} · ${fmtRuntime(ev.runtime)}</span>`
+    : ev.type === 'gamenight' ? `<span>◆ ${ev.when} · ${ev.venue}</span>`
+    : ev.type === 'birthday'  ? `${daylightMeter(dl)}<span>${fmtHMHtml(dl)} daylight · losing ~2${unit('min')} 50${unit('s')}/day</span>`
+    :                           `${daylightMeter(dl)}<span>${fmtHMHtml(dl)} daylight</span>`;
+  // The category tag closes the same row, which buys back the line it used to
+  // occupy alone above the title.
+  const statHTML = `<div class="stat">${reading}<span class="tag ${ev.type}">${ev.tag}</span></div>`;
 
   // Screenings link out to the venue's own listing and carry no description.
   const titleHTML = ev.url
@@ -1359,9 +1362,6 @@ function buildRow(ev){
 
   row.innerHTML = `
     <div class="card">
-      <div class="row1">
-        <span class="tag ${ev.type}">${ev.tag}</span>
-      </div>
       <div class="title">${titleHTML}</div>
       ${ev.desc ? `<div class="desc">${ev.desc}</div>` : ''}
       ${statHTML}
