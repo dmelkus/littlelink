@@ -460,15 +460,34 @@
     margin-bottom:12px;
   }
   .day-block[hidden]{ display:none; }
+
+  /* The ground rides a pseudo-element rather than the block itself, because
+     the block has to contain the rail in order to contain the cards, and the
+     rail column belongs to the spine. Offsetting left by the rail plus the
+     row gap, flush to the right, covers the card column exactly: date and
+     cards on one ground, nothing under the nodes.
+
+     Top and bottom are flush too. The head's own padding is the only inset,
+     and the last card in the day ends the ground with it. */
+  .day-block::before{
+    content:'';
+    position:absolute;
+    left:58px;              /* the 40px rail plus the 18px row gap */
+    right:0;
+    top:0;
+    bottom:0;
+    border-radius:10px;
+    /* The stops are a floor, not a fade to nothing: days run from one entry
+       to eight, so a gradient that reaches transparent would leave the long
+       ones with no visible bottom edge and no clear extent. */
+    background:linear-gradient(180deg,
+      var(--line) 0%, rgba(74,27,107,0.46) 30%, rgba(74,27,107,0.26) 100%);
+  }
   .day-block-head{
-    margin-left:58px;       /* the 40px rail plus the 18px row gap */
-    margin-bottom:12px;
-    padding:7px 14px;
-    border-radius:8px;
-    /* Fades out rightward so it reads as a label on the day rather than as
-       another card stacked above the real ones. */
-    background:linear-gradient(90deg,
-      var(--muted) 0%, var(--line) 42%, rgba(74,27,107,0) 100%);
+    /* Positioned, or the absolute ::before would paint over the date. */
+    position:relative;
+    margin-left:58px;
+    padding:9px 14px 12px;
     font-family:var(--font-head);
     font-weight:600;
     font-size:13px;
@@ -483,9 +502,9 @@
     gap:18px;
     padding-bottom:30px;
   }
-  /* The next day's band is its own divider, so the last card in a block does
-     not need the full between-cards gap under it. */
-  .day-block .event:last-child{ padding-bottom:18px; }
+  /* The ground ends where the last card ends: no trailing gap inside the day.
+     Days are separated by the block's own margin instead. */
+  .day-block .event:last-child{ padding-bottom:0; }
 
   /* No .past rule: spent entries never reach the DOM. See the live filter. */
   .event.today .card{
