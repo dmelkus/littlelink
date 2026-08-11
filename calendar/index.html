@@ -477,10 +477,15 @@
     top:0;
     bottom:0;
     border-radius:10px;
-    /* The stops are a floor, not a fade to nothing: days run from one entry
-       to eight, so a gradient that reaches transparent would leave the long
-       ones with no visible bottom edge and no clear extent. */
-    background:linear-gradient(180deg,
+    /* Runs upward: lightest under the last card, thinning toward the head.
+       The date keeps its own solid ground above this, so a day is bracketed
+       top and bottom by its strongest tone and slackest through the middle,
+       which is where the cards have to carry themselves.
+
+       The stops hold a floor rather than fading to nothing. Days run from one
+       entry to eight, and a gradient reaching transparent left the long ones
+       with no readable extent. */
+    background:linear-gradient(0deg,
       var(--line) 0%, rgba(74,27,107,0.46) 30%, rgba(74,27,107,0.26) 100%);
   }
   .day-block-head{
@@ -488,6 +493,12 @@
     position:relative;
     margin-left:58px;
     padding:9px 14px 12px;
+    /* Carries its own ground now that the block's gradient runs the other
+       way. Solid var(--line) is exactly the tone the head used to inherit
+       from that gradient's first stop, so the date reads unchanged while
+       everything beneath it inverts. Matches the ground's top corners. */
+    background:var(--line);
+    border-radius:10px 10px 0 0;
     font-family:var(--font-head);
     font-weight:600;
     font-size:13px;
