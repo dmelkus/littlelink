@@ -379,8 +379,9 @@
     outline-offset:3px;
   }
 
-  /* .event is display:flex, which would beat the user-agent [hidden] rule. */
-  .event[hidden], .today-marker[hidden]{ display:none; }
+  /* .event is display:flex, which would beat the user-agent [hidden] rule.
+     The today marker is never hidden any more, so it no longer needs one. */
+  .event[hidden]{ display:none; }
   .timeline-empty{
     padding:10px 0 30px 58px;
     font-size:13px;
@@ -448,7 +449,7 @@
     padding-bottom:30px;
   }
 
-  .event.past{ opacity:0.42; }
+  /* No .past rule: spent entries never reach the DOM. See the live filter. */
   .event.today .card{
     border-color:var(--pink);
     box-shadow:0 0 0 1px var(--pink), 0 0 24px rgba(253,0,253,0.25);
@@ -1179,6 +1180,19 @@ const hipointe = [
 events.push(...films, ...hipointe);
 events.sort((a, b) => a.date - b.date);   // stable, so same-day order is source order
 
+/* Prune everything already spent. Nothing on this page is a record: the whole
+   frame is what is still coming, so a dead entry is dead weight. It comes out
+   of the list here, once, rather than being dimmed or hidden downstream, which
+   keeps every count, the legend, the next-game line and the footer span
+   reading off the same live set instead of each deciding for itself.
+
+   Two clocks, because the entries keep time differently. A screening is one
+   showtime and dies the moment it starts, which is why it carries a real clock
+   time at all. Everything else is a whole-day marker with no hour to miss, so
+   a moon or a harvest window lives out its own day and dies at midnight. */
+const NOW = new Date();
+const live = events.filter(ev => ev.type === 'film' ? ev.date > NOW : ev.date >= TODAY);
+
 /* Legend groups, in field order. Sky folds the moons, the equinox, the
    longitude and zodiac marks and the meteorological convention into one, since
    they are all readings of the same sky on the same day.
@@ -1203,7 +1217,6 @@ function groupGlyph(glyph){
 }
 
 const tl = document.getElementById('timeline');
-let todayInserted = false;
 
 function todayMarker(){
   const marker = document.createElement('div');
@@ -1212,16 +1225,14 @@ function todayMarker(){
   return marker;
 }
 
-events.forEach(ev => {
-  const isPast = ev.date < TODAY;
+// With nothing dead left in the list the marker heads the timeline instead of
+// dividing it: everything under it is still ahead. It also dates the page,
+// which a static file whose contents depend on load time needs to do.
+tl.appendChild(todayMarker());
 
-  if (!isPast && !todayInserted){
-    tl.appendChild(todayMarker());
-    todayInserted = true;
-  }
-
+live.forEach(ev => {
   const row = document.createElement('div');
-  row.className = 'event ' + ev.type + (isPast ? ' past' : '') + (ev.type === 'birthday' ? ' today' : '');
+  row.className = 'event ' + ev.type + (ev.type === 'birthday' ? ' today' : '');
   row.dataset.type = ev.type;
   // Cinemas set group explicitly: both are type 'film' and share a card
   // treatment, but each house filters on its own.
@@ -1275,13 +1286,18 @@ events.forEach(ev => {
   tl.appendChild(row);
 });
 
-// Everything already behind us: pin the marker to the end so the rail still reads.
-if (!todayInserted){
-  tl.appendChild(todayMarker());
+// Past Oct 31 the prune empties the list outright, which is a real state and
+// not an error. Say so, rather than leaving a bare rail under the marker.
+if (!live.length){
+  const done = document.createElement('p');
+  done.className = 'timeline-empty';
+  done.textContent = 'The run is over. Every date on this page has passed.';
+  tl.appendChild(done);
 }
 
 // Next game night, read off the same array so it can't disagree with the cards.
-const nextGame = events.find(e => e.type === 'gamenight' && e.date >= TODAY);
+// The prune already dropped the spent ones, so this is simply the first left.
+const nextGame = live.find(e => e.type === 'gamenight');
 document.getElementById('nextGameNight').textContent = nextGame
   ? `Next game night · ${nextGame.date.toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'})} · ${nextGame.when}`
   : '';
@@ -1305,8 +1321,6 @@ const STATE_TEXT = {
 const STATE_ICON = { neutral:'🔍', include:'📌', exclude:'🚫' };
 
 const rows = [...tl.querySelectorAll('.event')];
-const marker = tl.querySelector('.today-marker');
-const pinned = rows.filter(r => !r.dataset.group).length;
 const presentGroups = GROUPS.filter(g => rows.some(r => r.dataset.group === g.group));
 const counts = Object.fromEntries(
   presentGroups.map(g => [g.group, rows.filter(r => r.dataset.group === g.group).length]));
@@ -1316,6 +1330,19 @@ const filterState = new Map(presentGroups.map(g => [g.group, 'neutral']));
 const legendItems  = document.getElementById('legendItems');
 const legendStatus = document.getElementById('legendStatus');
 const legendReset  = document.getElementById('legendReset');
+
+/* The run's span, named off the live list rather than hardcoded, since the
+   prune walks the start date forward and "Aug through Oct" would go stale
+   first and then simply be wrong. */
+const monthOf = d => d.toLocaleDateString('en-US', {month:'short'});
+const runSpanText = (() => {
+  if (!live.length) return '';
+  const first = monthOf(live[0].date), last = monthOf(live[live.length-1].date);
+  return first === last ? `in ${first}` : `${first} through ${last}`;
+})();
+
+// A run with nothing left in it has nothing to filter, so the legend goes too.
+document.getElementById('legend').hidden = !presentGroups.length;
 
 const emptyNote = document.createElement('p');
 emptyNote.className = 'timeline-empty';
@@ -1363,11 +1390,17 @@ function applyFilter(){
 
   const filtering = includes.length || excludes.length;
   legendReset.hidden = !filtering;
-  if (marker) marker.hidden = !!filtering;   // "today" reads as a lie in a filtered list
-  emptyNote.hidden = shown > 0;
+  // The marker is not touched here. It used to be hidden while filtering,
+  // because as a divider between past and future it went wrong the moment the
+  // rows around it disappeared. Now that the prune leaves only what is ahead,
+  // it heads the list and stays true under any filter, date stamp and all.
+  // Blame the filter only when there is something for it to have hidden. With
+  // the run pruned down to nothing there is no combination at fault, and the
+  // "run is over" note already says what happened.
+  emptyNote.hidden = shown > 0 || !rows.length;
   legendStatus.textContent = filtering
     ? `Showing ${shown} of ${rows.length}`
-    : `${rows.length} events, Aug through Oct`;
+    : `${rows.length} events${runSpanText ? ', ' + runSpanText : ''}`;
 }
 
 function cycle(group){
@@ -1392,8 +1425,11 @@ legendReset.addEventListener('click', () => {
 applyFilter();
 
 // Footer run span, read off the timeline itself so it can never drift from it.
-document.getElementById('runSpan').textContent =
-  `Run extends ${fmtDate(events[0].date)} → ${fmtDate(events[events.length-1].date)}`;
+// Once the prune has taken everything, the full array still knows where the
+// run ended, which is the only thing left worth stating.
+document.getElementById('runSpan').textContent = live.length
+  ? `Run extends ${fmtDate(live[0].date)} → ${fmtDate(live[live.length-1].date)}`
+  : `Run ended ${fmtDate(events[events.length-1].date)}`;
 </script>
 
 </body>
