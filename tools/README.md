@@ -15,10 +15,32 @@ python3 tools/ics_to_films.py arkadin.ics --venue Arkadin
 python3 tools/ics_to_films.py arkadin.ics --venue Arkadin --splice
 ```
 
-`--splice` replaces everything between the `FILMS:BEGIN` and `FILMS:END`
-markers in `calendar/index.html` and touches nothing else, so it is safe to
-re-run as often as a venue updates. Running it twice with the same input leaves
-the file unchanged.
+`--splice` replaces everything between the `BEGIN` and `END` markers of one
+venue's block in `calendar/index.html` and touches nothing else, so it is safe
+to re-run as often as a venue updates. Running it twice with the same input
+leaves the file unchanged. `--marker` picks the block: `FILMS` by default,
+`WEBSTER` for the film series.
+
+### Exports that need correcting
+
+Two flags exist because an export can be wrong in ways that look right.
+
+`--tz` converts UTC times into the venue's own zone. Arkadin writes floating
+local times that mean what they say and needs nothing. Localist writes
+everything as `...Z`, so a 7:30 PM screening arrives as `00:30` the following
+day: read literally, every film lands on the wrong date, and a run that plays
+Friday through Sunday shows up Saturday through Monday. The flag only touches
+times marked UTC, so passing it to a floating export is harmless.
+
+`--runtime-from-description` takes the runtime from the film's credit block at
+the head of the description:
+
+    (Maciej Drygas, 2024, Poland, 81 minutes)
+
+Use it when `DTEND` is a placeholder rather than a measurement. Localist ends
+every event exactly one hour after it starts regardless of the film, which is
+not obviously wrong on any single card and is wrong on all of them. Anything
+stating no runtime falls back to `DTEND` and is reported on stderr.
 
 ### Titles
 
@@ -43,12 +65,18 @@ event moving in the calendar.
 ### Monthly refresh
 
 Venues export one month at a time, and consecutive months overlap at the
-boundary. `--merge` unions the new export with what is already in the page,
-keyed on event URL, so each month adds rather than replaces:
+boundary. `--merge` unions the new export with what is already in the page, so
+each month adds rather than replaces:
 
 ```sh
 python3 tools/ics_to_films.py september.ics --venue Arkadin --merge --splice
 ```
+
+Screenings are keyed on start time as well as URL, because the two are only
+interchangeable at some venues. Arkadin gives every screening its own listing,
+so the URL alone identifies it. Localist reuses one listing for a whole run, so
+all three nights of a film share a URL and keying on it alone would keep one
+and silently drop the other two.
 
 Without `--merge` the block is replaced outright, which is what you want only
 when regenerating the whole run from a single export.
@@ -81,11 +109,33 @@ appended only when the film predates the screening, which dates the repertory
 without dating this year's releases, and format notes like `(35MM)` or
 `(4K Restoration)` are kept as the venue wrote them.
 
+## Webster University Film Series
+
+`webster.edu/film-series` embeds a Localist widget and links no feed, so
+nothing on the page announces one. The events live at `events.webster.edu`, and
+Localist puts iCalendar behind any calendar view:
+
+```sh
+curl -s https://events.webster.edu/film-series/calendar.ics -o webster.ics
+python3 tools/ics_to_films.py webster.ics --venue "Webster U." \
+    --marker WEBSTER --tz America/Chicago --runtime-from-description --splice
+```
+
+Take the path-scoped URL and nothing else. `events.webster.edu/calendar.ics`
+accepts `groups=`, `types=` and `days=` and ignores all of them, answering 200
+with the whole university's calendar every time. It looks like a working
+filtered feed, so check the event count rather than the status code.
+
+Summaries come through as the film's title alone, so there are no overrides.
+
 ### Adding a venue
 
-Cards read `venue` from the object and filter on `group`, so a third venue is
+Cards read `venue` from the object and filter on `group`, so a further venue is
 another array with its own `venue`, `group` and `nodeClass`, concatenated into
-`events` the same way, plus an entry in `GROUPS` for its legend chip.
+`events` the same way, plus an entry in `GROUPS` for its legend chip, a
+`--house` colour, and a `.node.film.<group>` rule. The three houses are pumpkin
+at hue 24, green at 128 and cyan at 187: pick something clear of those and of
+the purple ground, and check it against `--bg-card` at 4.5:1.
 
 ## Refreshing
 
@@ -96,6 +146,10 @@ from a browser: use Export Events on their calendar page, then run with
 `--merge --splice`.
 
 Hi-Pointe's JSON endpoint answers scripted requests, so `--fetch` works there.
+
+Webster's does too, and Localist regenerates on request, so `curl` is enough.
+The feed carries the whole published run rather than a window: it ignores
+`days=`, and re-fetching replaces the block outright, no `--merge` needed.
 
 ## Verification
 

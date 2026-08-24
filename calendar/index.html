@@ -82,11 +82,18 @@
     --violet:#C77DFF;
     --pale:#FCEFFA;
     --meteor:#8B6FD8;
-    /* House colours for the two cinemas. Halloween-adjacent on a page that
+    /* House colours for the three venues. Halloween-adjacent on a page that
        ends there, and the only hues outside the purple family, which is what
-       makes them read as identity rather than category. */
-    --arkadin:#EE7B30;
-    --hipointe:#5FBF6B;
+       makes them read as identity rather than category.
+
+       They are spread around the wheel rather than merely distinct: pumpkin at
+       24, green at 128, cyan at 187. Cyan is the one that had room left, being
+       far from the golds and reds already spoken for and still clear of the
+       purple ground it sits on. Contrast lands between the other two, so no
+       venue reads as louder than its neighbours. */
+    --arkadin:#EE7B30;   /* 6.03:1 */
+    --hipointe:#5FBF6B;  /* 7.35:1 */
+    --webster:#3FBFD0;   /* 7.69:1 */
     /* Harvest blood red and Sky moon gold.
 
        Blood red is dark by nature and this ground is dark, so it is split in
@@ -322,11 +329,13 @@
   .legend-chip[data-state="exclude"]{ opacity:0.42; }
   .legend-chip[data-group="arkadin"]  { --house:var(--arkadin); }
   .legend-chip[data-group="hipointe"] { --house:var(--hipointe); }
+  .legend-chip[data-group="webster"]  { --house:var(--webster); }
   .legend-chip[data-group="harvest"]  { --house:var(--harvest-house); --ink:var(--harvest-ink); }
   .legend-chip[data-group="sky"]      { --house:var(--sky-house); }
   .legend-chip[data-group="gamenight"]{ --house:var(--gamenight-house); }
   .legend-chip[data-group="arkadin"][data-state="include"],
   .legend-chip[data-group="hipointe"][data-state="include"],
+  .legend-chip[data-group="webster"][data-state="include"],
   .legend-chip[data-group="harvest"][data-state="include"],
   .legend-chip[data-group="sky"][data-state="include"],
   .legend-chip[data-group="gamenight"][data-state="include"]{
@@ -577,6 +586,15 @@
     background:var(--house, var(--text-dim));
     border-color:var(--house, var(--text-dim));
   }
+  /* The third screen is neither empty nor filled but lit across the middle,
+     so the three venues stay apart by shape at 13x9 and not only by hue. */
+  .node.film.webster{
+    border-color:var(--house, var(--text-dim));
+    background:
+      linear-gradient(var(--house, var(--text-dim)), var(--house, var(--text-dim)))
+      center / 100% 3px no-repeat,
+      var(--bg);
+  }
 
   /* Venue identity: a gradient frame rather than a fill, so the card ground
      stays the same purple as everything else and only the edge carries the
@@ -586,11 +604,13 @@
      signal rather than the only one. */
   .event[data-group="arkadin"]  { --house:var(--arkadin); }
   .event[data-group="hipointe"] { --house:var(--hipointe); }
+  .event[data-group="webster"]  { --house:var(--webster); }
   .event[data-group="harvest"]  { --house:var(--harvest-house); --ink:var(--harvest-ink); }
   .event[data-group="sky"]      { --house:var(--sky-house); }
   .event[data-group="gamenight"]{ --house:var(--gamenight-house); }
   .event[data-group="arkadin"] .card,
   .event[data-group="hipointe"] .card,
+  .event[data-group="webster"] .card,
   .event[data-group="harvest"] .card,
   .event[data-group="sky"] .card,
   .event[data-group="gamenight"] .card{
@@ -606,7 +626,8 @@
   .event[data-group="sky"] .node,
   .legend-chip[data-group="sky"] .node{ box-shadow:0 0 9px var(--sky-glow); }
   .event[data-group="arkadin"] .tag.film,
-  .event[data-group="hipointe"] .tag.film{ color:var(--house); }
+  .event[data-group="hipointe"] .tag.film,
+  .event[data-group="webster"] .tag.film{ color:var(--house); }
   /* The venue's name on the card carries its house too. */
   .stat .venue{ color:var(--house, inherit); }
   .node.halloween{
@@ -927,6 +948,7 @@
   Daylight hours approximated for 38.6°N · Harvest and frost windows are typical Missouri timing, not 2026 forecasts<br>
   <span id="runSpan"></span><br>
   <a class="ics" href="/calendar/game-nights.ics" download>⤓ Add the game nights to your calendar</a><br>
+  <a class="ics" href="https://events.webster.edu/film-series/calendar.ics">⤓ Subscribe to the Webster Film Series feed</a><br>
   <a class="wordmark" href="/">Degs</a>
 </footer>
 
@@ -1260,7 +1282,66 @@ const hipointe = [
 ].map(f => Object.assign({type:'film', tag:'Film', venue:'Hi-Pointe', group:'hipointe',
                           nodeClass:'film hipointe'}, f));
 
-events.push(...films, ...hipointe);
+// Screenings at the Webster University Film Series, from the Localist calendar
+// behind webster.edu/film-series, which embeds a widget rather than linking a
+// feed: https://events.webster.edu/film-series/calendar.ics is the same events
+// as iCalendar. Two of its quirks are handled at generation time and neither is
+// visible here -- it writes every time as UTC, and it ends every event exactly
+// an hour after it starts regardless of the film, so runtimes come from the
+// credit block in each description instead. See tools/ics_to_films.py.
+//
+// A run rather than a nightly change: most films play the same slot two or
+// three nights, so repeated titles on consecutive days are correct.
+const webster = [
+  /* WEBSTER:BEGIN. Generated by tools/ics_to_films.py, do not hand-edit */
+  {date:ldt(2026,7,24,19,30), runtime:81, title:'Trains', url:'https://events.webster.edu/event/trains'},
+  {date:ldt(2026,7,25,19,30), runtime:81, title:'Trains', url:'https://events.webster.edu/event/trains'},
+  {date:ldt(2026,7,26,19,30), runtime:81, title:'Trains', url:'https://events.webster.edu/event/trains'},
+  {date:ldt(2026,7,30,19,30), runtime:105, title:'The Currents', url:'https://events.webster.edu/event/the-currents'},
+  {date:ldt(2026,7,31,19,30), runtime:105, title:'The Currents', url:'https://events.webster.edu/event/the-currents'},
+  {date:ldt(2026,8,1,19,30), runtime:105, title:'The Currents', url:'https://events.webster.edu/event/the-currents'},
+  {date:ldt(2026,8,2,19,0), runtime:187, title:'Dry Leaf', url:'https://events.webster.edu/event/dry-leaf'},
+  {date:ldt(2026,8,7,19,30), runtime:122, title:'Seeds', url:'https://events.webster.edu/event/seeds'},
+  {date:ldt(2026,8,8,19,30), runtime:122, title:'Seeds', url:'https://events.webster.edu/event/seeds'},
+  {date:ldt(2026,8,9,19,30), runtime:122, title:'Seeds', url:'https://events.webster.edu/event/seeds'},
+  {date:ldt(2026,8,14,19,30), runtime:154, title:'Center Stage', url:'https://events.webster.edu/event/center-stage'},
+  {date:ldt(2026,8,15,19,30), runtime:154, title:'Center Stage', url:'https://events.webster.edu/event/center-stage'},
+  {date:ldt(2026,8,16,19,30), runtime:154, title:'Center Stage', url:'https://events.webster.edu/event/center-stage'},
+  {date:ldt(2026,8,21,19,30), runtime:109, title:'The Little Sister', url:'https://events.webster.edu/event/the-little-sister'},
+  {date:ldt(2026,8,22,19,30), runtime:109, title:'The Little Sister', url:'https://events.webster.edu/event/the-little-sister'},
+  {date:ldt(2026,8,23,19,30), runtime:109, title:'The Little Sister', url:'https://events.webster.edu/event/the-little-sister'},
+  {date:ldt(2026,8,27,19,30), runtime:90, title:'American Doctor', url:'https://events.webster.edu/event/american-doctor'},
+  {date:ldt(2026,8,28,19,30), runtime:70, title:'ITFS: Best of Stuttgart International Festival of Animated Film', url:'https://events.webster.edu/event/itfs-best-of-stuttgart-international-festival-of-animated-film'},
+  {date:ldt(2026,8,29,14,0), runtime:58, title:'ITFS: Best of Tricks for Kids', url:'https://events.webster.edu/event/itfs-best-of-tricks-for-kids'},
+  {date:ldt(2026,8,29,19,30), runtime:58, title:'ITFS: Best of Tricks for Kids', url:'https://events.webster.edu/event/itfs-best-of-tricks-for-kids'},
+  {date:ldt(2026,8,30,19,30), runtime:83, title:'ITFS: Best of Trickstar Nature', url:'https://events.webster.edu/event/itfs-best-of-trickstar-nature'},
+  {date:ldt(2026,9,1,19,0), runtime:121, title:'The Battle of Algiers', url:'https://events.webster.edu/event/the-battle-of-algiers'},
+  {date:ldt(2026,9,3,19,30), runtime:109, title:'Hundreds of Beavers', url:'https://events.webster.edu/event/hundreds-of-beavers-3404'},
+  {date:ldt(2026,9,4,19,30), runtime:102, title:'Barbara Forever', url:'https://events.webster.edu/event/barbara-forever'},
+  {date:ldt(2026,9,5,19,30), runtime:102, title:'Barbara Forever', url:'https://events.webster.edu/event/barbara-forever'},
+  {date:ldt(2026,9,6,19,30), runtime:102, title:'Barbara Forever', url:'https://events.webster.edu/event/barbara-forever'},
+  {date:ldt(2026,9,10,18,30), runtime:156, title:'Winter Hymns', url:'https://events.webster.edu/event/winter-hymns'},
+  {date:ldt(2026,9,11,19,30), runtime:89, title:'The Hole', url:'https://events.webster.edu/event/the-hole'},
+  {date:ldt(2026,9,12,19,30), runtime:89, title:'The Hole', url:'https://events.webster.edu/event/the-hole'},
+  {date:ldt(2026,9,13,19,30), runtime:121, title:'The Battle of Algiers', url:'https://events.webster.edu/event/the-battle-of-algiers'},
+  {date:ldt(2026,9,15,19,0), runtime:110, title:'Medium Cool', url:'https://events.webster.edu/event/medium-cool'},
+  {date:ldt(2026,9,17,19,0), runtime:96, title:'Kanał', url:'https://events.webster.edu/event/kanal'},
+  {date:ldt(2026,9,18,19,30), runtime:101, title:'Filipiñana', url:'https://events.webster.edu/event/filipinana'},
+  {date:ldt(2026,9,19,19,30), runtime:101, title:'Filipiñana', url:'https://events.webster.edu/event/filipinana'},
+  {date:ldt(2026,9,20,19,30), runtime:101, title:'Filipiñana', url:'https://events.webster.edu/event/filipinana'},
+  {date:ldt(2026,9,22,19,0), runtime:100, title:'Ashes & Diamonds', url:'https://events.webster.edu/event/ashes-diamonds'},
+  {date:ldt(2026,9,24,19,0), runtime:163, title:'The Promised Land', url:'https://events.webster.edu/event/the-promised-land'},
+  {date:ldt(2026,9,25,19,0), runtime:161, title:'Man of Marble', url:'https://events.webster.edu/event/man-of-marble'},
+  {date:ldt(2026,9,26,19,0), runtime:152, title:'Man of Iron', url:'https://events.webster.edu/event/man-of-iron'},
+  {date:ldt(2026,9,27,19,0), runtime:136, title:'Danton', url:'https://events.webster.edu/event/danton'},
+  {date:ldt(2026,10,2,19,30), runtime:88, title:'Powwow People with director Sky Hopinka', url:'https://events.webster.edu/event/powwow-people-with-director-sky-hopinka'},
+  {date:ldt(2026,10,3,19,30), runtime:81, title:'małni - towards the ocean, towards the shore', url:'https://events.webster.edu/event/malni-towards-the-ocean-towards-the-shore'},
+  {date:ldt(2026,10,4,19,30), runtime:87, title:'Sky Hopinka short film program', url:'https://events.webster.edu/event/sky-hopinka-short-film-program'},
+  /* WEBSTER:END */
+].map(f => Object.assign({type:'film', tag:'Film', venue:'Webster U.', group:'webster',
+                          nodeClass:'film webster'}, f));
+
+events.push(...films, ...hipointe, ...webster);
 events.sort((a, b) => a.date - b.date);   // stable, so same-day order is source order
 
 /* Prune everything already spent. Nothing on this page is a record: the whole
@@ -1288,6 +1369,7 @@ const GROUPS = [
   {group:'gamenight', label:'Game Night', types:['gamenight'], glyph:'gamenight'},
   {group:'arkadin',   label:'Arkadin',    types:[],            glyph:'film'},
   {group:'hipointe',  label:'Hi-Pointe',  types:[],            glyph:'film hipointe'},
+  {group:'webster',   label:'Webster',    types:[],            glyph:'film webster'},
   {group:'harvest',   label:'Harvest',    types:['harvest'],   glyph:'harvest'},
   {group:'sky',       label:'Sky',        types:['lunar','solar','astro','meteor'], glyph:'moon'},
 ];
@@ -1334,7 +1416,7 @@ function buildRow(ev){
   const row = document.createElement('div');
   row.className = 'event ' + ev.type + (ev.type === 'birthday' ? ' today' : '');
   row.dataset.type = ev.type;
-  // Cinemas set group explicitly: both are type 'film' and share a card
+  // Venues set group explicitly: all three are type 'film' and share a card
   // treatment, but each house filters on its own.
   const group = ev.group || GROUP_OF[ev.type];
   if (group) row.dataset.group = group;
