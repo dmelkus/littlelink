@@ -8,7 +8,7 @@ coordinate strangers is pure overhead here, and it costs real tokens.
 **Commit and push straight to `main`.** Do not open a pull request, do not
 create a working branch, and do not ask whether one is wanted.
 
-`main` is what Cloudflare Workers deploys to `degs.skin`, so a push to `main`
+`main` is what Cloudflare Workers deploys to `degs.chat`, so a push to `main`
 is the publish step. There is no staging branch and nothing to stage for.
 
 Branch-and-PR on this repo has actively cost time rather than saved it: a PR
@@ -52,7 +52,7 @@ successful `grep` has already reported a deploy as live while the page most
 requests were getting was still the old version.
 
     for i in $(seq 1 6); do
-      curl -s https://degs.skin/calendar/ -o /tmp/live.html
+      curl -s https://degs.chat/calendar/ -o /tmp/live.html
       diff -q /tmp/live.html calendar/index.html >/dev/null \
         && echo "$i: identical" || echo "$i: STALE $(wc -c < /tmp/live.html)"
       sleep 3
